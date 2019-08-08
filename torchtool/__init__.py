@@ -12,7 +12,7 @@ from .evaluation.similarity import jaccard_index, dice_coeff
 
 
 from .nn.cnn import Conv2d, ConvT2d, Pool2d, UnPool2d
-from .nn.loss import DCLoss, CDLoss, JaccardLoss
+from .nn.loss import DCLoss, CDLoss, JaccardLoss, IridescentLoss, F1Loss
 
 from .base.ops import cat
 

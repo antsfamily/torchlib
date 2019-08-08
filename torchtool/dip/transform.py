@@ -41,11 +41,10 @@ def normalize(X, mean=None, std=None, axis=None, ver=False):
             std = th.std(X)
         else:
             std = th.std(X, axis, keepdim=True)
-
     if ver is True:
         return (X - mean) / std, mean, std
     else:
-        return (X - mean) / std
+        return (X - mean) / (std + EPS)
 
 
 if __name__ == '__main__':
