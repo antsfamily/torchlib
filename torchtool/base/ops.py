@@ -49,6 +49,34 @@ def cat(shapes, axis=0):
     return s
 
 
+def concat2(X1, X2, axis):
+    r"""concat2
+
+    concatenate [X1, X2] in aixs direction
+
+    Parameters
+    ----------
+    X1 : {Torch Tensor}
+        the first torch tensor for concatenating
+    X2 : {Torch Tensor}
+        the second torch tensor for concatenating
+    axis : {integer}
+        concatenating axis
+
+    Returns
+    -------
+    Torch Tensor
+        concatenated tensors
+    """
+
+    if X1 is None or X1 is []:
+        return X2
+    else:
+        # print(type(X1), type(X2))
+        # print(X2.shape)
+        return th.cat((X1, X2), axis)
+
+
 if __name__ == '__main__':
     import torchtool as tht
     import torch as th

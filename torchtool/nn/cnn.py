@@ -42,7 +42,7 @@ def Conv2d(CHWi, Co, K, S, P, D=(1, 1), groups=1):
     Raises
     ------
     ValueError
-        [description]
+        dilation should be greater than zero.
     """
     if D[0] + D[1] < 2:
         raise ValueError("dilation should be greater than zero")
