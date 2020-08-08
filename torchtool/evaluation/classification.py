@@ -16,18 +16,18 @@ def accuracy(X, Y, TH=None):
     Parameters
     ----------
     X : {Torch Tensor}
-        Predicted one hot matrix
+        Predicted one hot matrix, :math:`\{0, 1\}`
     Y : {Torch Tensor}
-        Referenced one hot matrix
+        Referenced one hot matrix, :math:`\{0, 1\}`
     TH : {[type]}, optional
         threshold: X > TH --> 1, X <= TH --> 0
     """
 
     if TH is not None:
         X = (X > TH).float()
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     acc = th.mean((X == Y).float()).item()
 

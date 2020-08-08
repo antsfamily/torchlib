@@ -123,12 +123,11 @@ def precision(X, Y, TH=None):
         precision
     """
 
-    maxX = th.max(X)
-    if maxX != 1:
-        X = (X == maxX)
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+    if TH is not None:
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     # TP : True Positive
     # FP : False Positive
@@ -160,12 +159,11 @@ def recall(X, Y, TH=None):
         recall
     """
 
-    maxX = th.max(X)
-    if maxX != 1:
-        X = (X == maxX)
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+    if TH is not None:
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     # TP : True Positive
     # FN : False Negative
@@ -197,12 +195,11 @@ def sensitivity(X, Y, TH=None):
         recall
     """
 
-    maxX = th.max(X)
-    if maxX != 1:
-        X = (X == maxX)
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+    if TH is not None:
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     # TP : True Positive
     # FN : False Negative
@@ -234,12 +231,11 @@ def selectivity(X, Y, TH=None):
         selectivity
     """
 
-    maxX = th.max(X)
-    if maxX != 1:
-        X = (X == maxX)
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+    if TH is not None:
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     # TN : True Negative
     # FP : False Positive
@@ -272,14 +268,10 @@ def fmeasure(X, Y, TH=None, beta=1.0):
         F-measure
     """
     if TH is not None:
-        X = X > TH
+        X = (X > TH).float()
 
-    maxX = th.max(X)
-    if maxX != 1:
-        X = (X == maxX)
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     TP = true_positive(X, Y)
     FP = false_positive(X, Y)
@@ -315,10 +307,10 @@ def false_alarm_rate(X, Y, TH=None):
     """
 
     if TH is not None:
-        X = X > TH
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     # FP : False Positive
     # TP : True Positive
@@ -351,10 +343,10 @@ def miss_alarm_rate(X, Y, TH=None):
     """
 
     if TH is not None:
-        X = X > TH
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     # FP : False Negative
     # TP : True Positive
@@ -395,3 +387,22 @@ if __name__ == '__main__':
     print("FNR: ", FNR)
     print("1.0-FDR: ", 1.0 - FDR)
     print("1.0-FNR: ", 1.0 - FNR)
+
+    N, H, W = (10, 3, 4)
+    Xs = th.zeros(N, H, W)
+    Ys = th.zeros(N, H, W)
+
+    Xs[5, 1, 2] = 1
+    Ys[5, 1, 2] = 1
+
+    Fall = fmeasure(Xs, Ys, TH=TH, beta=1.0)
+
+    Favg = 0.
+    for X, Y in zip(Xs, Ys):
+        # print(th.sum(X), th.sum(Y))
+        Favg += fmeasure(X, Y, beta=1.0)
+        # print(Favg)
+
+    Favg = Favg / N
+
+    print("Fall, Favg: ", Fall, Favg)

@@ -30,12 +30,12 @@ def jaccard_index(X, Y, TH=None):
         the jaccard similarity coefficient.
 
     """
-    if TH is not None:
-        X = X > TH
 
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+    if TH is not None:
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     X = th.as_tensor(X, dtype=th.float32)
     Y = th.as_tensor(Y, dtype=th.float32)
@@ -68,11 +68,12 @@ def dice_coeff(X, Y, TH=0.5):
     DC : {float number}
         the dice coefficient.
     """
+
     if TH is not None:
-        X = X > TH
-    maxY = th.max(Y)
-    if maxY != 1:
-        Y = (Y == maxY)
+        X = (X > TH).float()
+
+    X = (X > 0.5)
+    Y = (Y > 0.5)
 
     X = th.as_tensor(X, dtype=th.float32)
     Y = th.as_tensor(Y, dtype=th.float32)

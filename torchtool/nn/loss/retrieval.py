@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date    : 2019-07-24 18:29:48
+# @Author  : Zhi Liu (zhiliu.mind@gmail.com)
+# @Link    : http://iridescent.ink
+# @Version : $1.0$
+
+
 import torch as th
 import torch.nn as nn
 import torchtool as tht
@@ -5,29 +13,28 @@ from torchtool.utils.const import EPS
 from torch.autograd import Variable
 
 
-class DCLoss(nn.Module):
-    def __init__(self):
-        super(DCLoss, self).__init__()
+class DiceLoss(nn.Module):
+    def __init__(self, size_average=True, reduce=True):
+        super(DiceLoss, self).__init__()
+        self.size_average = size_average
+        self.reduce = reduce
 
-    def forward(self, P, G):
+    def soft_dice_coeff(self, P, G):
 
-        # TP = th.sum(((P == 1) + (G == 1)) == 2)
-        # FP = th.sum(((P == 1) + (G == 0)) == 2)
-        # FN = th.sum(((P == 0) + (G == 1)) == 2)
-        # f = (FP + FN) / (2.0 * TP + EPS)
+        cupnum = th.sum(P, (1, 2, 3)) + th.sum(G, (1, 2, 3))
+        capnum = th.sum(P * G, (1, 2, 3))
 
-        TP = th.sum((P + G) == 2)
-        FPFN = th.sum((P + G) == 1)
-        return FPFN / (2.0 * TP + EPS)
-        # return f
+        score = (2. * capnum + EPS) / (cupnum + EPS)
+        if self.reduce is True:
+            if self.size_average is True:
+                score = score.mean()
+            else:
+                score = score.sum()
 
+        return score
 
-class CDLoss(nn.Module):
-    def __init__(self):
-        super(CDLoss, self).__init__()
-
-    def forward(self, P, G):
-        return th.mean(th.abs(P * (1 - G)))
+    def __call__(self, P, G):
+        return 1. - self.soft_dice_coeff(P, G)
 
 
 class JaccardLoss(nn.Module):
@@ -38,14 +45,14 @@ class JaccardLoss(nn.Module):
 
     """
 
-    def __init__(self):
+    def __init__(self, size_average=True, reduce=True):
         super(JaccardLoss, self).__init__()
 
     def forward(self, P, G):
         capnum = th.sum(P * G)
-        sumpg = th.sum(P) + th.sum(G)
+        cupnum = th.sum(P + G)
 
-        return (1.0 - capnum / (sumpg - capnum + EPS))
+        return (1.0 - capnum / (cupnum - capnum + EPS))
 
 
 class IridescentLoss(nn.Module):
@@ -56,8 +63,10 @@ class IridescentLoss(nn.Module):
 
     """
 
-    def __init__(self):
+    def __init__(self, size_average=True, reduce=True):
         super(IridescentLoss, self).__init__()
+        self.size_average = size_average
+        self.reduce = reduce
 
     def forward(self, P, G):
         sumbothones = th.sum(P * G)
@@ -86,18 +95,22 @@ class F1Loss(nn.Module):
 
     """
 
-    def __init__(self):
+    def __init__(self, size_average=True, reduce=True):
         super(F1Loss, self).__init__()
+        self.size_average = size_average
+        self.reduce = reduce
 
     def forward(self, P, G):
 
         TP = th.sum(P * G)
         FP = th.sum(P * (1. - G))
         FN = th.sum((1 - P) * G)
-        P = TP / (TP + FP + EPS)
-        R = TP / (TP + FN + EPS)
+        Precision = TP / (TP + FP + EPS)
+        Recall = TP / (TP + FN + EPS)
 
-        return 1.0 - 2.0 * P * R / (P + R + EPS)
+        xx = 2.0 * Precision * Recall / (Precision + Recall + EPS)
+        return 1.0 - xx
+        # return 1.0 / (2.0 * P * R / (P + R + EPS) + EPS)
 
 
 if __name__ == '__main__':
@@ -127,8 +140,11 @@ if __name__ == '__main__':
     # X = np.array([[1, 0, 1], [1, 1, 1]])
     # G = np.array([[1, 1, 1], [1, 1, 1]])
 
-    # X = np.array([[1, 1, 1], [1, 1, 1]])
-    # G = np.array([[1, 1, 1], [1, 1, 1]])
+    X = np.array([[1, 1, 1], [1, 1, 1]])
+    G = np.array([[1, 1, 1], [1, 1, 1]])
+
+    X = th.randn(4, 1, 3, 2)
+    G = th.randn(4, 1, 3, 2)
 
     X = th.Tensor(X)
     G = th.Tensor(G)
@@ -143,12 +159,16 @@ if __name__ == '__main__':
     print(G)
     print(th.mean(th.abs(X - G)))
 
-    # criterion = tht.DCLoss()
-    criterion = tht.JaccardLoss()
+    # criterion = tht.DiceLoss()
+    criterion = tht.DiceLoss(size_average=False, reduce=False)
+    # criterion = tht.JaccardLoss()
     # criterion = tht.IridescentLoss()
-    criterion = tht.F1Loss()
+    # criterion = tht.F1Loss()
+    # criterion = tht.F1Loss(size_average=True, reduce=True)
+
 
     loss = criterion(X, G)
+    print(loss.data)
     lossv = loss.item()
     print(lossv)
     loss.backward()

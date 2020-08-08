@@ -5,6 +5,7 @@
 # @Link    : http://iridescent.ink
 # @Version : $1.0$
 
+import numpy as np
 import torch as th
 from torchtool.utils.const import EPS
 
@@ -30,7 +31,12 @@ def normalize(X, mean=None, std=None, axis=None, ver=False):
         if True, also return the mean and std (the default is False, which all elements)
     """
 
-    X = th.tensor(X)
+    if type(X) is np.ndarray:
+        X = th.from_numpy(X)
+
+    if axis is False:
+        return X / X.max()
+
     if mean is None:
         if axis is None:
             mean = th.mean(X)
@@ -48,7 +54,6 @@ def normalize(X, mean=None, std=None, axis=None, ver=False):
 
 
 if __name__ == '__main__':
-    import numpy as np
 
     X = th.randn(4, 3, 5, 6)
     # X = th.randn(3, 4)
@@ -57,9 +62,10 @@ if __name__ == '__main__':
     print(XX.size())
     print(meanv, stdv)
 
-    X = np.random.randn(4, 3, 5, 6)
+    X = np.random.randn(4, 3, 5, 6) * 255
     # X = th.randn(3, 4)
     XX = normalize(X, axis=(0, 2, 3))
     XX, meanv, stdv = normalize(X, axis=(0, 2, 3), ver=True)
     print(XX.size())
     print(meanv, stdv)
+    print(XX)
