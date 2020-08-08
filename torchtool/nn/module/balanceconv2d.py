@@ -10,13 +10,10 @@ import torch
 import torch.nn.functional as F
 from torch.nn.modules.utils import _pair
 from torch.nn.modules.conv import _ConvNd
-from torch._jit_internal import weak_module, weak_script_method
 
 from torch.distributions.bernoulli import Bernoulli
 
 
-
-@weak_module
 class BalaConv2d(_ConvNd):
     r"""Applies a 2D Balanced convolution over an input signal composed of several input
     planes.
@@ -156,7 +153,7 @@ class BalaConv2d(_ConvNd):
         self.alpha.requires_grad = True
         self.m = torch.nn.Tanh()
 
-    @weak_script_method
+
     def forward(self, input):
         input_ones = torch.ones_like(input)
 
