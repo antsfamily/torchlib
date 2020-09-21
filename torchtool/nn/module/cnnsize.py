@@ -9,7 +9,115 @@
 import numpy as np
 
 
-def Conv2d(CHWi, Co, K, S, P, D=(1, 1), groups=1):
+def ConvSize1d(CLi, Co, K, S, P, D=1, groups=1):
+    r"""Compute shape after 2D-Convolution
+
+    .. math::
+       \begin{array}{l}
+       L_{o} &= \left\lfloor\frac{L_{i}  + 2 \times P_l - D_l \times (K_l - 1) - 1}{S_l} + 1\right\rfloor \\
+       \end{array}
+       :label: equ-DilationConv2dSize
+
+    CLi : {tulpe or list}
+        input data shape (C, L)
+    Co : {integer number}
+        number of output chanels.
+    K : {tulpe}
+        kernel size
+    S : {tulpe}
+        stride size
+    P : {tulpe}
+        padding size
+    D : {tuple}, optional
+        dilation size (the default is 1)
+    groups : {number}, optional
+        [description] (the default is 1, which [default_description])
+
+    Returns
+    -------
+    tulpe
+        shape after 2D-Convolution
+
+    Raises
+    ------
+    ValueError
+        dilation should be greater than zero.
+    """
+    if D < 1:
+        raise ValueError("dilation should be greater than zero")
+    Ci, Li = CLi
+
+    Lo = int(np.floor((Li + 2 * P - D * (K - 1) - 1) / S + 1))
+
+    return Co, Lo
+
+
+def ConvTransposeSize1d(CLi, Co, K, S, P, D=1, OP=0, groups=1):
+    r"""Compute shape after Transpose Convolution
+
+    .. math::
+       \begin{array}{l}
+       L_{o} &= (L_{i} - 1) \times S_l - 2 \times P_l + D_l \times (K_l - 1) + OP_l + 1 \\
+       \end{array}
+       :label: equ-TransposeConv2dSize
+
+    Parameters
+    ----------
+    CLi : {tulpe or list}
+        input data shape (C, H, W)
+    Co : {integer number}
+        number of output chanels.
+    K : {tulpe}
+        kernel size
+    S : {tulpe}
+        stride size
+    P : {tulpe}
+        padding size
+    D : {tuple}, optional
+        dilation size (the default is 1)
+    OP : {tuple}, optional
+        output padding size (the default is 0)
+    groups : {integer number}, optional
+        one group (the default is 1)
+
+    Returns
+    -------
+    tulpe
+        shape after 2D-Transpose Convolution
+
+    Raises
+    ------
+    ValueError
+        output padding must be smaller than either stride or dilation
+    """
+
+    if not ((OP < S) or (OP < D)):
+        raise ValueError(
+            "output padding must be smaller than either stride or dilation")
+    Ci, Li = CLi
+
+    Lo = int((Li - 1) * S - 2 * P + D * (K - 1) + OP + 1)
+
+    return Co, Lo
+
+
+def PoolSize1d(CLi, K, S, P, D=1):
+    Ci, Li = CLi
+
+    Lo = int(np.floor((Li + 2 * P - D * (K - 1) - 1) / S + 1))
+
+    return Ci, Lo
+
+
+def UnPoolSize1d(CLi, K, S, P, D=1):
+    Ci, Li = CLi
+
+    Lo = int((Li - 1) * S - 2 * P + K)
+
+    return Ci, Lo
+
+
+def ConvSize2d(CHWi, Co, K, S, P, D=(1, 1), groups=1):
     r"""Compute shape after 2D-Convolution
 
     .. math::
@@ -54,7 +162,7 @@ def Conv2d(CHWi, Co, K, S, P, D=(1, 1), groups=1):
     return Co, Ho, Wo
 
 
-def ConvT2d(CHWi, Co, K, S, P, D=(1, 1), OP=(0, 0), groups=1):
+def ConvTransposeSize2d(CHWi, Co, K, S, P, D=(1, 1), OP=(0, 0), groups=1):
     r"""Compute shape after Transpose Convolution
 
     .. math::
@@ -105,7 +213,7 @@ def ConvT2d(CHWi, Co, K, S, P, D=(1, 1), OP=(0, 0), groups=1):
     return Co, Ho, Wo
 
 
-def Pool2d(CHWi, K, S, P, D=(1, 1)):
+def PoolSize2d(CHWi, K, S, P, D=(1, 1)):
     Ci, Hi, Wi = CHWi
 
     Ho = int(np.floor((Hi + 2 * P[0] - D[0] * (K[0] - 1) - 1) / S[0] + 1))
@@ -114,7 +222,7 @@ def Pool2d(CHWi, K, S, P, D=(1, 1)):
     return Ci, Ho, Wo
 
 
-def UnPool2d(CHWi, K, S, P, D=(1, 1)):
+def UnPoolSize2d(CHWi, K, S, P, D=(1, 1)):
     Ci, Hi, Wi = CHWi
 
     Ho = int((Hi - 1) * S[0] - 2 * P[0] + K[0])
@@ -140,8 +248,8 @@ if __name__ == '__main__':
     print(CHWi)
     print('---Theoretical result')
 
-    CHWo = tht.Conv2d(CHWi=CHWi, Co=Co, K=K,
-                      S=S, P=P, D=D)
+    CHWo = tht.ConvSize2d(CHWi=CHWi, Co=Co, K=K,
+                          S=S, P=P, D=D)
     print(CHWo)
 
     print('---Torch result')
@@ -154,8 +262,8 @@ if __name__ == '__main__':
 
     print('===Deconv2d')
 
-    CHWo = tht.ConvTranspose2d(CHWi=CHWo, Co=CHWi[0], K=K,
-                               S=S, P=P, D=D, OP=OP)
+    CHWo = tht.ConvTransposeSize2d(CHWi=CHWo, Co=CHWi[0], K=K,
+                                   S=S, P=P, D=D, OP=OP)
     print('---Theoretical result')
     print(CHWo)
 
@@ -168,7 +276,7 @@ if __name__ == '__main__':
 
     print("===Pool2d")
     print('---Theoretical result')
-    CHWo = tht.Pool2d(CHWi, K, S, P, D=D)
+    CHWo = tht.PoolSize2d(CHWi, K, S, P, D=D)
     print(CHWo)
     print('---Torch result')
     pool = th.nn.MaxPool2d(kernel_size=K, stride=S,
@@ -180,7 +288,7 @@ if __name__ == '__main__':
 
     print("===UnPool2d")
     print('---Theoretical result')
-    CHWo = tht.UnPool2d(CHWo, K, S, P, D=D)
+    CHWo = tht.UnPoolSize2d(CHWo, K, S, P, D=D)
     print(CHWo)
     print('---Torch result')
     unpool = th.nn.MaxUnpool2d(kernel_size=K, stride=S, padding=P)

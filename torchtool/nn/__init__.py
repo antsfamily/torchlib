@@ -1,7 +1,8 @@
 from __future__ import absolute_import
 
 
-from .module.cnnsize import Conv2d, ConvT2d, Pool2d, UnPool2d
+from .module.cnnsize import ConvSize1d, ConvTransposeSize1d, PoolSize1d, UnPoolSize1d, ConvSize2d, ConvTransposeSize2d, PoolSize2d, UnPoolSize2d
+
 from .module.edge import EdgeDetector, EdgeFeatureExtractor
 from .module.balanceconv2d import BalaConv2d
 from .module.gaborconv2d import GaborConv2d

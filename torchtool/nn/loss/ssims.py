@@ -81,16 +81,12 @@ if __name__ == '__main__':
     import torchtool as tht
     import torch
     from torch import optim
-    import cv2
+    import psar as ps
     import numpy as np
-
-    npImg1 = cv2.imread("../../../data/images/einstein.png")
-    # npImg1 = cv2.imread("../../../data/images/LenaRGB.tif")
 
     L = 255.0
     # L = 1.0
 
-    img1 = torch.from_numpy(np.rollaxis(npImg1, 2)).float().unsqueeze(0) / (255.0 / L)
     img1 = torch.zeros(1, 3, 512, 512)
     img1[:, :, 10:500, 10:500] = L / 2.0
     img2 = torch.rand(img1.size())

@@ -6,7 +6,7 @@
 # @Version : $1.0$
 
 
-from .cnnsize import Conv2d, ConvT2d, Pool2d, UnPool2d
+from .cnnsize import ConvSize1d, ConvTransposeSize1d, PoolSize1d, UnPoolSize1d, ConvSize2d, ConvTransposeSize2d, PoolSize2d, UnPoolSize2d
 
 from .pool import MeanSquarePool2d, PnormPool2d
 
