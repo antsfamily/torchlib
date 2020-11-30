@@ -7,7 +7,7 @@
 
 import numpy as np
 import torch as th
-import torchtool as tht
+import torchlib as tl
 from torch.nn.parameter import Parameter
 
 
@@ -17,7 +17,7 @@ class FFTNet1d(th.nn.Module):
         super(FFTNet1d, self).__init__()
 
         self.f = Parameter(th.tensor(96., requires_grad=True))
-        self.fftlayer1d = tht.FFTLayer1d()
+        self.fftlayer1d = tl.FFTLayer1d()
 
     def forward(self, T):
 

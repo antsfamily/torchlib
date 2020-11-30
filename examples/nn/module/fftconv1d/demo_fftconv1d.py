@@ -7,7 +7,7 @@
 
 import numpy as np
 import torch as th
-import torchtool as tht
+import torchlib as tl
 import psar as ps
 import matplotlib.pyplot as plt
 
@@ -24,8 +24,8 @@ X_th = th.tensor([X_np.real, X_np.imag], device=device, dtype=th.float32).permut
 h_th = th.tensor([[0, -1, 1, 0]], device=device, dtype=th.float32)
 h_th = th.stack([h_th, th.zeros(h_th.size(), device=device, dtype=th.float32)], axis=-1)
 Y2 = X_th
-Y2 = tht.fftconv1(Y2, h_th, axis=1, shape='same')
-Y2 = tht.fftconv1(Y2, h_th.transpose(0, 1), axis=0, shape='same')
+Y2 = tl.fftconv1(Y2, h_th, axis=1, shape='same')
+Y2 = tl.fftconv1(Y2, h_th.transpose(0, 1), axis=0, shape='same')
 Y2 = th.view_as_complex(Y2)
 print(X_th.shape, h_th.shape, Y2.shape)
 

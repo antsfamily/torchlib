@@ -22,8 +22,8 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-project = 'IPRS'
-copyright = '2018-2019, Zhi Liu'
+project = 'torchlib'
+copyright = '2018-2020, Zhi Liu'
 author = 'Zhi Liu'
 
 # The short X.Y version
@@ -119,7 +119,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'IPRSdoc'
+htmlhelp_basename = 'TORCHLIBdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -146,7 +146,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'IPRS.tex', 'IPRS Documentation',
+    (master_doc, 'TORCHLIB.tex', 'TORCHLIB Documentation',
      'Zhi Liu', 'manual'),
 ]
 
@@ -156,7 +156,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pyml', 'IPRS Documentation',
+    (master_doc, 'pyml', 'TORCHLIB Documentation',
      [author], 1)
 ]
 
@@ -167,8 +167,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'IPRS', 'IPRS Documentation',
-     author, 'IPRS', 'One line description of project.',
+    (master_doc, 'TORCHLIB', 'TORCHLIB Documentation',
+     author, 'TORCHLIB', 'One line description of project.',
      'Miscellaneous'),
 ]
 

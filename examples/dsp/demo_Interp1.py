@@ -1,7 +1,7 @@
 
 import numpy as np
 import torch as th
-import torchtool as tht
+import torchlib as tl
 import matplotlib.pyplot as plt
 
 Ts = 2.
@@ -15,7 +15,7 @@ x = np.sin(2 * np.pi * 10 * tr)
 xi_np = np.interp(tri, tr, x)
 
 
-thinterpfn = tht.Interp1()
+thinterpfn = tl.Interp1()
 tr_th = th.tensor(tr)
 tri_th = th.tensor(tri)
 x_th = th.tensor(x)

@@ -1,7 +1,7 @@
 
 import numpy as np
 import torch as th
-import torchtool as tht
+import torchlib as tl
 import matplotlib.pyplot as plt
 
 Ts = 2.

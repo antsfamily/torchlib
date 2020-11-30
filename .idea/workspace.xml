@@ -3,15 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="6a84e359-521e-474b-8cf6-5cd9eb5bbeda" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchtool/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/dip/transform.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchtool/dip/transform.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/evaluation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchtool/evaluation/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/evaluation/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchtool/evaluation/classification.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/evaluation/retrieval.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchtool/evaluation/retrieval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/evaluation/similarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchtool/evaluation/similarity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/nn/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchtool/nn/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/nn/cnn.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/torchtool/nn/loss.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchlib/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/dip/transform.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchlib/dip/transform.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/evaluation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchlib/evaluation/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/evaluation/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchlib/evaluation/classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/evaluation/retrieval.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchlib/evaluation/retrieval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/evaluation/similarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchlib/evaluation/similarity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/nn/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/torchlib/nn/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/nn/cnn.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/torchlib/nn/loss.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,14 +21,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/torchtool$test_cnn_size.coverage" NAME="test_cnn_size Coverage Results" MODIFIED="1564125890661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/torchtool$retrieval.coverage" NAME="retrieval Coverage Results" MODIFIED="1564125881116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/torchtool/evaluation" />
-    <SUITE FILE_PATH="coverage/torchtool$classification.coverage" NAME="classification Coverage Results" MODIFIED="1564125198376" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/torchtool/evaluation" />
+    <SUITE FILE_PATH="coverage/torchlib$test_cnn_size.coverage" NAME="test_cnn_size Coverage Results" MODIFIED="1564125890661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/torchlib$retrieval.coverage" NAME="retrieval Coverage Results" MODIFIED="1564125881116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/torchlib/evaluation" />
+    <SUITE FILE_PATH="coverage/torchlib$classification.coverage" NAME="classification Coverage Results" MODIFIED="1564125198376" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/torchlib/evaluation" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="classification.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/torchtool/evaluation/classification.py">
+        <entry file="file://$PROJECT_DIR$/torchlib/evaluation/classification.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="266">
               <caret line="14" selection-start-line="14" selection-end-line="14" />
@@ -58,7 +58,7 @@
         </entry>
       </file>
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/torchtool/__init__.py">
+        <entry file="file://$PROJECT_DIR$/torchlib/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <folding>
@@ -69,7 +69,7 @@
         </entry>
       </file>
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/torchtool/evaluation/__init__.py">
+        <entry file="file://$PROJECT_DIR$/torchlib/evaluation/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <folding>
@@ -92,9 +92,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/torchtool/evaluation/retrieval.py" />
+        <option value="$PROJECT_DIR$/torchlib/evaluation/retrieval.py" />
         <option value="$PROJECT_DIR$/tests/test_cnn_size.py" />
-        <option value="$PROJECT_DIR$/torchtool/nn/cnn.py" />
+        <option value="$PROJECT_DIR$/torchlib/nn/cnn.py" />
       </list>
     </option>
   </component>
@@ -122,35 +122,35 @@
         <subPane>
           <expand>
             <path>
-              <item name="torchtool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="torchtool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
               <item name="tests" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="torchtool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="torchtool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
               <item name="evaluation" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="torchtool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
               <item name="nn" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="torchtool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
-              <item name="torchtool" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
+              <item name="torchlib" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -180,45 +180,45 @@
   </component>
   <component name="RunManager" selected="Python.test_cnn_size">
     <configuration name="classification" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="torchtool" />
+      <module name="torchlib" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/torchtool/evaluation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/torchlib/evaluation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/torchtool/evaluation/classification.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/torchlib/evaluation/classification.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <configuration name="retrieval" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="torchtool" />
+      <module name="torchlib" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/torchtool/evaluation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/torchlib/evaluation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/torchtool/evaluation/retrieval.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/torchlib/evaluation/retrieval.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <configuration name="test_cnn_size" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="torchtool" />
+      <module name="torchlib" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -295,7 +295,7 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/classification.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/classification.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret selection-end-line="8" />
@@ -319,7 +319,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -328,7 +328,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -337,14 +337,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/classification.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/classification.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret selection-end-line="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/retrieval.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/retrieval.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2071">
           <caret line="110" column="14" selection-start-line="110" selection-start-column="14" selection-end-line="110" selection-end-column="14" />
@@ -354,7 +354,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/nn/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/nn/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_cnn_size.py">
@@ -374,7 +374,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -383,7 +383,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -392,8 +392,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/nn/cnn.py" />
-    <entry file="file://$PROJECT_DIR$/torchtool/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/nn/cnn.py" />
+    <entry file="file://$PROJECT_DIR$/torchlib/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -402,7 +402,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -428,15 +428,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/nn/cnn.py" />
-    <entry file="file://$PROJECT_DIR$/torchtool/nn/__init__.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/nn/cnn.py" />
+    <entry file="file://$PROJECT_DIR$/torchlib/nn/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/retrieval.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/retrieval.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
           <caret line="110" column="14" selection-start-line="110" selection-start-column="14" selection-end-line="110" selection-end-column="14" />
@@ -446,7 +446,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/torchtool/evaluation/classification.py">
+    <entry file="file://$PROJECT_DIR$/torchlib/evaluation/classification.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="14" selection-start-line="14" selection-end-line="14" />

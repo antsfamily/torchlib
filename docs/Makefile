@@ -6,8 +6,8 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = source
 # BUILDDIR      = build
-BUILDDIR      = ../../torchtool-docs/
-PUBLISHDIR    = ../../../iridescent/Projects/torchtool/
+BUILDDIR      = ../../torchlib-docs/
+PUBLISHDIR    = ../../../iridescent/Projects/torchlib/
 
 # Put it first so that "make" without argument is like "make help".
 help:

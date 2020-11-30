@@ -1,6 +1,6 @@
 import numpy as np
 import torch as th
-import torchtool as tht
+import torchlib as tl
 import psar as ps
 import matplotlib.pyplot as plt
 
@@ -18,8 +18,8 @@ Y1 = np.fft.fft(Y1, axis=1)
 # Y1 = np.fft.fft(np.fft.fft(X_np, axis=0), axis=1)
 Y1 = np.abs(Y1)
 
-Y2 = tht.fft(X_th, axis=0)
-Y2 = tht.fft(Y2, axis=1)
+Y2 = tl.fft(X_th, axis=0)
+Y2 = tl.fft(Y2, axis=1)
 Y2 = th.abs(Y2[:, :, 0] + 1j * Y2[:, :, 1]).cpu()
 
 print(np.sum(Y1 - Y2.numpy()))
