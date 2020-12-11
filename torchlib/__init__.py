@@ -30,7 +30,7 @@ from .dsp.normalsignals import rect, chirp
 from .spl import voptimizer
 from .spl import spfunction
 
-from .optim.learning_rate import FindLearningRate
+from .optim.learning_rate import LrFinder
 from .summary.loss_log import LossLog
 
 from .diagnose.plotgradflow import plot_gradflow_v1, plot_gradflow_v2

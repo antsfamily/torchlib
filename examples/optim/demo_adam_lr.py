@@ -3,14 +3,14 @@ import torch as th
 import matplotlib.pyplot as plt
 
 lr = 1e-3
-steps = 5000
+steps = 1000
 
 
 params = {th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
           th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
           }
 
-betas = (0.9, 0.999)
+betas = (0.9, 0.99)
 optimizer = th.optim.Adam(params, lr=lr, betas=betas)
 # optimizer = th.optim.SGD(params, lr=lr, momentum=0.9)
 # optimizer = th.optim.Adadelta(params, lr=lr, rho=0.9, eps=1e-06, weight_decay=0)
