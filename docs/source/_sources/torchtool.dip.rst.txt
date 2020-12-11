@@ -1,0 +1,30 @@
+torchlib.dip package
+=====================
+
+Submodules
+----------
+
+torchlib.dip.image\_converter module
+-------------------------------------
+
+.. automodule:: torchlib.dip.image_converter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+torchlib.dip.transform module
+------------------------------
+
+.. automodule:: torchlib.dip.transform
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: torchlib.dip
+   :members:
+   :undoc-members:
+   :show-inheritance:

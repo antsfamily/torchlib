@@ -7,7 +7,7 @@ SPHINXBUILD   = sphinx-build
 SOURCEDIR     = source
 # BUILDDIR      = build
 BUILDDIR      = ../../torchlib-docs/
-PUBLISHDIR    = ../../../iridescent/Projects/torchlib/
+PUBLISHDIR    = ../../../iridescent/_site/Projects/torchlib/
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -21,3 +21,5 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	mkdir -p $(PUBLISHDIR)/
 	cp -rf $(BUILDDIR)/html/ $(PUBLISHDIR)/
+	rsync -av --exclude $(BUILDDIR)/html/.git $(BUILDDIR)/html/* $(PUBLISHDIR)/html/
+	# --------------------------------------------------------------

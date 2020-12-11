@@ -88,16 +88,16 @@ class LrFinder():
         The average loss is:
 
         .. math::
-           \text{avg_loss}_i=\beta * \text{avg_loss}_{i-1}+(1-\beta) * \text{loss}_i
+           \rm{avg\_loss}_i=\beta * \rm{avg\_loss}_{i-1}+(1-\beta) * \rm{loss}_i
 
         The smoothed loss is:
 
         .. math::
-            \text{smt_loss }_{i}=\frac{\text{avg_loss}_{i}}{1-\beta^{i+1}}
+            \rm{smt\_loss }_{i}=\frac{\rm{avg\_loss}_{i}}{1-\beta^{i+1}}
 
-        If :math:`i > 1` and :math:`\text{smt_loss} > \gamma * \text{best_loss}`, stop.
+        If :math:`i > 1` and :math:`\rm{smt\_loss} > \gamma * \rm{best\_loss}`, stop.
 
-        If :math:`\text{smt_loss} < \text{best_loss}` or :math:`i = 1`, let :math:`\text{best_loss} = \text{smt_loss}`.
+        If :math:`\rm{smt\_loss} < \rm{best\_loss}` or :math:`i = 1`, let :math:`\rm{best\_loss} = \rm{smt\_loss}`.
 
 
         Parameters
