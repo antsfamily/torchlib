@@ -11,10 +11,12 @@ Subpackages
    torchlib.dsp
    torchlib.evaluation
    torchlib.misc
+   torchlib.module
    torchlib.nn
    torchlib.optim
    torchlib.spl
    torchlib.summary
+   torchlib.utils
 
 Module contents
 ---------------

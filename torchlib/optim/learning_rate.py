@@ -6,7 +6,12 @@
 # @Version : $1.0$
 
 import math
+import numpy as np
 import matplotlib.pyplot as plt
+
+
+def gammalr(x, k=2, t=2, a=1):
+    return a * ((x ** (k - 1)) * np.exp(-x / t)) / ((t ** k) * np.math.gamma(k))
 
 
 class LrFinder():
@@ -78,7 +83,7 @@ class LrFinder():
             plt.savefig(self.plotdir + '/' + losslr_str)
             plt.close()
 
-    def find(self, dataloader, model, optimizer, criterion, nin=1, nbgc=1, lr_init=1e-8, lr_final=1e2, beta=0.98, gamma=4.):
+    def find(self, dataloader, model, optimizer, criterion, nin=1, nout=1, nbgc=1, lr_init=1e-8, lr_final=1e2, beta=0.98, gamma=4.):
         r"""Find learning rate
 
         Find learning rate, see `How Do You Find A Good Learning Rate <https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html>`_ .
@@ -111,7 +116,15 @@ class LrFinder():
         criterion : {torch.Loss}
             The criterion/loss used for training model.
         nin : {number}, optional
-            The number of inputs in dataloder, the first :attr:`nin` elements are inputs, the rest are targets(can be None). (the default is 1)
+            The number of inputs of the model,
+            the first :attr:`nin` elements are inputs,
+            the rest are targets(can be None) used for computing loss. (the default is 1)
+        nou : {number}, optional
+            The number of outputs of the model used for computing loss,
+            it works only when the model has multiple outputs, i.e.
+            the outputs is a tuple or list which has several tensor elements (>=1).
+            the first :attr:`nout` elements are used for computing loss,
+            the rest are ignored. (the default is 1)
         nbgc : {number}, optional
             The number of batches for grad cumulation (the default is 1, which means no cumulation)
         lr_init : {number}, optional
@@ -182,7 +195,11 @@ class LrFinder():
                 optimizer.zero_grad()
 
             outputs = model(*data[:nin])
-            loss = criterion(outputs, *data[nin:])
+
+            if type(outputs) is tuple or type(outputs) is list:
+                loss = criterion(*outputs[:nout], *data[nin:])
+            else:
+                loss = criterion(outputs, *data[nin:])
 
             # Compute the smoothed loss
             avg_loss = beta * avg_loss + (1. - beta) * loss.item()

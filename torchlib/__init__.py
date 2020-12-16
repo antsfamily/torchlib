@@ -18,7 +18,9 @@ from .evaluation.ssims import create_window, _ssim, ssim, msssim
 
 from .misc.transform import standardization, scale
 from .misc.mapping_operation import mapping
+from .misc.sampling import sample_tensor, split_tensor
 
+from .module.misc.transform import Standardization
 
 from .dsp.filters import sobelfilter
 from .dsp.kernels import *
@@ -30,14 +32,17 @@ from .dsp.normalsignals import rect, chirp
 from .spl import voptimizer
 from .spl import spfunction
 
-from .optim.learning_rate import LrFinder
+from .optim.learning_rate import gammalr, LrFinder
+from .optim.lr_scheduler import DoubleGaussianKernelLR
+
 from .summary.loss_log import LossLog
 
 from .diagnose.plotgradflow import plot_gradflow_v1, plot_gradflow_v2
 
 from .utils.const import *
-
-
+from .utils.ios import loadmat, savemat, loadh5, saveh5
+from .utils.file import listxfile, pathjoin, fileparts, readtxt
+from .utils.randomfunc import setseed, randgrid, randgrid2d, randperm, randperm2d
 
 
 

@@ -6,8 +6,8 @@
 # @Version : $1.0$
 from __future__ import division, print_function, absolute_import
 
-from tsar.base.mathops import nextpow2
-from tsar.utils.const import EPS
+from torchlib.base.mathops import nextpow2
+from torchlib.utils.const import EPS
 import torch as th
 
 

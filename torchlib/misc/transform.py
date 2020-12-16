@@ -115,7 +115,6 @@ def scale(X, st=[0, 1], sf=None, istrunc=True, extra=False):
         return (X - a) * (d - c) / (b - a + EPS) + c
 
 
-
 if __name__ == '__main__':
 
     X = th.randn(4, 3, 5, 6)
@@ -132,7 +131,6 @@ if __name__ == '__main__':
     print(XX.size())
     print(meanv, stdv)
     print(XX)
-
 
     XX = scale(X, st=[0, 1])
     print(XX)
