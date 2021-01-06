@@ -8,8 +8,8 @@
 import torch as th
 
 
-class Frobenius(th.nn.Module):
-    r"""Frobenius
+class FrobeniusLoss(th.nn.Module):
+    r"""Frobenius norm loss
 
         .. math::
            \|\bm X\|_p^p = (\sum{x^p})^{1/p}
@@ -17,7 +17,7 @@ class Frobenius(th.nn.Module):
     """
 
     def __init__(self, reduction='mean', p=2):
-        super(Frobenius, self).__init__()
+        super(FrobeniusLoss, self).__init__()
         self.reduction = reduction
         self.p = p
 
@@ -27,6 +27,9 @@ class Frobenius(th.nn.Module):
             X = ((X * X.conj()).real).sqrt()
         elif X.size(-1) == 2:
             X = X.pow(2).sum(axis=-1).sqrt()
+
+        if X.dtype is not th.float32 or th.double:
+            X = X.to(th.float32)
 
         D = X.dim()
         dim = list(range(1, D))
@@ -40,8 +43,8 @@ class Frobenius(th.nn.Module):
         return F
 
 
-class LogFrobenius(th.nn.Module):
-    r"""LogFrobenius
+class LogFrobeniusLoss(th.nn.Module):
+    r"""LogFrobenius Loss
 
         .. math::
            {\log}{\||\bm X|\|_p^p} = \log {\left((\sum{|x|^p})^{1/p}\right)}
@@ -49,7 +52,7 @@ class LogFrobenius(th.nn.Module):
     """
 
     def __init__(self, reduction='mean', p=2):
-        super(LogFrobenius, self).__init__()
+        super(LogFrobeniusLoss, self).__init__()
         self.reduction = reduction
         self.p = p
 
@@ -59,6 +62,9 @@ class LogFrobenius(th.nn.Module):
             X = ((X * X.conj()).real).sqrt()
         elif X.size(-1) == 2:
             X = X.pow(2).sum(axis=-1).sqrt()
+
+        if X.dtype is not th.float32 or th.double:
+            X = X.to(th.float32)
 
         D = X.dim()
         dim = list(range(1, D))
@@ -74,7 +80,7 @@ class LogFrobenius(th.nn.Module):
 
 if __name__ == '__main__':
 
-    f_func = Frobenius(reduction='mean')
+    f_func = FrobeniusLoss(reduction='mean')
     X = th.randn(1, 3, 4, 2)
     V = f_func(X)
     print(V)

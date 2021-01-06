@@ -20,6 +20,24 @@ from .misc.transform import standardization, scale
 from .misc.mapping_operation import mapping
 from .misc.sampling import sample_tensor, split_tensor
 
+from .module.loss.contrast import ContrastLoss
+from .module.loss.entropy import EntropyLoss
+from .module.loss.norm import FrobeniusLoss, LogFrobeniusLoss
+from .module.loss.perceptual import RandomProjectionLoss
+from .module.loss.retrieval import DiceLoss, JaccardLoss, F1Loss
+from .module.loss.semantic import EdgeLoss
+# from .module.loss.segmentation import SoftDiceLoss, FocalLoss, BinaryCrossEntropyLoss, ContourLoss, EdgeAwareLoss
+from .module.loss.ssims import SSIMLoss, MSSSIMLoss, StructureLoss
+from .module.loss.variation import TotalVariation
+from .module.layers.cnnsize import ConvSize1d, ConvTransposeSize1d, PoolSize1d, UnPoolSize1d, ConvSize2d, ConvTransposeSize2d, PoolSize2d, UnPoolSize2d
+from .module.layers.edge import EdgeDetector, EdgeFeatureExtractor
+from .module.layers.pool import MeanSquarePool2d, PnormPool2d
+
+from .module.layers.complex_functions import complex_relu, complex_leaky_relu, complex_max_pool2d, complex_dropout, complex_dropout2d, complex_upsample
+from .module.layers.complex_layers import ComplexSequential, ComplexMaxPool2d, ComplexMaxPool1d, ComplexDropout,  ComplexDropout2d, ComplexReLU, ComplexLeakyReLU, ComplexConvTranspose2d, ComplexConv2d, ComplexConvTranspose1d, ComplexConv1d, ComplexLinear, ComplexUpsample, NaiveComplexBatchNorm1d, NaiveComplexBatchNorm2d, NaiveComplexBatchNorm1d, ComplexBatchNorm2d, ComplexBatchNorm1d, ComplexConv1, ComplexMaxPool1, ComplexConv2, ComplexMaxPool2
+from .module.layers.fft_layers import FFTLayer1d
+from .module.layers.convolution import FFTConv1, Conv1, Conv2, MaxPool1, MaxPool2
+
 from .module.misc.transform import Standardization
 
 from .dsp.filters import sobelfilter
@@ -43,22 +61,5 @@ from .utils.const import *
 from .utils.ios import loadmat, savemat, loadh5, saveh5
 from .utils.file import listxfile, pathjoin, fileparts, readtxt
 from .utils.randomfunc import setseed, randgrid, randgrid2d, randperm, randperm2d
-
-
-
-from .nn.module.cnnsize import ConvSize1d, ConvTransposeSize1d, PoolSize1d, UnPoolSize1d, ConvSize2d, ConvTransposeSize2d, PoolSize2d, UnPoolSize2d
-from .nn.module.edge import EdgeDetector, EdgeFeatureExtractor
-from .nn.module.pool import MeanSquarePool2d, PnormPool2d
-from .nn.loss.retrieval import DiceLoss, JaccardLoss, IridescentLoss, F1Loss
-from .nn.loss.ssims import SSIMLoss, MSSSIMLoss, StructureLoss
-from .nn.loss.semantic import EdgeLoss
-from .nn.loss.entropy import ShannonEntropy, NaturalEntropy
-from .nn.loss.variation import TotalVariation
-from .nn.loss.contrast import ContrastLoss
-from .nn.loss.norm import Frobenius
-from .nn.module.complex_functions import complex_relu, complex_leaky_relu, complex_max_pool2d, complex_dropout, complex_dropout2d, complex_upsample
-from .nn.module.complex_layers import ComplexSequential, ComplexMaxPool2d, ComplexMaxPool1d, ComplexDropout,  ComplexDropout2d, ComplexReLU, ComplexLeakyReLU, ComplexConvTranspose2d, ComplexConv2d, ComplexConvTranspose1d, ComplexConv1d, ComplexLinear, ComplexUpsample, NaiveComplexBatchNorm1d, NaiveComplexBatchNorm2d, NaiveComplexBatchNorm1d, ComplexBatchNorm2d, ComplexBatchNorm1d, ComplexConv1, ComplexMaxPool1, ComplexConv2, ComplexMaxPool2
-from .nn.module.fft_layers import FFTLayer1d
-from .nn.module.convolution import FFTConv1, Conv1, Conv2, MaxPool1, MaxPool2
 
 

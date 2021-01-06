@@ -83,7 +83,7 @@ def sample_tensor(x, n, axis=0, groups=1, mode='sequentially', seed=None, extra=
             idx += list(range(int(M * g), int(M * g) + m))
     if mode in ['uniformly', 'Uniformly']:
         for g in range(groups):
-            idx += list(range(int(M * g), int(M * g + M), int(M / m)))
+            idx += list(range(int(M * g), int(M * g + M), int(M / m)))[:m]
     if mode in ['randomly', 'Randomly']:
         setseed(seed)
         for g in range(groups):

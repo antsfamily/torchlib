@@ -8,8 +8,7 @@
 
 import torch as th
 import torch.nn as nn
-import torchlib as tl
-from torchlib.utils.const import EPS
+from tsar.utils.const import EPS
 from torch.autograd import Variable
 
 
@@ -158,19 +157,3 @@ if __name__ == '__main__':
     print(P)
     print(G)
     print(th.mean(th.abs(X - G)))
-
-    # criterion = tl.DiceLoss()
-    criterion = tl.DiceLoss(size_average=False, reduce=False)
-    # criterion = tl.JaccardLoss()
-    # criterion = tl.IridescentLoss()
-    # criterion = tl.F1Loss()
-    # criterion = tl.F1Loss(size_average=True, reduce=True)
-
-
-    loss = criterion(X, G)
-    print(loss.data)
-    lossv = loss.item()
-    print(lossv)
-    loss.backward()
-
-    print(lossv)

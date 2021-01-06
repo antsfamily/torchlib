@@ -16,8 +16,8 @@ def setseed(seed=None, target='numpy'):
 
     Parameters
     ----------
-    seed : {[type]}, optional
-        [description] (the default is None, which [default_description])
+    seed : {integer or None}, optional
+        seed for random number generator (the default is None)
     target : {str}, optional
         - ``'numpy'``: ``np.random.seed(seed)``
         - ``'random'``: ``torch.random.manual_seed(seed)`` (the default)
@@ -61,7 +61,7 @@ def randgrid(start, stop, step, number):
     return list(P[0:number])
 
 
-def randgrid2d(start, stop, step, number):
+def randgrid2d(start, stop, step, number, upovr=[0.25, 0.25]):
     r"""generates non-repeated random integers
 
     Generates :attr:`number` non-repeated random integers from :attr:`start` to :attr:`stop` with stepsize :attr:`step`.
@@ -76,6 +76,9 @@ def randgrid2d(start, stop, step, number):
         sampling stepsize in both two dimensions.
     number : {integer}
         the number of samples
+    upovr : {float list}
+        the upper limit of overlap rate.
+
 
     Examples
     ----------
@@ -118,8 +121,12 @@ def randgrid2d(start, stop, step, number):
     Ph = P // W
     Pw = P % W
 
-    Y = Y[Ph] + np.random.randint(0, step[0] / 2, N)
-    X = X[Pw] + np.random.randint(0, step[1] / 2, N)
+    Y = Y[Ph]
+    X = X[Pw]
+    if int(upovr[0] * step[0]) > 0:
+        Y += np.random.randint(0, int(step[0] * upovr[0]), N)
+    if int(upovr[1] * step[1]) > 0:
+        X += np.random.randint(0, int(step[1] * upovr[1]), N)
 
     return list(Y), list(X)
 
@@ -196,7 +203,9 @@ if __name__ == '__main__':
     y = randperm(0, 8192, 800)
     x = randperm(0, 8192, 800)
 
-    y, x = randgrid2d([0, 0], [8192, 8192], [256, 256], 2048)
+    y, x = randgrid2d([0, 0], [8192, 8192], [256, 256], 400, [0, 0])
+    # y = y[0:40]
+    # x = x[0:40]
 
     plt.figure()
     plt.plot(x, y, '*')

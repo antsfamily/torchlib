@@ -294,7 +294,3 @@ if __name__ == '__main__':
     unpool = th.nn.MaxUnpool2d(kernel_size=K, stride=S, padding=P)
     xx = unpool(y, idx, output_size=x.size())
     print(xx.size())
-
-    unpool = th.nn.MaxUnpool2d(kernel_size=K, stride=S, padding=P)
-    xx = unpool(y, idx)
-    print(xx.size())
