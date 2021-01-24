@@ -8,7 +8,7 @@
 
 import torch as th
 import torch.nn as nn
-from tsar.utils.const import EPS
+from torchlib.utils.const import EPS
 from torch.autograd import Variable
 
 

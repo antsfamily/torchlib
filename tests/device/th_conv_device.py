@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import time
@@ -5,14 +6,17 @@ import time
 
 
 device = 'cuda:0'
-device = 'cuda:1'
+#device = 'cuda:1'
+
+os.environ["CUDA_VISIBLE_DEVICES"] = device[-1]
+device = 'cuda'
 
 niters = 1000
 
 print("Torch version: ", torch.__version__)
 print("Torch CUDA version: ", torch.version.cuda)
 print("CUDNN Version: ", torch.backends.cudnn.version())
-print(torch.cuda.get_device_name(int(device[-1])))
+print(torch.cuda.get_device_name(0))
 
 def profile(model, x, benchmark, deterministic, nb_iters):
     torch.backends.cudnn.benchmark = benchmark

@@ -6,7 +6,7 @@
 # @Version : $1.0$
 
 import torch as th
-from tsar.utils.const import EPS
+from torchlib.utils.const import EPS
 
 
 class ContrastLoss(th.nn.Module):

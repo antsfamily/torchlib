@@ -7,7 +7,7 @@
 
 import torch as th
 import torch.nn as nn
-import tsar as ts
+import torchlib as ts
 
 
 class RandomProjectionLoss(nn.Module):

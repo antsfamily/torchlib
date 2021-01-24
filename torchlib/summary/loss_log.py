@@ -15,6 +15,9 @@ class LossLog():
         self.title = title
         self.losses = {'train': [], 'valid': [], 'test': []}
 
+    def assign(self, key, value):
+        self.losses[key] = value
+
     def add(self, key, value):
         self.losses[key].append(value)
 

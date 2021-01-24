@@ -142,7 +142,7 @@ def fftshift(x, axis=None):
     ::
 
         import numpy as np
-        import tsar as ts
+        import torchlib as tl
         import torch as th
 
         x = [1, 2, 3, 4, 5, 6]
@@ -215,7 +215,7 @@ def ifftshift(x, axis=None):
     ::
 
         import numpy as np
-        import tsar as ts
+        import torchlib as tl
         import torch as th
 
         x = [1, 2, 3, 4, 5, 6]
@@ -311,9 +311,9 @@ def padfft(X, nfft=None, axis=0, shift=False):
 
 
 def fft(x, n=None, axis=0, norm="backward", shift=False):
-    """FFT in tsar
+    """FFT
 
-    FFT in tsar.
+    FFT
 
     Parameters
     ----------
@@ -373,9 +373,9 @@ def fft(x, n=None, axis=0, norm="backward", shift=False):
 
 
 def ifft(x, n=None, axis=0, norm="backward", shift=False):
-    """IFFT in tsar
+    """IFFT
 
-    IFFT in tsar, since ifft in torch only supports complex-complex transformation,
+    IFFT, since ifft in torch only supports complex-complex transformation,
     for real ifft, we insert imaginary part with zeros (torch.stack((x,torch.zeros_like(x), dim=-1))),
     also you can use torch's rifft.
 
