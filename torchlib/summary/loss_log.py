@@ -10,10 +10,15 @@ import matplotlib.pyplot as plt
 
 class LossLog():
 
-    def __init__(self, plotdir=None, title=None):
+    def __init__(self, plotdir=None, xlabel='Epoch', ylabel='Loss', title=None, logdict=None):
         self.plotdir = plotdir
         self.title = title
-        self.losses = {'train': [], 'valid': [], 'test': []}
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        if logdict is None:
+            self.losses = {'train': [], 'valid': [], 'test': []}
+        else:
+            self.losses = logdict
 
     def assign(self, key, value):
         self.losses[key] = value
@@ -35,8 +40,8 @@ class LossLog():
                 plt.plot(v)
                 legend.append(k)
         plt.legend(legend)
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss')
+        plt.xlabel(self.xlabel)
+        plt.ylabel(self.ylabel)
         plt.grid()
 
         if self.title is not None:
@@ -45,7 +50,7 @@ class LossLog():
         if self.plotdir is None:
             plt.show()
         else:
-            plt.savefig(self.plotdir + '/loss_epoch.png')
+            plt.savefig(self.plotdir + '/' + self.ylabel + '_' + self.xlabel + '.png')
             plt.close()
 
 

@@ -6,7 +6,7 @@ import time
 
 
 device = 'cuda:0'
-#device = 'cuda:1'
+device = 'cuda:1'
 
 os.environ["CUDA_VISIBLE_DEVICES"] = device[-1]
 device = 'cuda'
