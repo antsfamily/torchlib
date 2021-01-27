@@ -7,7 +7,7 @@ from .base.arrayops import sl, cut
 
 from .evaluation.classification import accuracy
 
-
+from .evaluation.contrast import contrast
 from .evaluation.entropy import entropy
 from .evaluation.retrieval import true_positive, true_negative, \
     false_positive, false_negative, \
@@ -20,7 +20,7 @@ from .misc.transform import standardization, scale
 from .misc.mapping_operation import mapping
 from .misc.sampling import sample_tensor, split_tensor
 
-from .module.loss.contrast import ContrastLoss
+from .module.loss.contrast import ContrastLoss, NegativeContrastLoss, ContrastReciprocalLoss
 from .module.loss.entropy import EntropyLoss
 from .module.loss.norm import FrobeniusLoss, LogFrobeniusLoss
 from .module.loss.perceptual import RandomProjectionLoss
