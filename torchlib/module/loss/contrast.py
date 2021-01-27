@@ -6,7 +6,7 @@
 # @Version : $1.0$
 
 import torch as th
-from tsar.utils.const import EPS
+from torchlib.utils.const import EPS
 
 
 class ContrastReciprocalLoss(th.nn.Module):
@@ -48,10 +48,10 @@ class ContrastReciprocalLoss(th.nn.Module):
             X = X.to(th.float32)
 
         if self.mode in ['way1', 'WAY1']:
-            Xmean = X.mean(axis=axis)
-            C = Xmean / ((X - Xmean).pow(2).mean(axis=axis).sqrt() + EPS)
+            Xmean = X.mean(axis=axis, keepdims=True)
+            C = Xmean / ((X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() + EPS)
         if self.mode in ['way2', 'WAY2']:
-            C = (X.sqrt().mean(axis=axis)).pow(2) / (X.mean(axis=axis) + EPS)
+            C = (X.sqrt().mean(axis=axis, keepdims=True)).pow(2) / (X.mean(axis=axis, keepdims=True) + EPS)
 
         if self.reduction == 'mean':
             C = th.mean(C)
@@ -99,10 +99,10 @@ class NegativeContrastLoss(th.nn.Module):
             X = X.to(th.float32)
 
         if self.mode in ['way1', 'WAY1']:
-            Xmean = X.mean(axis=axis)
-            C = (X - Xmean).pow(2).mean(axis=axis).sqrt() / (Xmean + EPS)
+            Xmean = X.mean(axis=axis, keepdims=True)
+            C = (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() / (Xmean + EPS)
         if self.mode in ['way2', 'WAY2']:
-            C = X.mean(axis=axis) / ((X.sqrt().mean(axis=axis)).pow(2) + EPS)
+            C = X.mean(axis=axis, keepdims=True) / ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + EPS)
 
         if self.reduction == 'mean':
             C = th.mean(C)
@@ -150,10 +150,10 @@ class ContrastLoss(th.nn.Module):
             X = X.to(th.float32)
 
         if self.mode in ['way1', 'WAY1']:
-            Xmean = X.mean(axis=axis)
-            C = (X - Xmean).pow(2).mean(axis=axis).sqrt() / (Xmean + EPS)
+            Xmean = X.mean(axis=axis, keepdims=True)
+            C = (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() / (Xmean + EPS)
         if self.mode in ['way2', 'WAY2']:
-            C = X.mean(axis=axis) / ((X.sqrt().mean(axis=axis)).pow(2) + EPS)
+            C = X.mean(axis=axis, keepdims=True) / ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + EPS)
 
         if self.reduction == 'mean':
             C = th.mean(C)

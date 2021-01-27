@@ -6,7 +6,7 @@
 # @Version : $1.0$
 
 import torch as th
-from tsar.utils.const import EPS
+from torchlib.utils.const import EPS
 
 
 def contrast(X, mode='way1', reduction='mean'):
@@ -40,10 +40,10 @@ def contrast(X, mode='way1', reduction='mean'):
         X = X.to(th.float32)
 
     if mode in ['way1', 'WAY1']:
-        Xmean = X.mean(axis=axis)
-        C = (X - Xmean).pow(2).mean(axis=axis).sqrt() / (Xmean + EPS)
+        Xmean = X.mean(axis=axis, keepdims=True)
+        C = (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() / (Xmean + EPS)
     if mode in ['way2', 'WAY2']:
-        C = X.mean(axis=axis) / ((X.sqrt().mean(axis=axis)).pow(2) + EPS)
+        C = X.mean(axis=axis, keepdims=True) / ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + EPS)
 
     if reduction == 'mean':
         C = th.mean(C)
