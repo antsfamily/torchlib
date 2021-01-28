@@ -62,5 +62,6 @@ from .utils.const import *
 from .utils.ios import loadmat, savemat, loadh5, saveh5
 from .utils.file import listxfile, pathjoin, fileparts, readtxt
 from .utils.randomfunc import setseed, randgrid, randgrid2d, randperm, randperm2d
+from .utils.plot_show import plots, Plots
 
 

@@ -56,8 +56,8 @@ class LossLog():
 
 if __name__ == '__main__':
 
-    fdlr = LossLog(plotdir='./')
-
+    fdlr = LossLog(plotdir='./', xlabel='xlabel', ylabel='ylabel')
+    fdlr = LossLog(plotdir='./', xlabel='Epoch', ylabel='Loss', title=None, logdict={'train':[], 'valid': []})
     for n in range(100):
         fdlr.add('train', n)
         fdlr.add('valid', n - 1)
