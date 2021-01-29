@@ -51,7 +51,7 @@ from .spl import voptimizer
 from .spl import spfunction
 
 from .optim.learning_rate import gammalr, LrFinder
-from .optim.lr_scheduler import DoubleGaussianKernelLR
+from .optim.lr_scheduler import DoubleGaussianKernelLR, MountainLR
 from .optim.save_load import device_transfer
 
 from .summary.loss_log import LossLog
