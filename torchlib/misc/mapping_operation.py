@@ -7,7 +7,9 @@
 from __future__ import division, print_function, absolute_import
 
 from torchlib.base.mathops import nextpow2
+from torchlib.misc.transform import scale
 from torchlib.utils.const import EPS
+from torchlib.utils.convert import str2num
 import torch as th
 
 
@@ -37,37 +39,45 @@ def mapping(X, drange=(0., 255.), mode='amplitude', method='2Sigma', odtype='aut
         converted image data
 
     """
+    if method is None:
+        return X
 
     X = X.float()
     xmin, xmax = X.min(), X.max()
+    dmin, dmax = drange[0:2]
 
-    nsigma = int(method[0])
+    if method[-5:] in ['Sigma', 'sigma', 'SIGMA']:
+        nsigma = str2num(method, float)[0]
 
-    if mode in ['Amplitude', 'amplitude', 'AMPLITUDE']:
-        xvsv = X.std()
-    if mode in ['Power', 'power', 'POWER']:
-        xvsv = X.var()
+        if mode in ['Amplitude', 'amplitude', 'AMPLITUDE']:
+            xvsv = X.std()
+        if mode in ['Power', 'power', 'POWER']:
+            xvsv = X.var()
 
-    xmean = X.mean()
-    diff_min = xmean - nsigma * xvsv
-    diff_max = xmean + nsigma * xvsv
+        xmean = X.mean()
+        diff_min = xmean - nsigma * xvsv
+        diff_max = xmean + nsigma * xvsv
 
-    ymin, ymax = diff_min, diff_max
+        ymin, ymax = diff_min, diff_max
 
-    if diff_min < xmin:
-        ymin = xmin
-    if diff_max > xmax:
-        ymax = xmax
+        if diff_min < xmin:
+            ymin = xmin
+        if diff_max > xmax:
+            ymax = xmax
 
-    dmin, dmax = drange
-    slope = dmax / (ymax - ymin + EPS)
-    # offset = -slope * ymin
-    offset = -slope * ymin + dmin
+        slope = dmax / (ymax - ymin + EPS)
+        # offset = -slope * ymin
+        offset = -slope * ymin + dmin
 
-    X = slope * X + offset
-    X[X < dmin] = dmin
-    X[X > dmax] = dmax
+        X = slope * X + offset
+        X[X < dmin] = dmin
+        X[X > dmax] = dmax
 
+    if method in ['Log', 'log', 'LOG']:
+        X = X / th.max(X)
+        X = 20.0 * th.log10(X)
+        X[X < drange[-1]] = drange[-1]
+        X = scale(X, drange[0:2], [drange[-1], 0])
 
     if odtype in ['auto', 'AUTO']:
         if dmin >= 0:
@@ -78,7 +88,6 @@ def mapping(X, drange=(0., 255.), mode='amplitude', method='2Sigma', odtype='aut
 
     if type(odtype) is str:
         X = X.to(eval(odtype))
-
     return X
 
 

@@ -10,7 +10,7 @@ import torch as th
 import torch.fft as thfft
 
 
-def freq(fs, n, norm=False, shift=False, dtype=th.float32):
+def freq(n, fs, norm=False, shift=False, dtype=th.float32, device='cpu'):
     r"""Return the sample frequencies
 
     Return the sample frequencies.
@@ -29,7 +29,7 @@ def freq(fs, n, norm=False, shift=False, dtype=th.float32):
     ----------
     fs : {float}
         Sampling rate.
-    n : {integer}
+    n : {int}
         Number of samples.
     norm : {bool}
         Normalize the frequencies.
@@ -37,6 +37,8 @@ def freq(fs, n, norm=False, shift=False, dtype=th.float32):
         Does shift the zero frequency to center.
     dtype : {torch tensor type}
         Data type, default is ``th.float32``.
+    device : {str}
+        device string, default is ``'cpu'``.
 
     Returns
     -------
@@ -52,12 +54,12 @@ def freq(fs, n, norm=False, shift=False, dtype=th.float32):
         f = np.linspace(0, n, n, endpoint=True)
 
     if norm:
-        return th.tensor(f / n, dtype=dtype)
+        return th.tensor(f / n, dtype=dtype, device=device)
     else:
-        return th.tensor(f / (d * n), dtype=dtype)
+        return th.tensor(f / (d * n), dtype=dtype, device=device)
 
 
-def fftfreq(fs, n, norm=False, shift=False, dtype=th.float32):
+def fftfreq(n, fs, norm=False, shift=False, dtype=th.float32, device='cpu'):
     r"""Return the Discrete Fourier Transform sample frequencies
 
     Return the Discrete Fourier Transform sample frequencies.
@@ -76,43 +78,65 @@ def fftfreq(fs, n, norm=False, shift=False, dtype=th.float32):
 
     Parameters
     ----------
+    n : {int}
+        Number of samples.
     fs : {float}
         Sampling rate.
-    n : {integer}
-        Number of samples.
     norm : {bool}
         Normalize the frequencies.
     shift : {bool}
         Does shift the zero frequency to center.
     dtype : {torch tensor type}
         Data type, default is ``th.float32``.
+    device : {torch tensor device}
+        device string, ``'cpu', 'cuda:0', 'cuda:1'``
 
     Returns
     -------
     torch 1d-array
         Frequency array with size :math:`n×1`.
     """
+
+    # d = 1. / fs
+    # if n % 2 == 0:
+    #     N = n
+    #     N1 = int(n / 2.)
+    #     N2 = int(n / 2.)
+    #     endpoint = False
+    # else:
+    #     N = n - 1
+    #     N1 = int((n + 1) / 2.)
+    #     N2 = int((n - 1) / 2.)
+    #     endpoint = True
+
+    # if shift:
+    #     f = np.linspace(-N / 2., N / 2., n, endpoint=endpoint)
+    # else:
+    #     f = np.hstack((np.linspace(0, N / 2., N1, endpoint=endpoint),
+    #                    np.linspace(-N / 2., 0, N2, endpoint=False)))
+    # if norm:
+    #     return th.tensor(f / n, dtype=dtype)
+    # else:
+    #     return th.tensor(f / (d * n), dtype=dtype)
+
+    n = int(n)
     d = 1. / fs
-    if n % 2 == 0:
-        N = n
-        N1 = int(n / 2.)
-        N2 = int(n / 2.)
-        endpoint = False
+    if norm:
+        s = 1.0 / n
     else:
-        N = n - 1
-        N1 = int((n + 1) / 2.)
-        N2 = int((n - 1) / 2.)
-        endpoint = True
+        s = 1.0 / (n * d)
+    results = th.empty(n, dtype=int, device=device)
+    N = (n - 1) // 2 + 1
+    pp = th.arange(0, N, dtype=int, device=device)
+    pn = th.arange(-(n // 2), 0, dtype=int, device=device)
+
+    results[:N] = pp
+    results[N:] = pn
 
     if shift:
-        f = np.linspace(-N / 2., N / 2., n, endpoint=endpoint)
-    else:
-        f = np.hstack((np.linspace(0, N / 2., N1, endpoint=endpoint),
-                       np.linspace(-N / 2., 0, N2, endpoint=False)))
-    if norm:
-        return th.tensor(f / n, dtype=dtype)
-    else:
-        return th.tensor(f / (d * n), dtype=dtype)
+        results = fftshift(results, axis=0)
+
+    return results * s
 
 
 def fftshift(x, axis=None):
@@ -125,7 +149,7 @@ def fftshift(x, axis=None):
     ----------
     x : {torch tensor}
         Input tensor.
-    axis : {number}, optional
+    axis : {int}, optional
         Axes over which to shift. (Default is None, which shifts all axes.)
 
     Returns
@@ -149,14 +173,14 @@ def fftshift(x, axis=None):
         y = np.fft.fftshift(x)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x)
+        y = tl.fftshift(x)
         print(y)
 
         x = [1, 2, 3, 4, 5, 6, 7]
         y = np.fft.fftshift(x)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x)
+        y = tl.fftshift(x)
         print(y)
 
         axis = (0, 1)  # axis = 0, axis = 1
@@ -164,7 +188,7 @@ def fftshift(x, axis=None):
         y = np.fft.fftshift(x, axis)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x, axis)
+        y = tl.fftshift(x, axis)
         print(y)
 
 
@@ -172,7 +196,7 @@ def fftshift(x, axis=None):
         y = np.fft.fftshift(x, axis)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x, axis)
+        y = tl.fftshift(x, axis)
         print(y)
 
     """
@@ -198,7 +222,7 @@ def ifftshift(x, axis=None):
     ----------
     x : {torch tensor}
         The input tensor.
-    axis : {number}, optional
+    axis : {int}, optional
         Axes over which to shift. (Default is None, which shifts all axes.)
 
     Returns
@@ -222,14 +246,14 @@ def ifftshift(x, axis=None):
         y = np.fft.fftshift(x)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x)
+        y = tl.fftshift(x)
         print(y)
 
         x = [1, 2, 3, 4, 5, 6, 7]
         y = np.fft.fftshift(x)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x)
+        y = tl.fftshift(x)
         print(y)
 
         axis = (0, 1)  # axis = 0, axis = 1
@@ -237,7 +261,7 @@ def ifftshift(x, axis=None):
         y = np.fft.fftshift(x, axis)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x, axis)
+        y = tl.fftshift(x, axis)
         print(y)
 
 
@@ -245,7 +269,7 @@ def ifftshift(x, axis=None):
         y = np.fft.fftshift(x, axis)
         print(y)
         x = th.tensor(x)
-        y = ts.fftshift(x, axis)
+        y = tl.fftshift(x, axis)
         print(y)
 
     """
@@ -270,9 +294,9 @@ def padfft(X, nfft=None, axis=0, shift=False):
     ----------
     X : {torch tensor}
         Data to be padded.
-    nfft : {number or None}
+    nfft : {int or None}
         Padding size.
-    axis : {number}, optional
+    axis : {int}, optional
         Padding dimension. (the default is 0)
     shift : {bool}, optional
         Whether to shift the frequency (the default is False)
@@ -311,19 +335,19 @@ def padfft(X, nfft=None, axis=0, shift=False):
 
 
 def fft(x, n=None, axis=0, norm="backward", shift=False):
-    """FFT
+    """FFT in torchlib
 
-    FFT
+    FFT in torchlib.
 
     Parameters
     ----------
-    x : {torch array}
+    x : {tensor}
         complex representation is supported. Since torch1.7 and above support complex array,
         when :attr:`x` is in real-representation formation(last dimension is 2, real, imag),
         we will change the representation in complex formation, after FFT, it will be change back.
-    n : {integer}, optional
-        number of fft points (the default is None --> equals to signal dimension)
-    axis : {number}, optional
+    n : {int}, optional
+        the number of fft points (the default is None --> equals to signal dimension)
+    axis : {int}, optional
         axis of fft (the default is 0, which the first dimension)
     norm : {None or str}, optional
         Normalization mode. For the forward transform (fft()), these correspond to:
@@ -335,8 +359,8 @@ def fft(x, n=None, axis=0, norm="backward", shift=False):
 
     Returns
     -------
-    y : {torch array}
-        fft results torch array with the same type as :attr:`x`
+    y : {tensor}
+        fft results tensor with the same type as :attr:`x`
 
     Raises
     ------
@@ -356,13 +380,16 @@ def fft(x, n=None, axis=0, norm="backward", shift=False):
         realflag = False
 
     d = x.size(axis)
-    if (n is not None) and (d < n):
+    if n is None:
+        n = d
+    if d < n:
         x = padfft(x, n, axis, shift)
     elif d > n:
         raise ValueError('nfft is small than signal dimension!')
 
     if shift:
-        y = thfft.fftshift(thfft.fft(thfft.fftshift(x, dim=axis), n=n, dim=axis, norm=norm), dim=axis)
+        y = thfft.fftshift(thfft.fft(thfft.fftshift(x, dim=axis),
+                                     n=n, dim=axis, norm=norm), dim=axis)
     else:
         y = thfft.fft(x, n=n, dim=axis, norm=norm)
 
@@ -373,21 +400,21 @@ def fft(x, n=None, axis=0, norm="backward", shift=False):
 
 
 def ifft(x, n=None, axis=0, norm="backward", shift=False):
-    """IFFT
+    """IFFT in torchlib
 
-    IFFT, since ifft in torch only supports complex-complex transformation,
+    IFFT in torchlib, since ifft in torch only supports complex-complex transformation,
     for real ifft, we insert imaginary part with zeros (torch.stack((x,torch.zeros_like(x), dim=-1))),
     also you can use torch's rifft.
 
     Parameters
     ----------
-    x : {torch array}
+    x : {tensor}
         both complex and real representation are supported. Since torch does not
         support complex array, when :attr:`x` is complex, we will change the representation
         in real formation(last dimension is 2, real, imag), after IFFT, it will be change back.
-    n : {integer}, optional
-        number of ifft points (the default is None --> equals to signal dimension)
-    axis : {number}, optional
+    n : {int}, optional
+        the number of ifft points (the default is None --> equals to signal dimension)
+    axis : {int}, optional
         axis of ifft (the default is 0, which the first dimension)
     norm : {bool}, optional
         Normalization mode. For the backward transform (ifft()), these correspond to:
@@ -399,8 +426,8 @@ def ifft(x, n=None, axis=0, norm="backward", shift=False):
 
     Returns
     -------
-    y : {torch array}
-        ifft results torch array with the same type as :attr:`x`
+    y : {tensor}
+        ifft results tensor with the same type as :attr:`x`
 
     Raises
     ------
@@ -420,7 +447,8 @@ def ifft(x, n=None, axis=0, norm="backward", shift=False):
         realflag = False
 
     if shift:
-        y = thfft.ifftshift(thfft.ifft(thfft.ifftshift(x, dim=axis), n=n, dim=axis, norm=norm), dim=axis)
+        y = thfft.ifftshift(thfft.ifft(thfft.ifftshift(x, dim=axis),
+                                       n=n, dim=axis, norm=norm), dim=axis)
     else:
         y = thfft.ifft(x, n=n, dim=axis, norm=norm)
 
@@ -449,4 +477,3 @@ if __name__ == '__main__':
     print(y2, y2.shape)
     x2 = ifft(y2, n=nfft, axis=1, norm=None, shift=ftshift)
     print(x2)
-

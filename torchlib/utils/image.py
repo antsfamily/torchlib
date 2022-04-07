@@ -9,24 +9,30 @@ from skimage.io import imread as skimread
 from skimage.io import imsave as skimsave
 from skimage.transform import resize as skimresize
 
+import torch as th
 import numpy as np
 import torchlib as tl
 
 
 def imread(imgfile):
-    return skimread(imgfile)
+    try:
+        return th.from_numpy(skimread(imgfile))
+    except:
+        return th.from_numpy(skimread(imgfile) / 1.)
 
 
 def imsave(outfile, img):
+    if type(img) is th.Tensor:
+        img = img.cpu().numpy()
     return skimsave(outfile, img, check_contrast=False)
 
 
 def imadjust(img, lhin, lhout):
     if lhout is None:
         lhout = (0, 255)
-    medianv = np.median(img)
-    # meanv = np.mean(img)
-    maxv = np.max(img)
+    medianv = th.median(img)
+    # meanv = th.mean(img)
+    maxv = th.max(img)
     if lhin is None:
         lhin = (medianv, maxv * 0.886)
     elif lhin[0] is None:
@@ -42,10 +48,10 @@ def imadjustlog(img, lhin=None, lhout=None):
     if lhout is None:
         lhout = (0, 255)
 
-    img = 20 * np.log10(img + tl.EPS)
-    medianv = np.median(img)
-    meanv = np.mean(img)
-    maxv = np.max(img)
+    img = 20 * tl.log10(img + tl.EPS)
+    medianv = tl.median(img)
+    meanv = tl.mean(img)
+    maxv = tl.max(img)
 
     if lhin is None:
         # lhin = (medianv * (0.886**2), maxv * (0.886**2))
@@ -84,18 +90,19 @@ def imresize(img, oshape=None, odtype=None, order=1, mode='constant', cval=0, cl
 
     Parameters
     ----------
-    img : {ndarray}
+    img : ndarray
         Input image.
-    oshape : {tulpe}, optional
+    oshape : tulpe, optional
         output shape (the default is None, which is the same as the input)
-    odtype : {string}, optional
+    odtype : str, optional
         output data type, ``'uint8', 'uint16', 'int8', ...`` (the default is None, float)
     order : int, optional
         The order of the spline interpolation, default is 1. The order has to
         be in the range 0-5. See `skimage.transform.warp` for detail.
-    mode : {'constant', 'edge', 'symmetric', 'reflect', 'wrap'}, optional
+    mode : str, optional
         Points outside the boundaries of the input are filled according
-        to the given mode.  Modes match the behaviour of `numpy.pad`.  The
+        to the given mode. {``'constant'``, ``'edge'``, ``'symmetric'``, ``'reflect'``, ``'wrap'``},
+        Modes match the behaviour of `numpy.pad`.  The
         default mode is 'constant'.
     cval : float, optional
         Used in conjunction with mode 'constant', the value outside
@@ -133,10 +140,20 @@ def imresize(img, oshape=None, odtype=None, order=1, mode='constant', cval=0, cl
 
     """
 
+    typeimg = type(img)
+    if typeimg is th.Tensor:
+        device = img.device
+        img = img.cpu().numpy()
+
     oimage = skimresize(img, output_shape=oshape, order=1, mode=mode,
                         cval=cval, clip=clip, preserve_range=preserve_range)
 
+    if typeimg is th.Tensor:
+        oimage = th.tensor(oimage, device=device)
     if odtype is not None:
-        oimage = oimage.astype(odtype)
+        if typeimg == th.Tensor:
+            oimage = oimage.to(odtype)
+        if typeimg == np.ndarray:
+            oimage = oimage.astype(odtype)
 
     return oimage

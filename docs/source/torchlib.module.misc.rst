@@ -12,7 +12,6 @@ torchlib.module.misc.transform module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

@@ -1,229 +1,269 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Date    : 2019-07-24 18:29:48
-# @Author  : Zhi Liu (zhiliu.mind@gmail.com)
-# @Link    : http://iridescent.ink
-# @Version : $1.0$
-# @Note    : https://github.com/Po-Hsun-Su/pytorch-ssim, https://github.com/jorge-pessoa/pytorch-msssim
+# Copyright 2020 by Gongfan Fang, Zhejiang University. All rights reserved.
+# @Note    : https://github.com/VainF/pytorch-msssim/blob/master/pytorch_msssim/ssim.py
 
+import warnings
 import torch
 import torch.nn.functional as F
-from torch.autograd import Variable
-from math import exp
-from torchlib.utils.const import EPS
 
 
-def gaussian(winsize, sigma):
-    gauss = torch.Tensor([exp(-(x - winsize // 2)**2 / float(2 * sigma**2)) for x in range(winsize)])
-    return gauss / gauss.sum()
-
-
-def create_window(winsize, channel):
-    _1D_window = gaussian(winsize, 1.5).unsqueeze(1)
-    _2D_window = _1D_window.mm(_1D_window.t()).float().unsqueeze(0).unsqueeze(0)
-    window = Variable(_2D_window.expand(channel, 1, winsize, winsize).contiguous())
-    return window
-
-
-def _ssim(X, Y, window, winsize, channel, sizeavg=True, L=None, alpha=1, beta=1, gamma=1, full=False):
-    r"""Structural similarity
-
+def _fspecial_gauss_1d(size, sigma):
+    r"""Create 1-D gauss kernel
+    Args:
+        size (int): the size of gauss kernel
+        sigma (float): sigma of normal distribution
+    Returns:
+        torch.Tensor: 1D kernel (1 x 1 x size)
     """
+    coords = torch.arange(size).to(dtype=torch.float)
+    coords -= size // 2
 
-    if L is None:
-        L = 255.0
+    g = torch.exp(-(coords ** 2) / (2 * sigma ** 2))
+    g /= g.sum()
 
-    C1 = (0.01 * L)**2.0
-    C2 = (0.03 * L)**2.0
-    C3 = C2 / 2.0
+    return g.unsqueeze(0).unsqueeze(0)
 
-    mu1 = F.conv2d(X, window, padding=winsize // 2, groups=channel)
-    mu2 = F.conv2d(Y, window, padding=winsize // 2, groups=channel)
 
-    mu1_sq = mu1 * mu1
-    mu2_sq = mu2 * mu2
+def gaussian_filter(input, win):
+    r""" Blur input with 1-D kernel
+    Args:
+        input (torch.Tensor): a batch of tensors to be blurred
+        window (torch.Tensor): 1-D gauss kernel
+    Returns:
+        torch.Tensor: blurred tensors
+    """
+    assert all([ws == 1 for ws in win.shape[1:-1]]), win.shape
+    if len(input.shape) == 4:
+        conv = F.conv2d
+    elif len(input.shape) == 5:
+        conv = F.conv3d
+    else:
+        raise NotImplementedError(input.shape)
+
+    C = input.shape[1]
+    out = input
+    for i, s in enumerate(input.shape[2:]):
+        if s >= win.shape[-1]:
+            out = conv(out, weight=win.transpose(2 + i, -1), stride=1, padding=0, groups=C)
+        else:
+            warnings.warn(
+                f"Skipping Gaussian Smoothing at dimension 2+{i} for input: {input.shape} and win size: {win.shape[-1]}"
+            )
+
+    return out
+
+
+def _ssim(X, Y, data_range, win, size_average=True, K=(0.01, 0.03)):
+
+    r""" Calculate ssim index for X and Y
+    Args:
+        X (torch.Tensor): images
+        Y (torch.Tensor): images
+        win (torch.Tensor): 1-D gauss kernel
+        data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+        size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+    Returns:
+        torch.Tensor: ssim results.
+    """
+    K1, K2 = K
+    # batch, channel, [depth,] height, width = X.shape
+    compensation = 1.0
+
+    C1 = (K1 * data_range) ** 2
+    C2 = (K2 * data_range) ** 2
+
+    win = win.to(X.device, dtype=X.dtype)
+
+    mu1 = gaussian_filter(X, win)
+    mu2 = gaussian_filter(Y, win)
+
+    mu1_sq = mu1.pow(2)
+    mu2_sq = mu2.pow(2)
     mu1_mu2 = mu1 * mu2
 
-    sigma1_sq = torch.abs(F.conv2d(X * X, window, padding=winsize // 2, groups=channel) - mu1_sq)
-    sigma2_sq = torch.abs(F.conv2d(Y * Y, window, padding=winsize // 2, groups=channel) - mu2_sq)
-    sigma12 = torch.abs(F.conv2d(X * Y, window, padding=winsize // 2, groups=channel) - mu1_mu2)
+    sigma1_sq = compensation * (gaussian_filter(X * X, win) - mu1_sq)
+    sigma2_sq = compensation * (gaussian_filter(Y * Y, win) - mu2_sq)
+    sigma12 = compensation * (gaussian_filter(X * Y, win) - mu1_mu2)
 
-    sigma1 = torch.sqrt(sigma1_sq)
-    sigma2 = torch.sqrt(sigma2_sq)
+    cs_map = (2 * sigma12 + C2) / (sigma1_sq + sigma2_sq + C2)  # set alpha=beta=gamma=1
+    ssim_map = ((2 * mu1_mu2 + C1) / (mu1_sq + mu2_sq + C1)) * cs_map
 
-    luminance = (2 * mu1_mu2 + C1) / (mu1_sq + mu2_sq + C1 + EPS)
-    contrast = (2 * sigma1 * sigma2 + C2) / (sigma1_sq + sigma2_sq + C2 + EPS)
-    structure = (sigma12 + C3) / (sigma1 * sigma2 + C3 + EPS)
-    # print(sigma1.min(), sigma1.max())
-    # print(sigma2_sq.min(), sigma2_sq.max(), "===")
-    # print(sigma2.min(), sigma2.max(), "===")
-    # print(luminance.min(), luminance.max())
-    # print(contrast.min(), contrast.max())
-    # print(structure.min(), structure.max())
-
-    ssim_map = (luminance**alpha) * (contrast**beta) * (structure**gamma)
-
-    if full:
-        if sizeavg:
-            ssim_map = ssim_map.mean()
-            luminance = luminance.mean()
-            contrast = contrast.mean()
-            structure = structure.mean()
-        else:
-            ssim_map = ssim_map.mean(1).mean(1).mean(1)
-            luminance = luminance.mean(1).mean(1).mean(1)
-            contrast = contrast.mean(1).mean(1).mean(1)
-            structure = structure.mean(1).mean(1).mean(1)
-        return ssim_map, luminance, contrast, structure
-    else:
-        if sizeavg:
-            ssim_map = ssim_map.mean()
-        else:
-            ssim_map = ssim_map.mean(1).mean(1).mean(1)
-        return ssim_map
+    ssim_per_channel = torch.flatten(ssim_map, 2).mean(-1)
+    cs = torch.flatten(cs_map, 2).mean(-1)
+    return ssim_per_channel, cs
 
 
-def ssim(X, Y, winsize=11, sizeavg=True, L=255, alpha=1, beta=1, gamma=1, full=False):
-    r"""Structural similarity
-
-    .. math::
-       \begin{aligned} l(x, y) &=\frac{2 \mu_{x} \mu_{y}+c_{1}}{\mu_{x}^{2}+\mu_{y}^{2}+c_{1}} \\
-       c(x, y) &=\frac{2 \sigma_{x} \sigma_{y}+c_{2}}{\sigma_{x}^{2}+\sigma_{y}^{2}+c_{2}} \\
-       s(x, y) &=\frac{\sigma_{x y}+c_{3}}{\sigma_{x} \sigma_{y}+c_{3}} \end{aligned}
-
-    where, :math:`c_1 = (k_1 L)^2, c_2 = (k_2 L)^2, c_3 = c_2 / 2`,
-    :math:`L` is the dynamic range of the pixel-values (typically this is :math:`2 ^{\# \text { bits per pixel }}-1`.
-    The structure similarity index is expressed as
-
-    .. math::
-       \operatorname{SSIM}(x, y)=\left[l(x, y)^{\alpha} \cdot c(x, y)^{\beta} \cdot s(x, y)^{\gamma}\right].
-
-    When :math:`\alpha=\beta=\gamma=1`, SSIM is equal to
-
-    .. math::
-       \operatorname{SSIM}(x, y)=\frac{\left(2 \mu_{x} \mu_{y}+c_{1}\right)\left(2 \sigma_{x y}+
-       c_{2}\right)}{\left(\mu_{x}^{2}+\mu_{y}^{2}+c_{1}\right)\left(\sigma_{x}^{2}+\sigma_{y}^{2}+c_{2}\right)}
-
-    see http://wikipedia.moesalih.com/SSIM for more details.
-
-    Parameters
-    ----------
-    X : {Torch Tensor}
-        data 1
-    Y : {Torch Tensor}
-        data 2
-    winsize : {int}
-        window size
-    sizeavg : {bool}, optional
-        whether to average (the default is True, which average the result)
-    L : {integer}, optional
-        the dynamic range of the pixel-values (typically this is :math:`2 ^{\# \text { bits per pixel }}-1`. (the default is 255)
-    alpha : {number}, optional
-        luminance weight (the default is 1)
-    beta : {number}, optional
-        contrast weight (the default is 1)
-    gamma : {number}, optional
-        structure weight (the default is 1)
-    full : {bool}, optional
-        IF True, return SSIM, luminance, contrast and structure index (the default is False, which only return SSIM)
-
-    Returns
-    -------
-    float
-        IF ``full`` is True, returns SSIM, luminance, contrast and structure index, otherwise, only returns SSIM.
+def ssim(
+    X,
+    Y,
+    data_range=255,
+    size_average=True,
+    win_size=11,
+    win_sigma=1.5,
+    win=None,
+    K=(0.01, 0.03),
+    nonnegative_ssim=False,
+):
+    r""" interface of ssim
+    Args:
+        X (torch.Tensor): a batch of images, (N,C,H,W)
+        Y (torch.Tensor): a batch of images, (N,C,H,W)
+        data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+        size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+        win_size: (int, optional): the size of gauss kernel
+        win_sigma: (float, optional): sigma of normal distribution
+        win (torch.Tensor, optional): 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
+        K (list or tuple, optional): scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
+        nonnegative_ssim (bool, optional): force the ssim response to be nonnegative with relu
+    Returns:
+        torch.Tensor: ssim results
     """
+    if not X.shape == Y.shape:
+        raise ValueError("Input images should have the same dimensions.")
 
-    (_, channel, _, _) = X.size()
-    window = create_window(winsize, channel)
+    for d in range(len(X.shape) - 1, 1, -1):
+        X = X.squeeze(dim=d)
+        Y = Y.squeeze(dim=d)
 
-    if X.is_cuda:
-        window = window.cuda(X.get_device())
-    window = window.type_as(X)
+    if len(X.shape) not in (4, 5):
+        raise ValueError(f"Input images should be 4-d or 5-d tensors, but got {X.shape}")
 
-    return _ssim(X, Y, window, winsize, channel, sizeavg, L=L, full=full)
+    if not X.type() == Y.type():
+        raise ValueError("Input images should have the same dtype.")
+
+    if win is not None:  # set win_size
+        win_size = win.shape[-1]
+
+    if not (win_size % 2 == 1):
+        raise ValueError("Window size should be odd.")
+
+    if win is None:
+        win = _fspecial_gauss_1d(win_size, win_sigma)
+        win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
+
+    ssim_per_channel, cs = _ssim(X, Y, data_range=data_range, win=win, size_average=False, K=K)
+    if nonnegative_ssim:
+        ssim_per_channel = torch.relu(ssim_per_channel)
+
+    if size_average:
+        return ssim_per_channel.mean()
+    else:
+        return ssim_per_channel.mean(1)
 
 
-def msssim(X, Y, winsize=11, sizeavg=True, L=255, alpha=1, beta=1, gamma=1, normalize=False):
-    device = X.device
-    weights = torch.FloatTensor([0.0448, 0.2856, 0.3001, 0.2363, 0.1333]).to(device)
-    levels = weights.size()[0]
-    mssim = []
-    mcontrast = []
-    for _ in range(levels):
-        sim, _, contrast, _ = ssim(X, Y, winsize=winsize, sizeavg=sizeavg, L=255, alpha=1, beta=1, gamma=1, full=True)
-        mssim.append(sim)
-        mcontrast.append(contrast)
+def msssim(X, Y, data_range=255, size_average=True, win_size=11, win_sigma=1.5, win=None, weights=None, K=(0.01, 0.03)):
+    r""" interface of ms-ssim
+    Args:
+        X (torch.Tensor): a batch of images, (N,C,[T,]H,W)
+        Y (torch.Tensor): a batch of images, (N,C,[T,]H,W)
+        data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+        size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+        win_size: (int, optional): the size of gauss kernel
+        win_sigma: (float, optional): sigma of normal distribution
+        win (torch.Tensor, optional): 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
+        weights (list, optional): weights for different levels
+        K (list or tuple, optional): scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
+    Returns:
+        torch.Tensor: msssim results
+    """
+    if not X.shape == Y.shape:
+        raise ValueError("Input images should have the same dimensions.")
 
-        X = F.avg_pool2d(X, (2, 2))
-        Y = F.avg_pool2d(Y, (2, 2))
+    for d in range(len(X.shape) - 1, 1, -1):
+        X = X.squeeze(dim=d)
+        Y = Y.squeeze(dim=d)
 
-    mssim = torch.stack(mssim)
-    mcontrast = torch.stack(mcontrast)
+    if not X.type() == Y.type():
+        raise ValueError("Input images should have the same dtype.")
 
-    # Normalize (to avoid NaNs during training unstable models, not compliant with original definition)
-    if normalize:
-        mssim = (mssim + 1) / 2
-        mcontrast = (mcontrast + 1) / 2
+    if len(X.shape) == 4:
+        avg_pool = F.avg_pool2d
+    elif len(X.shape) == 5:
+        avg_pool = F.avg_pool3d
+    else:
+        raise ValueError(f"Input images should be 4-d or 5-d tensors, but got {X.shape}")
 
-    pow1 = mcontrast ** weights
-    pow2 = mssim ** weights
-    # From Matlab implementation https://ece.uwaterloo.ca/~z70wang/research/iwssim/
-    output = torch.prod(pow1[:-1] * pow2[-1])
-    return output
+    if win is not None:  # set win_size
+        win_size = win.shape[-1]
+
+    if not (win_size % 2 == 1):
+        raise ValueError("Window size should be odd.")
+
+    smaller_side = min(X.shape[-2:])
+    assert smaller_side > (win_size - 1) * (
+        2 ** 4
+    ), "Image size should be larger than %d due to the 4 downsamplings in ms-ssim" % ((win_size - 1) * (2 ** 4))
+
+    if weights is None:
+        weights = [0.0448, 0.2856, 0.3001, 0.2363, 0.1333]
+    weights = torch.FloatTensor(weights).to(X.device, dtype=X.dtype)
+
+    if win is None:
+        win = _fspecial_gauss_1d(win_size, win_sigma)
+        win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
+
+    levels = weights.shape[0]
+    mcs = []
+    for i in range(levels):
+        ssim_per_channel, cs = _ssim(X, Y, win=win, data_range=data_range, size_average=False, K=K)
+
+        if i < levels - 1:
+            mcs.append(torch.relu(cs))
+            padding = [s % 2 for s in X.shape[2:]]
+            X = avg_pool(X, kernel_size=2, padding=padding)
+            Y = avg_pool(Y, kernel_size=2, padding=padding)
+
+    ssim_per_channel = torch.relu(ssim_per_channel)  # (batch, channel)
+    mcs_and_ssim = torch.stack(mcs + [ssim_per_channel], dim=0)  # (level, batch, channel)
+    ms_ssim_val = torch.prod(mcs_and_ssim ** weights.view(-1, 1, 1), dim=0)
+
+    if size_average:
+        return ms_ssim_val.mean()
+    else:
+        return ms_ssim_val.mean(1)
 
 
 if __name__ == '__main__':
-    import torchlib as tl
-    import cv2
     import numpy as np
-    import matplotlib.pyplot as plt
+    import torchlib as tl
 
-    npImg1 = cv2.imread("../../data/images/einstein.png")
-    npImg1 = cv2.imread("../../data/images/LenaRGB.tif")
+    X = tl.imread("../../data/images/Einstein256.png")
+    X = X.numpy()
+    Y = X + np.random.randn(X.shape[0], X.shape[1])
 
-    H, W, C = npImg1.shape
-    print(npImg1.shape)
+    print(X.shape, Y.shape)
+    X, Y = torch.from_numpy(X).double(), torch.from_numpy(Y).double()
+    X, Y = X.unsqueeze(0), Y.unsqueeze(0)
+    X, Y = X.unsqueeze(0), Y.unsqueeze(0)
+    print(X.shape, Y.shape)
 
-    L = 255.0
-    L = 1.0
+    # calculate ssim & ms-ssim for each image
+    ssim_val = ssim(X, Y, data_range=255, size_average=False)  # return (N,)
+    ms_ssim_val = msssim(X, Y, data_range=255, size_average=False)  # (N,)
 
-    img1 = torch.from_numpy(np.rollaxis(npImg1, 2)).float().unsqueeze(0) / (255.0 / L)
-    print(img1.min(), img1.max())
-    img2 = torch.rand(img1.size())
-    img2 = img1.clone()
-    # img2[:, :, 10:300, 10:300] = 1
-    img2[:, :, 0:H, 0:W] = L / 2.0
-    print(img2.min(), img2.max())
+    # set 'size_average=True' to get a scalar value as loss. see tests/tests_loss.py for more details
+    ssim_loss = 1 - ssim(X, Y, data_range=255, size_average=True)  # return a scalar
+    ms_ssim_loss = 1 - msssim(X, Y, data_range=255, size_average=True)
 
-    if torch.cuda.is_available():
-        img1 = img1.cuda()
-        img2 = img2.cuda()
+    print(ssim_val, ms_ssim_val, ssim_loss, ms_ssim_loss)
 
-    img1 = Variable(img1, requires_grad=False)
-    img2 = Variable(img2, requires_grad=True)
+    X = tl.imread("../../data/images/LenaRGB512.tif")
+    X = X.numpy()
+    Y = X + np.random.randn(X.shape[0], X.shape[1], X.shape[2])
 
-    # Functional: tl.ssim(img1, img2, window_size = 11, size_average = True)
-    ssimo, luminanceo, contrasto, structureo = tl.ssim(img1, img2, L=L, full=True)
-    ssimv, luminancev, contrastv, structurev = (ssimo.item(), luminanceo.item(), contrasto.item(), structureo.item())
-    print("ssim, luminance, contrast, structure:", ssimv, luminancev, contrastv, structurev)
+    print(X.shape, Y.shape)
+    X, Y = torch.from_numpy(X).double(), torch.from_numpy(Y).double()
+    X, Y = X.unsqueeze(0), Y.unsqueeze(0)
+    X, Y = X.permute(0, 3, 1, 2), Y.permute(0, 3, 1, 2)
+    print(X.shape, Y.shape)
 
-    msssimo = msssim(img1, img2, winsize=11, sizeavg=True, L=L, normalize=False)
+    # calculate ssim & ms-ssim for each image
+    ssim_val = ssim(X, Y, data_range=255, size_average=False)  # return (N,)
+    ms_ssim_val = msssim(X, Y, data_range=255, size_average=False)  # (N,)
 
-    print("MSSIM: ", msssimo.item())
+    # set 'size_average=True' to get a scalar value as loss. see tests/tests_loss.py for more details
+    ssim_loss = 1 - ssim(X, Y, data_range=255, size_average=True)  # return a scalar
+    ms_ssim_loss = 1 - msssim(X, Y, data_range=255, size_average=True)
 
-    img1 = img1.data.cpu()
-    img2 = img2.data.cpu()
-    print(img1.size())
-    print(img2.size())
-    img1 = img1.reshape(C, H, W)
-    img1 = img1.permute(1, 2, 0)
-
-    img2 = img2.reshape(C, H, W)
-    img2 = img2.permute(1, 2, 0)
-
-    plt.figure()
-    plt.subplot(121)
-    plt.imshow(img1)
-    plt.subplot(122)
-    plt.imshow(img2)
-    plt.show()
+    print(ssim_val, ms_ssim_val, ssim_loss, ms_ssim_loss)

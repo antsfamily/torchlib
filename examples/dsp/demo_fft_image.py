@@ -3,11 +3,15 @@ import torch as th
 import torchlib as tl
 import matplotlib.pyplot as plt
 
-X_np = tl.imread('../../data/images/Einstein.png').astype('float32')
-X_np = X_np + 1j * X_np
+ftshift = False
+# ftshift = True
+
+X_th = tl.imread('../../data/images/Einstein256.png')
+X_th = X_th + 1j * X_th
+
+X_np = X_th.numpy()
 
 device = th.device('cuda:0')
-X_th = th.tensor([X_np.real, X_np.imag], dtype=th.float32).permute(1, 2, 0)
 X_th = X_th.to(device)
 print(X_th.shape, type(X_th))
 # print(x_th)
@@ -17,9 +21,9 @@ Y1 = np.fft.fft(Y1, axis=1)
 # Y1 = np.fft.fft(np.fft.fft(X_np, axis=0), axis=1)
 Y1 = np.abs(Y1)
 
-Y2 = tl.fft(X_th, axis=0)
-Y2 = tl.fft(Y2, axis=1)
-Y2 = th.abs(Y2[:, :, 0] + 1j * Y2[:, :, 1]).cpu()
+Y2 = tl.fft(X_th, axis=0, shift=ftshift)
+Y2 = tl.fft(Y2, axis=1, shift=ftshift)
+Y2 = th.abs(Y2).cpu()
 
 print(np.sum(Y1 - Y2.numpy()))
 Y1 = np.log10(Y1)
@@ -33,10 +37,3 @@ plt.imshow(Y1)
 plt.subplot(133)
 plt.imshow(Y2)
 plt.show()
-
-
-
-
-
-
-

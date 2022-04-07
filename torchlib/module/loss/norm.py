@@ -16,24 +16,31 @@ class FrobeniusLoss(th.nn.Module):
 
     """
 
-    def __init__(self, reduction='mean', p=2):
+    def __init__(self, p=2, axis=None, caxis=None, reduction='mean'):
         super(FrobeniusLoss, self).__init__()
-        self.reduction = reduction
         self.p = p
+        self.axis = axis
+        self.caxis = caxis
+        self.reduction = reduction
 
     def forward(self, X):
-
         if th.is_complex(X):
-            X = ((X * X.conj()).real).sqrt()
-        elif X.size(-1) == 2:
-            X = X.pow(2).sum(axis=-1).sqrt()
+            X = X.abs()
+        elif (self.caxis is None) or X.shape[-1] == 2:
+            X = X.pow(2).sum(axis=-1, keepdims=True).sqrt()
+        else:
+            X = X.pow(2).sum(axis=self.caxis, keepdims=True).sqrt()
 
         if X.dtype is not th.float32 or th.double:
             X = X.to(th.float32)
 
-        D = X.dim()
-        dim = list(range(1, D))
-        X = th.mean(X.pow(self.p), axis=dim).pow(1. / self.p)
+        if self.axis is None:
+            D = X.dim()
+            axis = list(range(1, D)) if D > 2 else list(range(0, D))
+        else:
+            axis = self.axis
+
+        X = th.mean(X.pow(self.p), axis=axis).pow(1. / self.p)
 
         if self.reduction == 'mean':
             F = th.mean(X)
@@ -51,24 +58,31 @@ class LogFrobeniusLoss(th.nn.Module):
 
     """
 
-    def __init__(self, reduction='mean', p=2):
+    def __init__(self, p=2, axis=None, caxis=-1, reduction='mean'):
         super(LogFrobeniusLoss, self).__init__()
-        self.reduction = reduction
         self.p = p
+        self.axis = axis
+        self.caxis = caxis
+        self.reduction = reduction
 
     def forward(self, X):
-
         if th.is_complex(X):
-            X = ((X * X.conj()).real).sqrt()
-        elif X.size(-1) == 2:
-            X = X.pow(2).sum(axis=-1).sqrt()
+            X = X.abs()
+        elif (self.caxis is None) or X.shape[-1] == 2:
+            X = X.pow(2).sum(axis=-1, keepdims=True).sqrt()
+        else:
+            X = X.pow(2).sum(axis=self.caxis, keepdims=True).sqrt()
 
         if X.dtype is not th.float32 or th.double:
             X = X.to(th.float32)
 
-        D = X.dim()
-        dim = list(range(1, D))
-        X = th.mean(X.pow(self.p), axis=dim).pow(1. / self.p)
+        if self.axis is None:
+            D = X.dim()
+            axis = list(range(1, D)) if D > 2 else list(range(0, D))
+        else:
+            axis = self.axis
+
+        X = th.mean(X.pow(self.p), axis=axis).pow(1. / self.p)
 
         if self.reduction == 'mean':
             F = th.mean(X)

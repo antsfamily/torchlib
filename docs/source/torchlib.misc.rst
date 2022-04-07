@@ -12,6 +12,14 @@ torchlib.misc.mapping\_operation module
    :undoc-members:
    :show-inheritance:
 
+torchlib.misc.noising module
+----------------------------
+
+.. automodule:: torchlib.misc.noising
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 torchlib.misc.sampling module
 -----------------------------
 
@@ -27,7 +35,6 @@ torchlib.misc.transform module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

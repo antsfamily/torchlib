@@ -7,12 +7,11 @@
 
 
 import torch as th
-import torch.nn as nn
 from torchlib.utils.const import EPS
 from torch.autograd import Variable
 
 
-class DiceLoss(nn.Module):
+class DiceLoss(th.nn.Module):
     def __init__(self, size_average=True, reduce=True):
         super(DiceLoss, self).__init__()
         self.size_average = size_average
@@ -36,7 +35,7 @@ class DiceLoss(nn.Module):
         return 1. - self.soft_dice_coeff(P, G)
 
 
-class JaccardLoss(nn.Module):
+class JaccardLoss(th.nn.Module):
     r"""Jaccard distance
 
     .. math::
@@ -54,7 +53,7 @@ class JaccardLoss(nn.Module):
         return (1.0 - capnum / (cupnum - capnum + EPS))
 
 
-class IridescentLoss(nn.Module):
+class IridescentLoss(th.nn.Module):
     r"""Iridescent Distance Loss
 
     .. math::
@@ -75,7 +74,7 @@ class IridescentLoss(nn.Module):
         # return 1.0 - (th.sum(P * G) + th.sum((1 - P) * (1 - G))) / (th.sum(P) + th.sum(G) - th.sum(P * G) + EPS)
 
 
-class F1Loss(nn.Module):
+class F1Loss(th.nn.Module):
     r"""F1 distance Loss
 
     .. math::
@@ -150,7 +149,7 @@ if __name__ == '__main__':
     X = Variable(X, requires_grad=True)
     G = Variable(G, requires_grad=True)
 
-    net = nn.ReLU()
+    net = th.nn.ReLU()
     P = net(X)
 
     print(X)

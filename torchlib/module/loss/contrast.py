@@ -29,20 +29,27 @@ class ContrastReciprocalLoss(th.nn.Module):
 
     """
 
-    def __init__(self, mode='way1', reduction='mean'):
+    def __init__(self, mode='way1', axis=None, caxis=None, reduction='mean'):
         super(ContrastReciprocalLoss, self).__init__()
         self.mode = mode
+        self.axis = axis
+        self.caxis = caxis
         self.reduction = reduction
 
     def forward(self, X):
 
         if th.is_complex(X):
             X = (X * X.conj()).real
-        elif X.size(-1) == 2:
-            X = X.pow(2).sum(axis=-1)
+        elif (self.caxis is None) or X.shape[-1] == 2:
+            X = th.sum(X.pow(2), axis=-1, keepdims=True)
+        else:
+            X = th.sum(X.pow(2), axis=self.caxis, keepdims=True)
 
-        D = X.dim()
-        axis = list(range(1, D))
+        if self.axis is None:
+            D = X.dim()
+            axis = list(range(1, D)) if D > 2 else list(range(0, D))
+        else:
+            axis = self.axis
 
         if X.dtype is not th.float32 or th.double:
             X = X.to(th.float32)
@@ -80,20 +87,27 @@ class NegativeContrastLoss(th.nn.Module):
 
     """
 
-    def __init__(self, mode='way1', reduction='mean'):
+    def __init__(self, mode='way1', axis=None, caxis=None, reduction='mean'):
         super(NegativeContrastLoss, self).__init__()
         self.mode = mode
+        self.axis = axis
+        self.caxis = caxis
         self.reduction = reduction
 
     def forward(self, X):
 
         if th.is_complex(X):
             X = (X * X.conj()).real
-        elif X.size(-1) == 2:
-            X = X.pow(2).sum(axis=-1)
+        elif (self.caxis is None) or X.shape[-1] == 2:
+            X = th.sum(X.pow(2), axis=-1, keepdims=True)
+        else:
+            X = th.sum(X.pow(2), axis=self.caxis, keepdims=True)
 
-        D = X.dim()
-        axis = list(range(1, D))
+        if self.axis is None:
+            D = X.dim()
+            axis = list(range(1, D)) if D > 2 else list(range(0, D))
+        else:
+            axis = self.axis
 
         if X.dtype is not th.float32 or th.double:
             X = X.to(th.float32)
@@ -103,7 +117,6 @@ class NegativeContrastLoss(th.nn.Module):
             C = (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() / (Xmean + EPS)
         if self.mode in ['way2', 'WAY2']:
             C = X.mean(axis=axis, keepdims=True) / ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + EPS)
-
         if self.reduction == 'mean':
             C = th.mean(C)
         if self.reduction == 'sum':
@@ -131,20 +144,27 @@ class ContrastLoss(th.nn.Module):
 
     """
 
-    def __init__(self, mode='way1', reduction='mean'):
+    def __init__(self, mode='way1', axis=None, caxis=None, reduction='mean'):
         super(ContrastLoss, self).__init__()
         self.mode = mode
+        self.axis = axis
+        self.caxis = caxis
         self.reduction = reduction
 
     def forward(self, X):
 
         if th.is_complex(X):
             X = (X * X.conj()).real
-        elif X.size(-1) == 2:
-            X = X.pow(2).sum(axis=-1)
+        elif (self.caxis is None) or X.shape[-1] == 2:
+            X = th.sum(X.pow(2), axis=-1, keepdims=True)
+        else:
+            X = th.sum(X.pow(2), axis=self.caxis, keepdims=True)
 
-        D = X.dim()
-        axis = list(range(1, D))
+        if self.axis is None:
+            D = X.dim()
+            axis = list(range(1, D)) if D > 2 else list(range(0, D))
+        else:
+            axis = self.axis
 
         if X.dtype is not th.float32 or th.double:
             X = X.to(th.float32)
@@ -160,4 +180,3 @@ class ContrastLoss(th.nn.Module):
         if self.reduction == 'sum':
             C = th.sum(C)
         return C
-

@@ -8,7 +8,20 @@
 
 import numpy as np
 import torch as th
-from torchlib.base.arrayops import sl
+import torchlib as tl
+
+
+def sinc(x):
+    flag = False
+    if type(x) is not th.Tensor:
+        flag = True
+        x = th.tensor(x)
+    x = th.where(x.abs() < 1e-32, th.tensor(1., dtype=x.dtype, device=x.device), th.sin(tl.PI * x) / (tl.PI * x))
+
+    if flag:
+        return x.item()
+    else:
+        return x
 
 
 def nextpow2(x):
@@ -105,6 +118,26 @@ def matmulcc(A, B):
         return th.matmul(A.real, B.real) - th.matmul(A.imag, B.imag) + 1j * (th.matmul(A.real, B.imag) + th.matmul(A.imag, B.real))
     else:
         return th.stack((th.matmul(A[..., 0], B[..., 0]) - th.matmul(A[..., 1], B[..., 1]), th.matmul(A[..., 0], B[..., 1]) + th.matmul(A[..., 1], B[..., 0])), dim=-1)
+
+
+def conj(X):
+
+    if th.is_complex(X):
+        return th.conj(X)
+    elif X.size(-1) == 2:
+        return th.stack((X[..., 0], -X[..., 1]), dim=-1)
+    else:
+        raise TypeError('Not known type! Only real and imag representions are supported!')
+
+
+def absc(X):
+
+    if X.size(-1) == 2:
+        X = X.pow(2).sum(axis=-1).sqrt()
+    else:
+        X = th.abs(X)
+
+    return X
 
 
 if __name__ == '__main__':

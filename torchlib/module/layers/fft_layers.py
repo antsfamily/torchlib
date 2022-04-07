@@ -7,6 +7,7 @@
 
 import torch as th
 import torch.nn.functional as F
+import torchlib as tl
 
 
 class FFTLayer1d(th.nn.Module):
@@ -21,7 +22,8 @@ class FFTLayer1d(th.nn.Module):
             self.nfft = d
         if d != self.nfft:
             x = F.pad(x, [0, self.nfft - d, 0], mode='constant', value=0)
-        y = th.fft(x, signal_ndim=1, normalized=False)
+        # y = th.fft.fft(x, n=None, dim=0, norm=None)
+        y = tl.fft(x, n, axis=0, norm=None)
 
         return y
 
@@ -30,7 +32,6 @@ if __name__ == '__main__':
 
     import numpy as np
     import torch as th
-    import torchlib as tl
     import matplotlib.pyplot as plt
 
     PI = np.pi
@@ -54,7 +55,7 @@ if __name__ == '__main__':
 
     print(x_ths.shape)
 
-    fftlayer = tl.FFTLayer1d()
+    fftlayer = FFTLayer1d()
     ys = fftlayer.forward(x_ths)
     ys = th.abs(ys[:, :, 0] + 1j * ys[:, :, 1]).cpu()
 

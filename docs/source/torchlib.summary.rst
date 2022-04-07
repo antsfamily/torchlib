@@ -12,7 +12,6 @@ torchlib.summary.loss\_log module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

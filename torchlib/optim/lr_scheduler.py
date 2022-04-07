@@ -150,6 +150,7 @@ if __name__ == '__main__':
 
     import torch as th
     import torchlib as tl
+    import matplotlib; matplotlib.use('TkAgg')
     import matplotlib.pyplot as plt
 
     lr = 1e-1
@@ -157,8 +158,9 @@ if __name__ == '__main__':
     # lr = 1e2
 
     num_epochs = 1000
-    batch_size = 1
-    num_batch = 401
+    num_epochs = 500
+    batch_size = 8
+    num_batch = 750
 
     params = {th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
               th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
@@ -166,9 +168,9 @@ if __name__ == '__main__':
 
     optimizer = th.optim.Adam(params, lr=lr)
     # optimizer = th.optim.SGD(params, lr=lr, momentum=0.9)
-    # scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=80, sigma1=15, sigma2=200, eta_start=1e-5, eta_stop=1e-5, last_epoch=-1)
-    # scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e0, eta_stop=1e0, last_epoch=-1)
-    scheduler = tl.optim.lr_scheduler.MountainLR(optimizer, total_epoch=num_epochs, peak_epoch=300, period_epoch=50, last_epoch=-1)
+    # scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=80, sigma1=15, sigma2=200, eta_start=1e-4, eta_stop=1e-5, last_epoch=-1)
+    scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
+    # scheduler = tl.optim.lr_scheduler.MountainLR(optimizer, total_epoch=num_epochs, peak_epoch=300, period_epoch=50, last_epoch=-1)
 
     print(optimizer)
 
@@ -185,5 +187,7 @@ if __name__ == '__main__':
 
     plt.figure()
     plt.plot(lrs)
+    plt.xlabel('Iteration')
+    plt.ylabel('Learning rate')
     plt.grid()
     plt.show()

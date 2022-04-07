@@ -6,9 +6,8 @@
 # @Version : $1.0$
 
 import numpy as np
-import torch as th
-from torchlib.base.mathops import nextpow2, ebemulcc
 from torchlib.dsp.ffts import padfft, fft, ifft
+from torchlib.base.mathops import nextpow2, ebemulcc
 from torchlib.base.arrayops import cut
 
 
@@ -19,7 +18,7 @@ def cutfftconv1(y, nfft, Nx, Nh, shape='same', axis=0, ftshift=False):
 
     Parameters
     ----------
-    y : {numpy.ndarray}
+    y : {torch.tensor}
         array after ``iff``.
     nfft : {number}
         number of fft points.
@@ -36,11 +35,11 @@ def cutfftconv1(y, nfft, Nx, Nh, shape='same', axis=0, ftshift=False):
     axis : {number}
         convolution axis (the default is 0)
     ftshift : {[type]}
-        whether to shift the frequencies (the default is False)
+        whether to shift zero the frequency to center (the default is False)
 
     Returns
     -------
-    y : {numpy.ndarray}
+    y : {torch.tensor}
         array with shape specified by :attr:`same`.
     """
 
@@ -88,9 +87,9 @@ def fftconv1(x, h, axis=0, nfft=None, shape='same', ftshift=False, eps=None):
 
     Parameters
     ----------
-    x : {numpy.ndarray}
+    x : {torch.tensor}
         data to be convolved.
-    h : {numpy.ndarray}
+    h : {torch.tensor}
         filter array
     shape : {str}, optional
         output shape:
@@ -110,13 +109,10 @@ def fftconv1(x, h, axis=0, nfft=None, shape='same', ftshift=False, eps=None):
 
     Returns
     -------
-    y : {numpy.ndarray}
+    y : {torch.tensor}
         Convolution result array.
 
     """
-
-    if h.size(-1) != 2 or x.size(-1) != 2:
-        raise TypeError('Last dim must have size 2!')
 
     dh, dx = h.dim(), x.dim()
     if dh != dx:
@@ -136,14 +132,11 @@ def fftconv1(x, h, axis=0, nfft=None, shape='same', ftshift=False, eps=None):
 
     x = padfft(x, nfft, axis, ftshift)
     h = padfft(h, nfft, axis, ftshift)
-    x = fft(x, nfft, axis, norm=False, shift=ftshift)
-    h = fft(h, nfft, axis, norm=False, shift=ftshift)
+    x = fft(x, nfft, axis, norm=None, shift=ftshift)
+    h = fft(h, nfft, axis, norm=None, shift=ftshift)
     y = ebemulcc(x, h)  # element-by-element complex multiplication
-    # x, h = x.transpose(0, -1), h.transpose(0, -1)
-    # y = th.stack((x[0] * h[0] - x[1] * h[1], x[0] * h[1] + x[1] * h[0]), dim=0)
-    # y = y.transpose(0, -1)
 
-    y = ifft(y, nfft, axis, norm=False, shift=ftshift)
+    y = ifft(y, nfft, axis, norm=None, shift=ftshift)
     y = cutfftconv1(y, nfft, Nx, Nh, shape, axis, ftshift)
 
     if eps is not None:
@@ -153,10 +146,13 @@ def fftconv1(x, h, axis=0, nfft=None, shape='same', ftshift=False, eps=None):
 
 
 if __name__ == '__main__':
+    import torchlib as tl
     import psar as ps
+    import torch as th
 
     shape = 'same'
     ftshift = False
+    # ftshift = True
     x_np = np.array([1, 2, 3, 4, 5])
     h_np = np.array([1 + 2j, 2, 3, 4, 5, 6, 7])
 
@@ -166,11 +162,11 @@ if __name__ == '__main__':
     h_th = th.stack([h_th.real, h_th.imag], dim=-1)
 
     y1 = ps.fftconv1(x_np, h_np, axis=0, Nfft=None, shape=shape, ftshift=ftshift)
+    y2 = tl.fftconv1(x_th, h_th, axis=0, nfft=None, shape=shape, ftshift=ftshift)
 
-    y2 = fftconv1(x_th, h_th, axis=0, nfft=None, shape=shape, ftshift=ftshift)
     y2 = th.view_as_complex(y2)
     y2 = y2.cpu().numpy()
 
-    # print(y1)
-    # print(y2)
+    print(y1)
+    print(y2)
     print(np.sum(np.abs(y1 - y2)), np.sum(np.angle(y1) - np.angle(y2)))

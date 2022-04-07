@@ -5,14 +5,16 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    torchlib.base
    torchlib.diagnose
    torchlib.dsp
    torchlib.evaluation
+   torchlib.layerfunction
+   torchlib.linalg
    torchlib.misc
    torchlib.module
-   torchlib.nn
    torchlib.optim
    torchlib.spl
    torchlib.summary

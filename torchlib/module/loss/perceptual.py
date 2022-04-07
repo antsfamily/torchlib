@@ -6,11 +6,10 @@
 # @Version : $1.0$
 
 import torch as th
-import torch.nn as nn
-import torchlib as ts
+import torchlib as tl
 
 
-class RandomProjectionLoss(nn.Module):
+class RandomProjectionLoss(th.nn.Module):
     r"""RandomProjection loss
 
 
@@ -26,12 +25,12 @@ class RandomProjectionLoss(nn.Module):
         self.nLayers = nLayers
 
         net = []
-        if mode is 'real':
+        if mode == 'real':
             conv = th.nn.Conv2d
             bn = th.nn.BatchNorm2d
-        if mode is 'complex':
-            conv = ts.ComplexConv2d
-            bn = ts.ComplexBatchNorm2d
+        if mode == 'complex':
+            conv = tl.ComplexConv2d
+            bn = tl.ComplexBatchNorm2d
 
         for n in range(nLayers):
             net.append(conv(channels[n], channels[n + 1], kernel_sizes[n]))
@@ -46,20 +45,21 @@ class RandomProjectionLoss(nn.Module):
             self.baseloss = th.nn.MAELoss(reduction=reduction)
 
         self.weight_init()
+        self.rpf = self.rpf.to(device)
 
     def forward(self, P, G):
 
-        loss = 0.
-        for n in range(self.nLayers * self.N):
-            P, G = self.rpf[n](P), self.rpf[n](G)
-            if n % self.N == self.N - 1:
-                loss += self.baseloss(P, G)
+        with th.no_grad():
+            loss = 0.
+            for n in range(self.nLayers * self.N):
+                P, G = self.rpf[n](P), self.rpf[n](G)
+                if n % self.N == self.N - 1:
+                    loss += self.baseloss(P, G)
 
-
-        if self.reduction == 'mean':
-            loss /= self.nLayers
-        if self.reduction == 'sum':
-            pass
+            if self.reduction == 'mean':
+                loss /= self.nLayers
+            if self.reduction == 'sum':
+                pass
         return loss
 
     def weight_init(self):
@@ -88,4 +88,3 @@ if __name__ == '__main__':
     G = th.randn(4, 3, 64, 64, 2)
     S = loss_func(P, G)
     print(S)
-

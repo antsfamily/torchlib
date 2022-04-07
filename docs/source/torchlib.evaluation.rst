@@ -12,10 +12,26 @@ torchlib.evaluation.classification module
    :undoc-members:
    :show-inheritance:
 
+torchlib.evaluation.contrast module
+-----------------------------------
+
+.. automodule:: torchlib.evaluation.contrast
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 torchlib.evaluation.entropy module
 ----------------------------------
 
 .. automodule:: torchlib.evaluation.entropy
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+torchlib.evaluation.norm module
+-------------------------------
+
+.. automodule:: torchlib.evaluation.norm
    :members:
    :undoc-members:
    :show-inheritance:
@@ -43,7 +59,6 @@ torchlib.evaluation.ssims module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

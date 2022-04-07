@@ -9,7 +9,7 @@ from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 
 device = 'cuda:0'
-#device = 'cuda:1'
+device = 'cuda:1'
 num_workers = 1
 num_workers = 4
 batch_size = 64

@@ -7,7 +7,6 @@
 # @Note    :
 
 import torch as th
-from torch.autograd import Variable
 from torchlib.dsp.kernels import VERTICAL_SOBEL_3x3, HORIZONTAL_SOBEL_3x3
 
 
@@ -22,12 +21,12 @@ class EdgeLoss(th.nn.Module):
 
         self.Ci = Ci
 
-        if window is 'sobel':
+        if window == 'sobel':
             WINh = HORIZONTAL_SOBEL_3x3
             WINv = VERTICAL_SOBEL_3x3
             self.WINh = WINh.repeat(Ci, 1).reshape(Ci, 1, 3, 3).type(dtype).requires_grad_(requires_grad=True)
             self.WINv = WINv.repeat(Ci, 1).reshape(Ci, 1, 3, 3).type(dtype).requires_grad_(requires_grad=True)
-        if window is 'normsobel':
+        if window == 'normsobel':
             WINh = HORIZONTAL_SOBEL_3x3 / 9.0
             WINv = VERTICAL_SOBEL_3x3 / 9.0
             self.WINh = WINh.repeat(Ci, 1).reshape(Ci, 1, 3, 3).type(dtype).requires_grad_(requires_grad=True)

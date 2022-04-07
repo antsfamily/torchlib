@@ -10,6 +10,24 @@ import torch as th
 import copy
 
 
+def dmka(D, Ds):
+    """Multi-key value assign
+
+    Multi-key value assign
+
+    Parameters
+    ----------
+    D : {[type]}
+        [description]
+    Ds : {[type]}
+        [description]
+    """
+
+    for k, v in Ds.items():
+        D[k] = v
+    return D
+
+
 def cat(shapes, axis=0):
     r"""Concatenates
 
@@ -78,8 +96,14 @@ def concat2(X1, X2, axis):
 
 
 if __name__ == '__main__':
-    import torchlib as tl
+    import torchtool as tht
     import torch as th
+
+    D = {'a': 1, 'b': 2, 'c': 3}
+    Ds = {'b': 6}
+    print(D)
+    dmka(D, Ds)
+    print(D)
 
     x = th.randn(2, 3)
     xs = x.shape
@@ -89,10 +113,10 @@ if __name__ == '__main__':
     print(x.size())
     print('---Theoretical result')
 
-    ys = tl.cat((xs, xs, xs), 0)
+    ys = tht.cat((xs, xs, xs), 0)
     print(ys)
 
-    ys = tl.cat((xs, xs, xs), 1)
+    ys = tht.cat((xs, xs, xs), 1)
     print(ys)
     print('---Torch result')
 

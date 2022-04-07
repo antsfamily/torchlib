@@ -5,11 +5,36 @@
 # @Link    : http://iridescent.ink
 # @Version : $1.0$
 
-
 from __future__ import division, print_function, absolute_import
 import h5py
+import json
+import yaml
 import numpy as np
 import scipy.io as scio
+
+
+def loadyaml(filename, dbname=None):
+    f = open(filename, 'r', encoding='utf-8')
+    if dbname is None:
+        if int(yaml.__version__[0]) > 3:
+            data = yaml.load(f, Loader=yaml.FullLoader)
+        else:
+            data = yaml.load(f)
+    else:
+        if int(yaml.__version__[0]) > 3:
+            data = yaml.load(f, Loader=yaml.FullLoader)[dbname]
+        else:
+            data = yaml.load(f)
+    return data
+
+
+def loadjson(filename, dbname=None):
+    with open(filename, 'r', encoding='utf-8') as f:
+        if dbname is None:
+            data = json.load(f)
+        else:
+            data = json.load(f)[dbname]
+    return data
 
 
 def loadmat(filename):
@@ -30,24 +55,38 @@ def savemat(filename, mdict, fmt='5', dtype=None):
 
 def _create_group_dataset(group, mdict):
     for k, v in mdict.items():
+        if k in group.keys():
+            del group[k]
+
         if type(v) is dict:
             subgroup = group.create_group(k)
             _create_group_dataset(subgroup, v)
         else:
+            if v is None:
+                v = []
             group.create_dataset(k, data=v)
 
 
-def _read_group_dataset(group, mdict):
-    for k in group.keys():
-        if type(group[k]) is h5py.Group:
-            exec(k + '={}')
-            _read_group_dataset(group[k], eval(k))
-            mdict[k] = eval(k)
-        else:
-            mdict[k] = group[k][()]
+def _read_group_dataset(group, mdict, keys=None):
+    if keys is None:
+        for k in group.keys():
+            if type(group[k]) is h5py.Group:
+                exec(k + '={}')
+                _read_group_dataset(group[k], eval(k))
+                mdict[k] = eval(k)
+            else:
+                mdict[k] = group[k][()]
+    else:
+        for k in keys:
+            if type(group[k]) is h5py.Group:
+                exec(k + '={}')
+                _read_group_dataset(group[k], eval(k))
+                mdict[k] = eval(k)
+            else:
+                mdict[k] = group[k][()]
 
 
-def loadh5(filename):
+def loadh5(filename, keys=None):
     """load h5 file
 
     load all the data from a h5 file.
@@ -67,13 +106,13 @@ def loadh5(filename):
     f = h5py.File(filename, 'r')
     D = {}
 
-    _read_group_dataset(f, D)
+    _read_group_dataset(f, D, keys)
 
     f.close()
     return D
 
 
-def saveh5(filename, mdict):
+def saveh5(filename, mdict, mode='w'):
     """save data to h5 file
 
     save data to h5 file
@@ -84,6 +123,8 @@ def saveh5(filename, mdict):
         filename string
     mdict : {dict}
         each dict is store in group, the elements in dict are store in dataset
+    mode : {str}
+        save mode, ``'w'`` for write, ``'a'`` for add.
 
     Returns
     -------
@@ -91,10 +132,44 @@ def saveh5(filename, mdict):
         0 --> all is well.
     """
 
-    f = h5py.File(filename, 'w')
+    f = h5py.File(filename, mode)
 
     _create_group_dataset(f, mdict)
 
+    f.close()
+    return 0
+
+
+def mvkeyh5(filepath, ksf, kst, sep='.'):
+    """rename keys in ``.h5`` file
+
+    Parameters
+    ----------
+    filepath : str
+        The file path string
+    ksf : list
+        keys from list, e.g. ['a.x', 'b.y']
+    kst : list
+        keys to list, e.g. ['a.1', 'b.2']
+    sep : str, optional
+        The separate pattern, default is ``'.'``
+
+    Returns
+    -------
+    0
+        All is ok!
+    """
+    ksf = [ksf] if type(ksf) is not list else ksf
+    kst = [kst] if type(kst) is not list else kst
+    f = h5py.File(filepath, 'a')
+    for keyf, keyt in zip(ksf, kst):
+        keyf = keyf.split(sep)
+        keyt = keyt.split(sep)
+        grp = f
+        for kf, kt in zip(keyf[:-1], keyt[:-1]):
+            grp = grp[kf]
+        grp.create_dataset(keyt[-1], data=grp[keyf[-1]][()])
+        del grp[keyf[-1]]
     f.close()
     return 0
 
@@ -106,9 +181,23 @@ if __name__ == '__main__':
     c = [1, 2, 3]
     d = {'1': 1, '2': a}
     s = 'Hello, the future!'
+    t = (0, 1)
 
-    saveh5('./data.h5', {'a': a, 'b': b, 'c': c, 'd': d, 's': s})
+    saveh5('./data.h5', {'a': {'x': a}, 'b': b, 'c': c, 'd': d, 's': s})
+    data = loadh5('./data.h5', keys=['a', 's'])
+    print(data.keys())
 
+    print("==========")
+    # saveh5('./data.h5', {'t': t}, 'w')
+    saveh5('./data.h5', {'t': t}, 'a')
+    saveh5('./data.h5', {'t': (2, 3, 4)}, 'a')
     data = loadh5('./data.h5')
 
-    print(data)
+    for k, v in data.items():
+        print(k, v)
+
+    mvkeyh5('./data.h5', ['a.x'], ['a.1'])
+    data = loadh5('./data.h5')
+
+    for k, v in data.items():
+        print(k, v)

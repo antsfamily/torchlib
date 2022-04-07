@@ -12,18 +12,18 @@ torchlib.dsp.convolution module
    :undoc-members:
    :show-inheritance:
 
-torchlib.dsp.ffts module
-------------------------
+torchlib.dsp.correlation module
+-------------------------------
 
-.. automodule:: torchlib.dsp.ffts
+.. automodule:: torchlib.dsp.correlation
    :members:
    :undoc-members:
    :show-inheritance:
 
-torchlib.dsp.filters module
----------------------------
+torchlib.dsp.ffts module
+------------------------
 
-.. automodule:: torchlib.dsp.filters
+.. automodule:: torchlib.dsp.ffts
    :members:
    :undoc-members:
    :show-inheritance:
@@ -52,6 +52,13 @@ torchlib.dsp.normalsignals module
    :undoc-members:
    :show-inheritance:
 
+torchlib.dsp.polynomialfit module
+---------------------------------
+
+.. automodule:: torchlib.dsp.polynomialfit
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------
