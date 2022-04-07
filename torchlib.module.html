@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchlib.module package &mdash; torchlib 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/katex-math.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+        <script src="_static/katex_autorenderer.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="torchlib.module.dsp package" href="torchlib.module.dsp.html" />
+    <link rel="prev" title="torchlib.misc package" href="torchlib.misc.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> torchlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">torchlib</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="torchlib.html">torchlib package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="torchlib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="torchlib.base.html">torchlib.base package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.diagnose.html">torchlib.diagnose package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.dsp.html">torchlib.dsp package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.evaluation.html">torchlib.evaluation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.layerfunction.html">torchlib.layerfunction package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.linalg.html">torchlib.linalg package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.misc.html">torchlib.misc package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">torchlib.module package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.optim.html">torchlib.optim package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.spl.html">torchlib.spl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.summary.html">torchlib.summary package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="torchlib.utils.html">torchlib.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="torchlib.html#module-torchlib">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">torchlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">torchlib</a> &raquo;</li>
+        
+          <li><a href="torchlib.html">torchlib package</a> &raquo;</li>
+        
+      <li>torchlib.module package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/torchlib.module.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="torchlib-module-package">
+<h1>torchlib.module package<a class="headerlink" href="#torchlib-module-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="torchlib.module.dsp.html">torchlib.module.dsp package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.dsp.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.dsp.html#module-torchlib.module.dsp.convolution">torchlib.module.dsp.convolution module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.dsp.html#module-torchlib.module.dsp.interpolation">torchlib.module.dsp.interpolation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.dsp.html#module-torchlib.module.dsp.polynomialfit">torchlib.module.dsp.polynomialfit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.dsp.html#module-torchlib.module.dsp">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="torchlib.module.evaluation.html">torchlib.module.evaluation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#module-torchlib.module.evaluation.contrast">torchlib.module.evaluation.contrast module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#module-torchlib.module.evaluation.entropy">torchlib.module.evaluation.entropy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#module-torchlib.module.evaluation.norm">torchlib.module.evaluation.norm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#module-torchlib.module.evaluation.retrieval">torchlib.module.evaluation.retrieval module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#module-torchlib.module.evaluation.ssims">torchlib.module.evaluation.ssims module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#module-torchlib.module.evaluation.variation">torchlib.module.evaluation.variation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.evaluation.html#module-torchlib.module.evaluation">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="torchlib.module.layers.html">torchlib.module.layers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.balanceconv2d">torchlib.module.layers.balanceconv2d module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.cnnsize">torchlib.module.layers.cnnsize module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.complex_layers">torchlib.module.layers.complex_layers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.consistency_layers">torchlib.module.layers.consistency_layers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.convolution">torchlib.module.layers.convolution module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.edge">torchlib.module.layers.edge module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.fft_layers">torchlib.module.layers.fft_layers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.flow_layers">torchlib.module.layers.flow_layers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.gaborconv2d">torchlib.module.layers.gaborconv2d module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.phase_convolution">torchlib.module.layers.phase_convolution module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers.pool">torchlib.module.layers.pool module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.layers.html#module-torchlib.module.layers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="torchlib.module.loss.html">torchlib.module.loss package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.contrast">torchlib.module.loss.contrast module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.entropy">torchlib.module.loss.entropy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.fourier_domain">torchlib.module.loss.fourier_domain module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.mean_squared_error">torchlib.module.loss.mean_squared_error module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.norm">torchlib.module.loss.norm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.perceptual">torchlib.module.loss.perceptual module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.regularization">torchlib.module.loss.regularization module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.retrieval">torchlib.module.loss.retrieval module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#torchlib-module-loss-segmentation-module">torchlib.module.loss.segmentation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.semantic">torchlib.module.loss.semantic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.sparse_metric">torchlib.module.loss.sparse_metric module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss.variation">torchlib.module.loss.variation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.loss.html#module-torchlib.module.loss">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="torchlib.module.misc.html">torchlib.module.misc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.misc.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.misc.html#module-torchlib.module.misc.transform">torchlib.module.misc.transform module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="torchlib.module.misc.html#module-torchlib.module.misc">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-torchlib.module">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-torchlib.module" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="torchlib.module.dsp.html" class="btn btn-neutral float-right" title="torchlib.module.dsp package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="torchlib.misc.html" class="btn btn-neutral float-left" title="torchlib.misc package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2018-2020, Zhi Liu
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
