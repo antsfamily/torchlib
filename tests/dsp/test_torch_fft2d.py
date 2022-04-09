@@ -1,9 +1,9 @@
 import numpy as np
 import torch as th
-import psar as ps
+import pyailib as pl
 import matplotlib.pyplot as plt
 
-X_np = ps.imread('../../data/images/Einstein.png').astype('float32')
+X_np = pl.imread('../../data/images/Einstein.png').astype('float32')
 X_np = X_np + 1j * X_np
 
 device = th.device('cuda:0')

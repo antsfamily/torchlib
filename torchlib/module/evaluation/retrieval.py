@@ -78,7 +78,7 @@ class F1(nn.Module):
     r"""F1 distance
 
     .. math::
-       F_{\beta} = 1 -\frac{(1+\beta^2) * P * R}{\beta^2 *P + R}
+       F_{\beta} = 1 -\frac{(1+\beta^2)  P  R}{\beta^2 P + R}
        :label: equ-F-measure
 
     where,

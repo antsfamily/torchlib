@@ -21,15 +21,15 @@ def standardization(X, mean=None, std=None, axis=None, extra=False):
 
     Parameters
     ----------
-    X : {torch tensor}
+    X : tensor
         data to be normalized,
-    mean : {list or None}, optional
+    mean : list or None, optional
         mean value (the default is None, which means auto computed)
-    std : {list or None}, optional
+    std : list or None, optional
         standard deviation (the default is None, which means auto computed)
-    axis : {list or int}, optional
+    axis : list or int, optional
         specify the axis for computing mean and standard deviation (the default is None, which means all elements)
-    extra : {bool}, optional
+    extra : bool, optional
         if True, also return the mean and std (the default is False, which means just return the standardized data)
     """
 
@@ -135,7 +135,7 @@ def quantization(X, idrange=None, odrange=[0, 31], odtype='auto', extra=False):
         Specifies the range of data. Default [min(X), max(X)].
     odrange : tuple, list, optional
         Specifies the range of data after beening quantized. Default [0, 31].
-    odtype : {str, None... }, optional
+    odtype : str or None, optional
         output data type, supportted are ``'auto'`` (auto infer, default), or torch tensor's dtype string.
         If the type of :attr:`odtype` is not string(such as None),
         the type of output data is the same with input.

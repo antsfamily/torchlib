@@ -78,7 +78,7 @@ class F1Loss(th.nn.Module):
     r"""F1 distance Loss
 
     .. math::
-       F_{\beta} = 1 -\frac{(1+\beta^2)鈰匬鈰匯}{\beta^2鈰匬 + R}
+       F_{\beta} = 1 -\frac{(1+\beta^2)  P  R}{\beta^2  P + R}
        :label: equ-F-measure
 
     where,

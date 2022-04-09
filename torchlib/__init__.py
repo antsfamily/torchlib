@@ -8,9 +8,9 @@ from .utils.convert import str2list, str2num
 from .utils.colors import rgb2gray
 from .utils.plot_show import cplot, plots, Plots
 
-from .base.baseops import dmka
+from .base.baseops import dmka, cat
 from .base.arrayops import sl, cut, arraycomb
-from .base.mathops import sinc, nextpow2, prevpow2, ebemulcc, mmcc, matmulcc, conj, absc
+from .base.mathops import sinc, nextpow2, prevpow2, ematmul, matmul, conj
 from .base.randomfunc import setseed, randgrid, randperm, randperm2d
 
 from .dsp.ffts import padfft, freq, fftfreq, fftshift, ifftshift, fft, ifft
@@ -59,7 +59,7 @@ from .module.loss.norm import FrobeniusLoss, LogFrobeniusLoss
 from .module.loss.perceptual import RandomProjectionLoss
 from .module.loss.retrieval import DiceLoss, JaccardLoss, F1Loss
 from .module.loss.variation import TotalVariation
-from .module.loss.fourier_domain import FourierDomainAmplitudeLoss, FourierDomainPhaseLoss, FourierDomainLoss, FourierDomainNormLoss
+from .module.loss.fourier_domain import FourierDomainLoss, FourierDomainAmplitudeLoss, FourierDomainPhaseLoss, FourierDomainNormLoss
 from .module.loss.mean_squared_error import CMAELoss, CMSELoss
 from .module.loss.sparse_metric import LogSparseLoss, FourierDomainLogSparseLoss
 from .module.loss.regularization import LogSparseLoss

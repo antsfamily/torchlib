@@ -18,17 +18,17 @@ class Standardization(th.nn.Module):
 
     Parameters
     ----------
-    X : {torch tensor}
+    X : tensor
         data to be normalized,
-    mean : {list or None}, optional
+    mean : list or None, optional
         mean value (the default is None, which means auto computed)
-    std : {list or None}, optional
+    std : list or None, optional
         Standard deviation (the default is None, which means auto computed)
-    axis : {list or int}, optional
+    axis : list or int, optional
         Specify the axis for computing mean and standard deviation (the default is None, which means all elements)
     unbiased : bool, optional
         If unbiased is False, then the standard-deviation will be calculated via the biased estimator. Otherwise, Bessel’s correction will be used.
-    extra : {bool}, optional
+    extra : bool, optional
         If True, also return the mean and std (the default is False, which means just return the standardized data)
 
     Examples

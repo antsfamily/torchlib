@@ -8,7 +8,7 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 from torchlib.dsp.ffts import fft, ifft, padfft
-from torchlib.base.mathops import nextpow2, ebemulcc
+from torchlib.base.mathops import nextpow2, ematmul
 from torchlib.base.arrayops import cut
 
 
@@ -19,28 +19,28 @@ def cutfftcorr1(y, nfft, Nx, Nh, shape='same', axis=0, ftshift=False):
 
     Parameters
     ----------
-    y : {torch.tensor}
+    y : tensor
         array after ``iff``.
-    nfft : {number}
+    nfft : int
         number of fft points.
-    Nx : {number}
+    Nx : int
         signal length
-    Nh : {number}
+    Nh : int
         filter length
-    shape : {str}
+    shape : dstr
         output shape:
         1. ``'same' --> same size as input x``, :math:`N_x`
         2. ``'valid' --> valid correlation output``
         3. ``'full' --> full correlation output``, :math:`N_x+N_h-1`
         (the default is 'same')
-    axis : {number}
+    axis : int
         correlation axis (the default is 0)
-    ftshift : {[type]}
+    ftshift : bool
         whether to shift the frequencies (the default is False)
 
     Returns
     -------
-    y : {torch.tensor}
+    y : tensor
         array with shape specified by :attr:`same`.
     """
 
@@ -91,29 +91,29 @@ def fftcorr1(x, h, shape='same', axis=0, nfft=None, ftshift=False, eps=None):
 
     Parameters
     ----------
-    x : {torch.tensor}
+    x : tensor
         data to be convolved.
-    h : {torch.tensor}
+    h : tensor
         filter array
-    shape : {str}, optional
+    shape : dstr, optional
         output shape:
         1. ``'same' --> same size as input x``, :math:`N_x`
         2. ``'valid' --> valid correlation output``
         3. ``'full' --> full correlation output``, :math:`N_x+N_h-1`
         (the default is 'same')
-    axis : {number}, optional
+    axis : int, optional
         correlation axis (the default is 0)
-    nfft : {number}, optional
-        number of fft points (the default is None, :math:`2^nextpow2(N_x+N_h-1)`),
+    nfft : int, optional
+        number of fft points (the default is None, :math:`2^{nextpow2(N_x+N_h-1)}`),
         note that :attr:`nfft` can not be smaller than :math:`N_x+N_h-1`.
-    ftshift : {bool}, optional
+    ftshift : bool, optional
         whether shift frequencies (the default is False)
-    eps : {None or float}, optional
+    eps : None or float, optional
         x[abs(x)<eps] = 0 (the default is None, does nothing)
 
     Returns
     -------
-    y : {torch.tensor}
+    y : tensor
         Correlation result array.
 
     """
@@ -135,7 +135,7 @@ def fftcorr1(x, h, shape='same', axis=0, nfft=None, ftshift=False, eps=None):
     x = fft(x, nfft, axis, norm=None, shift=ftshift)
     h = fft(h, nfft, axis, norm=None, shift=ftshift)
     h[..., 1] = -h[..., 1]  # conj
-    y = ebemulcc(x, h)  # element-by-element complex multiplication
+    y = ematmul(x, h)  # element-by-element complex multiplication
 
     y = ifft(y, nfft, axis, norm=None, shift=ftshift)
     y = cutfftcorr1(y, nfft, Nx, Nh, shape, axis, ftshift)
@@ -152,11 +152,11 @@ def xcorr(A, B, shape='same', axis=0):
 
     Parameters
     ----------
-    A : {numpy array}
+    A : numpy array
         data1
-    B : {numpy array}
+    B : numpy array
         data2
-    mod : {str}, optional
+    mod : str, optional
         - 'biased': scales the raw cross-correlation by 1/M.
         - 'unbiased': scales the raw correlation by 1/(M-abs(lags)).
         - 'coeff': normalizes the sequence so that the auto-correlations
@@ -210,19 +210,19 @@ def accc(Sr, isplot=False):
     Average cross correlation coefficient (ACCC)
 
     .. math::
-       $\overline{C(\eta)}=\sum_{\eta} s^{*}(\eta) s(\eta+\Delta \eta)$
+       \overline{C(\eta)}=\sum_{\eta} s^{*}(\eta) s(\eta+\Delta \eta)
 
     where, :math:`\eta, \Delta \eta` are azimuth time and it's increment.
 
 
     Parameters
     ----------
-    Sr : {numpy array}
+    Sr : numpy array
         SAR raw signal data :math:`N_a×N_r` or range compressed data.
 
     Returns
     -------
-    [1d array]
+    1d array
         ACCC in each range cell.
     """
 
@@ -249,7 +249,7 @@ def accc(Sr, isplot=False):
 
 if __name__ == '__main__':
     import torchlib as tl
-    import psar as ps
+    import pyailib as pl
     import torch as th
 
     shape = 'same'
@@ -263,7 +263,7 @@ if __name__ == '__main__':
     x_th = th.stack([x_th, th.zeros(x_th.size())], dim=-1)
     h_th = th.stack([h_th.real, h_th.imag], dim=-1)
 
-    y1 = ps.fftcorr1(x_np, h_np, axis=0, Nfft=None, shape=shape, ftshift=ftshift)
+    y1 = pl.fftcorr1(x_np, h_np, axis=0, nfft=None, shape=shape, ftshift=ftshift)
     y2 = tl.fftcorr1(x_th, h_th, axis=0, nfft=None, shape=shape, ftshift=ftshift)
 
     y2 = th.view_as_complex(y2)

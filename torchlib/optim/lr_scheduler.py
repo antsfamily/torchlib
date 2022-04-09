@@ -6,51 +6,97 @@
 # @Version : $1.0$
 
 import math
-import numpy as np
 import torch as th
 
 
 class DoubleGaussianKernelLR(th.optim.lr_scheduler._LRScheduler):
-    r"""Set the learning rate of each parameter group using a double gaussian kernel
-    schedule, where :math:`\eta_{max}` is set to the initial lr and
+    r"""DoubleGaussianKernelLR
+
+    Set the learning rate of each parameter group using a double gaussian kernel schedule
+
+    .. image:: ./_static/GaussianLREquation.png
+       :scale: 50 %
+       :align: center
+
+    where :math:`\eta_{max}` is set to the initial lr and
     :math:`T_{cur}` is the number of epochs since the last restart in SGDR:
-
-    .. math::
-        \eta_{t}=\left\{\begin{array}{l}
-        \left(\eta_{\max }-\eta_{\text {start }}\right) \exp \left(\frac{-\left(t-t_{\eta_{\
-        max }}\right)^{2}}{2 \sigma_{1}^{2}}\right)+\eta_{\text {start }}, \text { if } t<t
-        _{\eta_{\max}} \\
-        \left(\eta_{\max }-\eta_{\text {stop }}\right) \exp \left(\frac{-\left(t-t_{\eta_{\
-        max }}\right)^{2}}{2 \sigma_{2}^{2}}\right)+\eta_{\text {stop }}, \text { otherwi
-        se }
-        \end{array}\right.
-
 
     When last_epoch=-1, sets initial lr as lr. Notice that because the schedule
     is defined recursively, the learning rate can be simultaneously modified
     outside this scheduler by other operators.
 
+    The maximum learning rate are the base learning rate setted in Optimizer.
+
 
     Parameters
     ----------
-    optimizer : {Optimizer}
+    optimizer : Optimizer
         Wrapped optimizer.
-    t_eta_max : {int}
+    t_eta_max : int
         Iterations when the learning rate reach to the maximum value :math:`\eta_{\max}`.
-    sigma1 : {int}
+    sigma1 : int
         Controls the shape of warming up phase.
-    sigma2 : {int}
+    sigma2 : int
         Controls the shape of annealing phase.
-    eta_start : {float}
+    eta_start : float
         Starting learning rate. Default: 0.
-    eta_stop : {float}
+    eta_stop : float
         Stopping learning rate. Default: 0.
-    last_epoch : {int}
+    last_epoch : int
         The index of last epoch. Default: -1.
 
-    .. note::
-        The maximum learning rate are the base learning rate setted in Optimizer.
+    Examples
+    ---------
 
+    .. image:: ./_static/DoubleGaussianKernelLR.png
+       :scale: 50 %
+       :align: center
+
+    The results shown in the above figure can be obtained by the following codes.
+
+    ::
+
+        import torch as th
+        import torchlib as tl
+        import matplotlib; matplotlib.use('TkAgg')
+        import matplotlib.pyplot as plt
+
+        lr = 1e-1
+        lr = 1e-2
+        # lr = 1e2
+
+        num_epochs = 1000
+        num_epochs = 500
+        batch_size = 8
+        num_batch = 750
+
+        params = {th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
+                th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
+                }
+
+        optimizer = th.optim.Adam(params, lr=lr)
+        # optimizer = th.optim.SGD(params, lr=lr, momentum=0.9)
+        scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
+
+        print(optimizer)
+
+        lrs = []
+        for n in range(num_epochs):
+            for b in range(num_batch):
+
+                optimizer.step()
+
+                # lrs.append(optimizer.param_groups[0]['lr'])
+
+            scheduler.step()
+            lrs.append(optimizer.param_groups[0]['lr'])
+
+        plt.figure()
+        plt.plot(lrs)
+        plt.xlabel('Iteration')
+        plt.ylabel('Learning rate')
+        plt.grid()
+        plt.show()
 
     """
 
@@ -87,39 +133,90 @@ class DoubleGaussianKernelLR(th.optim.lr_scheduler._LRScheduler):
 
 
 class MountainLR(th.optim.lr_scheduler._LRScheduler):
-    r"""Set the learning rate of each parameter group using a double gaussian kernel
-    schedule, where :math:`\eta_{max}` is set to the initial lr and
-    :math:`T_{cur}` is the number of epochs since the last restart in SGDR:
+    r"""MountainLR
+    
+    Set the learning rate of each parameter group using a double gaussian kernel
 
     .. math::
         (|x-P| / N) .* (-2 + cos(2 * (x-P) / T))
 
+    schedule, where :math:`\eta_{max}` is set to the initial lr and
+    :math:`T_{cur}` is the number of epochs since the last restart in SGDR:
 
     When last_epoch=-1, sets initial lr as lr. Notice that because the schedule
     is defined recursively, the learning rate can be simultaneously modified
     outside this scheduler by other operators.
 
+    The maximum learning rate are the base learning rate setted in Optimizer.
 
     Parameters
     ----------
-    optimizer : {Optimizer}
+    optimizer : Optimizer
         Wrapped optimizer.
-    t_eta_max : {int}
+    t_eta_max : int
         Iterations when the learning rate reach to the maximum value :math:`\eta_{\max}`.
-    sigma1 : {int}
+    sigma1 : int
         Controls the shape of warming up phase.
-    sigma2 : {int}
+    sigma2 : int
         Controls the shape of annealing phase.
-    eta_start : {float}
+    eta_start : float
         Starting learning rate. Default: 0.
-    eta_stop : {float}
+    eta_stop : float
         Stopping learning rate. Default: 0.
-    last_epoch : {int}
+    last_epoch : int
         The index of last epoch. Default: -1.
 
-    .. note::
-        The maximum learning rate are the base learning rate setted in Optimizer.
+    Examples
+    ---------
 
+    .. image:: ./_static/MountainLR.png
+       :scale: 50 %
+       :align: center
+
+    The results shown in the above figure can be obtained by the following codes.
+
+    ::
+
+        import torch as th
+        import torchlib as tl
+        import matplotlib; matplotlib.use('TkAgg')
+        import matplotlib.pyplot as plt
+
+        lr = 1e-1
+        lr = 1e-2
+        # lr = 1e2
+
+        num_epochs = 1000
+        num_epochs = 500
+        batch_size = 8
+        num_batch = 750
+
+        params = {th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
+                th.nn.parameter.Parameter(th.zeros(128), requires_grad=True),
+                }
+
+        optimizer = th.optim.Adam(params, lr=lr)
+        scheduler = tl.optim.lr_scheduler.MountainLR(optimizer, total_epoch=num_epochs, peak_epoch=300, period_epoch=50, last_epoch=-1)
+
+        print(optimizer)
+
+        lrs = []
+        for n in range(num_epochs):
+            for b in range(num_batch):
+
+                optimizer.step()
+
+                # lrs.append(optimizer.param_groups[0]['lr'])
+
+            scheduler.step()
+            lrs.append(optimizer.param_groups[0]['lr'])
+
+        plt.figure()
+        plt.plot(lrs)
+        plt.xlabel('Iteration')
+        plt.ylabel('Learning rate')
+        plt.grid()
+        plt.show()
 
     """
 
@@ -169,8 +266,8 @@ if __name__ == '__main__':
     optimizer = th.optim.Adam(params, lr=lr)
     # optimizer = th.optim.SGD(params, lr=lr, momentum=0.9)
     # scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=80, sigma1=15, sigma2=200, eta_start=1e-4, eta_stop=1e-5, last_epoch=-1)
-    scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
-    # scheduler = tl.optim.lr_scheduler.MountainLR(optimizer, total_epoch=num_epochs, peak_epoch=300, period_epoch=50, last_epoch=-1)
+    # scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
+    scheduler = tl.optim.lr_scheduler.MountainLR(optimizer, total_epoch=num_epochs, peak_epoch=300, period_epoch=50, last_epoch=-1)
 
     print(optimizer)
 

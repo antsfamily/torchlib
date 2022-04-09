@@ -18,24 +18,24 @@ def ConvSize1d(CLi, Co, K, S, P, D=1, groups=1):
        \end{array}
        :label: equ-DilationConv2dSize
 
-    CLi : {tulpe or list}
+    CLi : {tuple or list}
         input data shape (C, L)
     Co : {integer number}
         number of output chanels.
-    K : {tulpe}
+    K : tuple
         kernel size
-    S : {tulpe}
+    S : tuple
         stride size
-    P : {tulpe}
+    P : tuple
         padding size
     D : {tuple}, optional
         dilation size (the default is 1)
-    groups : {number}, optional
+    groups : int, optional
         [description] (the default is 1, which [default_description])
 
     Returns
     -------
-    tulpe
+    tuple
         shape after 2D-Convolution
 
     Raises
@@ -63,15 +63,15 @@ def ConvTransposeSize1d(CLi, Co, K, S, P, D=1, OP=0, groups=1):
 
     Parameters
     ----------
-    CLi : {tulpe or list}
+    CLi : {tuple or list}
         input data shape (C, H, W)
     Co : {integer number}
         number of output chanels.
-    K : {tulpe}
+    K : tuple
         kernel size
-    S : {tulpe}
+    S : tuple
         stride size
-    P : {tulpe}
+    P : tuple
         padding size
     D : {tuple}, optional
         dilation size (the default is 1)
@@ -82,7 +82,7 @@ def ConvTransposeSize1d(CLi, Co, K, S, P, D=1, OP=0, groups=1):
 
     Returns
     -------
-    tulpe
+    tuple
         shape after 2D-Transpose Convolution
 
     Raises
@@ -127,24 +127,24 @@ def ConvSize2d(CHWi, Co, K, S, P, D=(1, 1), groups=1):
        \end{array}
        :label: equ-DilationConv2dSize
 
-    CHWi : {tulpe or list}
+    CHWi : {tuple or list}
         input data shape (C, H, W)
     Co : {integer number}
         number of output chanels.
-    K : {tulpe}
+    K : tuple
         kernel size
-    S : {tulpe}
+    S : tuple
         stride size
-    P : {tulpe}
+    P : tuple
         padding size
     D : {tuple}, optional
         dilation size (the default is (1, 1))
-    groups : {number}, optional
+    groups : int, optional
         [description] (the default is 1, which [default_description])
 
     Returns
     -------
-    tulpe
+    tuple
         shape after 2D-Convolution
 
     Raises
@@ -174,15 +174,15 @@ def ConvTransposeSize2d(CHWi, Co, K, S, P, D=(1, 1), OP=(0, 0), groups=1):
 
     Parameters
     ----------
-    CHWi : {tulpe or list}
+    CHWi : {tuple or list}
         input data shape (C, H, W)
     Co : {integer number}
         number of output chanels.
-    K : {tulpe}
+    K : tuple
         kernel size
-    S : {tulpe}
+    S : tuple
         stride size
-    P : {tulpe}
+    P : tuple
         padding size
     D : {tuple}, optional
         dilation size (the default is (1, 1))
@@ -193,7 +193,7 @@ def ConvTransposeSize2d(CHWi, Co, K, S, P, D=(1, 1), OP=(0, 0), groups=1):
 
     Returns
     -------
-    tulpe
+    tuple
         shape after 2D-Transpose Convolution
 
     Raises

@@ -11,16 +11,19 @@ import copy
 
 
 def dmka(D, Ds):
-    """Multi-key value assign
-
-    Multi-key value assign
+    r"""Multiple key-value assign to a dict
 
     Parameters
     ----------
-    D : {[type]}
-        [description]
-    Ds : {[type]}
-        [description]
+    D : dict
+        main dict
+    Ds : dict
+        sub dict
+
+    Returns
+    -------
+    dict
+        after assign
     """
 
     for k, v in Ds.items():
@@ -36,14 +39,14 @@ def cat(shapes, axis=0):
 
     Parameters
     ----------
-    shapes : {tuples or lists}
+    shapes : tuples or lists
         (shape1, shape2, ...)
-    axis : {number}, optional
+    axis : int, optional
         specify the concatenated axis (the default is 0)
 
     Returns
     -------
-    tulpe or list
+    tuple or list
         concatenated shape
 
     Raises
@@ -51,6 +54,7 @@ def cat(shapes, axis=0):
     ValueError
         Shapes are not consistent in axises except the specified one.
     """
+
     x = 0
     s = copy.copy(shapes[0])
     s = list(s)
@@ -62,41 +66,13 @@ def cat(shapes, axis=0):
                      or be empty.")
         x += shape[axis]
         # print(x)
-    print(s, x)
+    # print(s, x)
     s[axis] = x
     return s
 
 
-def concat2(X1, X2, axis):
-    r"""concat2
-
-    concatenate [X1, X2] in aixs direction
-
-    Parameters
-    ----------
-    X1 : {Torch Tensor}
-        the first torch tensor for concatenating
-    X2 : {Torch Tensor}
-        the second torch tensor for concatenating
-    axis : {integer}
-        concatenating axis
-
-    Returns
-    -------
-    Torch Tensor
-        concatenated tensors
-    """
-
-    if X1 is None or X1 is []:
-        return X2
-    else:
-        # print(type(X1), type(X2))
-        # print(X2.shape)
-        return th.cat((X1, X2), axis)
-
-
 if __name__ == '__main__':
-    import torchtool as tht
+    import torchlib as tl
     import torch as th
 
     D = {'a': 1, 'b': 2, 'c': 3}
@@ -113,10 +89,10 @@ if __name__ == '__main__':
     print(x.size())
     print('---Theoretical result')
 
-    ys = tht.cat((xs, xs, xs), 0)
+    ys = tl.cat((xs, xs, xs), 0)
     print(ys)
 
-    ys = tht.cat((xs, xs, xs), 1)
+    ys = tl.cat((xs, xs, xs), 1)
     print(ys)
     print('---Torch result')
 

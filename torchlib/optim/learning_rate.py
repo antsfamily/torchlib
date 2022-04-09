@@ -23,9 +23,9 @@ class LrFinder():
 
         Parameters
         ----------
-        device : {string}, optional
+        device : str, optional
             device string: ``'cpu'``(default), ``'cuda:0'``, ``cuda:1`` ...
-        plotdir : {string}, optional
+        plotdir : str, optional
             If it is not None, plot the loss-lr curve and save the figure,
             otherwise plot and show but not save. (the default is None).
         """
@@ -43,10 +43,10 @@ class LrFinder():
 
         Parameters
         ----------
-        lrmod : {str}, optional
+        lrmod : str, optional
             ``'log'`` --> use log scale, i.e. log10(lr) instead lr. (default)
             ``'linear'`` --> use original lr.
-        loss : {str}, optional
+        loss : str, optional
             Specify which type of loss will be ploted. (the default is 'smoothed')
         """
 
@@ -107,45 +107,45 @@ class LrFinder():
 
         Parameters
         ----------
-        dataloader : {torch.DataLoader}
+        dataloader : DataLoader
             The dataloader that contains a dataset for training.
-        model : {torch.Module}
+        model : Module
             Your network module.
-        optimizer : {torch.Optimizer}
+        optimizer : Optimizer
             The optimizer such as SGD, Adam...
-        criterion : {torch.Loss}
+        criterion : Loss
             The criterion/loss used for training model.
-        nin : {number}, optional
+        nin : int, optional
             The number of inputs of the model,
             the first :attr:`nin` elements are inputs,
             the rest are targets(can be None) used for computing loss. (the default is 1)
-        nou : {number}, optional
+        nou : int, optional
             The number of outputs of the model used for computing loss,
             it works only when the model has multiple outputs, i.e.
             the outputs is a tuple or list which has several tensor elements (>=1).
             the first :attr:`nout` elements are used for computing loss,
             the rest are ignored. (the default is 1)
-        nbgc : {number}, optional
+        nbgc : int, optional
             The number of batches for grad cumulation (the default is 1, which means no cumulation)
-        lr_init : {number}, optional
+        lr_init : int, optional
             The initial learning rate (the default is 1e-8)
-        lr_final : {number}, optional
+        lr_final : int, optional
             The final learning rate (the default is 1e-8)
-        beta : {float}, optional
-            [description] (the default is 0.98)
-        gamma : {float}, optional
+        beta : float, optional
+            weight for weighted sum of loss (the default is 0.98)
+        gamma : float, optional
             The exploding factor :math:`\gamma`. (the default is 4.)
 
 
         Returns
         -------
-        lrs : {list}
+        lrs : list
             Learning rates during training.
-        smt_losses : {list}
+        smt_losses : list
             Smoothed losses during training.
-        avg_losses : {list}
+        avg_losses : list
             Average losses during training.
-        losses : {list}
+        losses : list
             Original losses during training.
 
         Examples

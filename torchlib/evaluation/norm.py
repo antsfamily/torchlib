@@ -11,8 +11,8 @@ import torch as th
 def frobenius(X, p=2, reduction='mean'):
     r"""frobenius norm
 
-        .. math::
-           \|\bm X\|_p^p = (\sum{x^p})^{1/p}
+    .. math::
+        \|\bm X\|_p^p = (\sum{x^p})^{1/p}
 
     """
 

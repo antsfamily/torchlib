@@ -92,7 +92,7 @@ def imresize(img, oshape=None, odtype=None, order=1, mode='constant', cval=0, cl
     ----------
     img : ndarray
         Input image.
-    oshape : tulpe, optional
+    oshape : tuple, optional
         output shape (the default is None, which is the same as the input)
     odtype : str, optional
         output data type, ``'uint8', 'uint16', 'int8', ...`` (the default is None, float)

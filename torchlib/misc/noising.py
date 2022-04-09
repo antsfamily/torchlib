@@ -10,23 +10,23 @@ from torchlib.utils.convert import str2num
 from torchlib.base.mathops import nextpow2
 
 
-def matnoise(mat, noise='wgn', snr=30, peak='maxv'):
+def matnoise(mat, noise='awgn', snr=30, peak='maxv'):
     r"""add noise to an matrix
 
     Add noise to an matrix (real or complex)
 
     Arguments
     --------------------
-    mat : {torch.Tensor}
+    mat : tensor
         can be real or complex valued
 
     Keyword Arguments
     --------------------
-    noise : {string}
-        type of noise (default: {'wgn'})
-    snr : {float number}
-        Signal-to-noise ratio (default: {30})
-    peak : {None or float}
+    noise : str
+        type of noise (default: ``'wgn'``)
+    snr : float
+        Signal-to-noise ratio (default: 30)
+    peak : None or float
         Peak value in input, for complex data, ``peak=[peakr, peaki]``, if None, auto detected, if ``'maxv'``, use the maximum value as peak value. (default)
     """
 
@@ -45,8 +45,11 @@ def matnoise(mat, noise='wgn', snr=30, peak='maxv'):
         else:
             peakr, peaki = peak
         mat = th.view_as_real(mat)
-        mat[..., 0] = awgn(mat[..., 0], snr=snr, peak=peakr, pmode='db', measMode='measured')
-        mat[..., 1] = awgn(mat[..., 1], snr=snr, peak=peaki, pmode='db', measMode='measured')
+        if noise in ['awgn', 'AWGN']:
+            mat[..., 0] = awgn(mat[..., 0], snr=snr, peak=peakr, pmode='db', measMode='measured')
+            mat[..., 1] = awgn(mat[..., 1], snr=snr, peak=peaki, pmode='db', measMode='measured')
+        else:
+            raise ValueError('Not supported noise: %s' % noise)
     else:
         cplxflag = False
         if peak is None:
@@ -62,8 +65,11 @@ def matnoise(mat, noise='wgn', snr=30, peak='maxv'):
         else:
             peakr, peaki = peak
         if mat.shape[-1] == 2:
-            mat[..., 0] = awgn(mat[..., 0], snr=snr, peak=peakr, pmode='db', measMode='measured')
-            mat[..., 1] = awgn(mat[..., 1], snr=snr, peak=peaki, pmode='db', measMode='measured')
+            if noise in ['awgn', 'AWGN']:
+                mat[..., 0] = awgn(mat[..., 0], snr=snr, peak=peakr, pmode='db', measMode='measured')
+                mat[..., 1] = awgn(mat[..., 1], snr=snr, peak=peaki, pmode='db', measMode='measured')
+            else:
+                raise ValueError('Not supported noise: %s' % noise)
         else:
             if peak is None:
                 # peak = mat.abs().max()
@@ -71,7 +77,10 @@ def matnoise(mat, noise='wgn', snr=30, peak='maxv'):
                 peak = 2**nextpow2(peak) - 1
             elif peak == 'maxv':
                 peak = mat.max()
-            mat = awgn(mat, snr=snr, peak=peak, pmode='db', measMode='measured')
+            if noise in ['awgn', 'AWGN']:
+                mat = awgn(mat, snr=snr, peak=peak, pmode='db', measMode='measured')
+            else:
+                raise ValueError('Not supported noise: %s' % noise)
 
     if cplxflag:
         mat = th.view_as_complex(mat)
@@ -80,26 +89,26 @@ def matnoise(mat, noise='wgn', snr=30, peak='maxv'):
 
 
 def imnoise(img, noise='wgn', snr=30, peak=None, fmt='chnllast'):
-    """Add noise to image
+    r"""Add noise to image
 
     Add noise to image
 
     Parameters
     ----------
-    img : {torch.Tensor}
+    img : tensor
         image aray
-    noise : {string}, optional
+    noise : str, optional
         noise type (the default is 'wgn', which [default_description])
-    snr : {float number}, optional
+    snr : float, optional
         Signal-to-noise ratio (the default is 30, which [default_description])
-    peak : {None, string or float}
+    peak : None, str or float
         Peak value in input, if None, auto detected (default), if ``'maxv'``, use the maximum value as peak value.
-    fmt : {string or None}, optional
+    fmt : str or None, optional
         for color image, :attr:`fmt` should be specified with ``'chnllast'`` or ``'chnlfirst'``, for gray image, :attr:`fmt` should be setted to ``None``.
 
     Returns
     -------
-    {torch.Tensor}
+    tensor
         Images with added noise.
 
     """
@@ -109,6 +118,8 @@ def imnoise(img, noise='wgn', snr=30, peak=None, fmt='chnllast'):
     elif peak == 'maxv':
         peak = img.max()
 
+    if noise not in ['awgn', 'AWGN']:
+        raise ValueError('Not supported noise: %s' % noise)
     if img.dim() == 2:
         img = awgn(img, snr, peak=peak, pmode='db', measMode='measured')
     elif img.dim() == 3:
@@ -134,7 +145,7 @@ def imnoise(img, noise='wgn', snr=30, peak=None, fmt='chnllast'):
 
 
 def awgn(sig, snr=30, peak=1, pmode='db', measMode='measured'):
-    """AWGN Add white Gaussian noise to a signal.
+    r"""AWGN Add white Gaussian noise to a signal.
 
     Y = AWGN(X,snr) adds white Gaussian noise to X.  The snr is in dB.
     The power of X is assumed to be 0 dBW.  If X is complex, then
@@ -142,20 +153,20 @@ def awgn(sig, snr=30, peak=1, pmode='db', measMode='measured'):
 
     Parameters
     ----------
-    sig : {torch.Tensor}
+    sig : tensor
         Signal that will be noised.
-    snr : {float number}, optional
+    snr : float, optional
         Signal Noise Ratio (the default is 30)
-    peak : {float number}, optional
+    peak : float, optional
         Peak value (the default is 1)
-    pmode : {string}, optional
+    pmode : str, optional
         Power mode ``'linear'``, ``'db'`` (the default is 'db')
-    measMode : {string}, optional
-        [description] (the default is 'measured', which [default_description])
+    measMode : str, optional
+        the method for computing power (the default is 'measured', which sigPower = th.sum(th.abs(sig) ** 2) / sig.numel())
 
     Returns
     -------
-    {torch.Tensor}
+    tensor
         noised data
 
     Raises
@@ -201,7 +212,7 @@ def awgn(sig, snr=30, peak=1, pmode='db', measMode='measured'):
 
 
 def wgn(shape, p, peak=1, pmode='dbw', dtype='real', seed=None):
-    """WGN Generate white Gaussian noise.
+    r"""WGN Generate white Gaussian noise.
 
     Y = WGN((M,N),P) generates an M-by-N matrix of white Gaussian noise. P
     specifies the power of the output noise in dBW. The unit of measure for
@@ -210,22 +221,22 @@ def wgn(shape, p, peak=1, pmode='dbw', dtype='real', seed=None):
 
     Parameters
     ----------
-    shape : {tulpe}
+    shape : tuple
         Shape of noising matrix
-    p : {float number}
+    p : float
         P specifies the power of the output noise in dBW.
-    peak : {float number}, optional
+    peak : float, optional
         Peak value (the default is 1)
-    pmode : {string}, optional
+    pmode : str, optional
         Power mode of the output noise (the default is 'dbw')
-    dtype : {string}, optional
+    dtype : str, optional
         data type, real or complex (the default is 'real', which means real-valued)
-    seed : {integer}, optional
+    seed : int, optional
         Seed for random number generator. (the default is None, which means different each time)
 
     Returns
     -------
-    torch.Tensor
+    tensor
         Matrix of white Gaussian noise (real or complex).
     """
 

@@ -6,14 +6,73 @@
 # @Version : $1.0$
 
 import torch as th
-from torchlib.utils.const import EPS
+import torchlib as tl
 
 
 class EntropyLoss(th.nn.Module):
-    r"""Entropy loss
+    r"""compute the entropy loss of the inputs
 
+    .. math::
+        {\rm S} = -\sum_{n=0}^N p_i{\rm log}_2 p_n
 
+    where :math:`N` is the number of pixels, :math:`p_n=\frac{|X_n|^2}{\sum_{n=0}^N|X_n|^2}`.
 
+    Parameters
+    ----------
+    X : tensor
+        The complex or real inputs, for complex inputs, both complex and real representations are surpported.
+    mode : str, optional
+        The entropy mode: ``'shannon'`` or ``'natural'`` (the default is 'shannon')
+    axis : tuple, None, optional
+        the dimensions for compute entropy. by default None (if input's dimension > 2, then all but the first, else all).
+    caxis : int or None
+        If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    reduction : str, optional
+        The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
+
+    Returns
+    -------
+    S : tensor
+        The entropy of the inputs.
+    
+    Examples
+    --------
+
+    ::
+
+        th.manual_seed(2020)
+        X = th.randn(1, 3, 4, 2)
+        ent_func = EntropyLoss(mode='shannon', axis=(1, 2), caxis=-1, reduction='mean')
+        V = ent_func(X)
+        print(V)
+
+        X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
+        ent_func = EntropyLoss(mode='shannon', axis=(1, 2), caxis=None, reduction='mean')
+        V = ent_func(X)
+        print(V)
+
+        ent_func = EntropyLoss(mode='shannon', axis=None, caxis=None, reduction='mean')
+        V = ent_func(X)
+        print(V)
+
+        ent_func = EntropyLoss(mode='shannon', axis=(2), caxis=None, reduction='mean')
+        V = ent_func(X)
+        print(V)
+
+        ent_func = EntropyLoss(mode='shannon', axis=(2), caxis=None, reduction=None)
+        V = ent_func(X)
+        print(V)
+
+        # output
+        tensor(2.8302)
+        tensor(2.8302)
+        tensor(2.8302)
+        tensor(1.5349)
+        tensor([[[1.3829],
+                [1.3055],
+                [1.9163]]])
     """
 
     def __init__(self, mode='shannon', axis=None, caxis=None, reduction='mean'):
@@ -24,46 +83,31 @@ class EntropyLoss(th.nn.Module):
         self.reduction = reduction
 
     def forward(self, X):
-        if th.is_complex(X):
-            X = (X * X.conj()).real
-        elif (self.caxis is None) or X.shape[-1] == 2:
-            X = th.sum(X.pow(2), axis=-1, keepdims=True)
-        else:
-            X = th.sum(X.pow(2), axis=self.caxis, keepdims=True)
-
-        if self.axis is None:
-            D = X.dim()
-            axis = list(range(1, D)) if D > 2 else list(range(0, D))
-        else:
-            axis = self.axis
-
-        P = th.sum(X, axis, keepdims=True)
-        p = X / (P + EPS)
-        if self.mode in ['Shannon', 'shannon', 'SHANNON']:
-            S = -th.sum(p * th.log2(p + EPS), axis)
-        if self.mode in ['Natural', 'natural', 'NATURAL']:
-            S = -th.sum(p * th.log(p + EPS), axis)
-        if self.reduction == 'mean':
-            S = th.mean(S)
-        if self.reduction == 'sum':
-            S = th.sum(S)
-
-        return S
+        
+        return tl.entropy(X, mode=self.mode, axis=self.axis, caxis=self.caxis, reduction=self.reduction)
 
 
 if __name__ == '__main__':
 
-    ent_func = EntropyLoss('shannon')
-    ent_func = EntropyLoss('natural')
-    ent_func1 = EntropyLoss('natural', caxis=1)
+    th.manual_seed(2020)
     X = th.randn(1, 3, 4, 2)
-    S = ent_func(X)
-    print(S)
-
-    Y = X.permute(0, 3, 1, 2)
-    S = ent_func1(Y)
-    print(S)
+    ent_func = EntropyLoss(mode='shannon', axis=(1, 2), caxis=-1, reduction='mean')
+    V = ent_func(X)
+    print(V)
 
     X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-    S = ent_func(X)
-    print(S)
+    ent_func = EntropyLoss(mode='shannon', axis=(1, 2), caxis=None, reduction='mean')
+    V = ent_func(X)
+    print(V)
+
+    ent_func = EntropyLoss(mode='shannon', axis=None, caxis=None, reduction='mean')
+    V = ent_func(X)
+    print(V)
+
+    ent_func = EntropyLoss(mode='shannon', axis=(2), caxis=None, reduction='mean')
+    V = ent_func(X)
+    print(V)
+
+    ent_func = EntropyLoss(mode='shannon', axis=(2), caxis=None, reduction=None)
+    V = ent_func(X)
+    print(V)

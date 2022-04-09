@@ -12,6 +12,19 @@ import torchlib as tl
 
 
 def sinc(x):
+    """Applies sinc function to a tensor
+
+    Parameters
+    ----------
+    x : Tensor
+        input tensor
+
+    Returns
+    -------
+    Tensor
+        after sinc transformation.
+    """
+
     flag = False
     if type(x) is not th.Tensor:
         flag = True
@@ -25,139 +38,400 @@ def sinc(x):
 
 
 def nextpow2(x):
-    if x == 0:
-        y = 0
-    else:
-        y = int(np.ceil(np.log2(x)))
+    r"""get the next higher power of 2.
 
-    return y
+    Given an number :math:`x`, returns the first p such that :math:`2^p >=|x|`. 
+
+    Args:
+        x (int or float): an number.
+
+    Returns:
+        int: Next higher power of 2.
+
+    Examples:
+
+        ::
+
+            print(prevpow2(-5), nextpow2(-5))
+            print(prevpow2(5), nextpow2(5))
+            print(prevpow2(0.3), nextpow2(0.3))
+            print(prevpow2(7.3), nextpow2(7.3))
+            print(prevpow2(-3.5), nextpow2(-3.5))
+
+            # output
+            2 3
+            2 3
+            -2 -1
+            2 3
+            1 2
+
+    """
+
+    return int(np.ceil(np.log2(np.abs(x) + 1e-32)))
 
 
 def prevpow2(x):
-    if x == 0:
-        y = 0
-    else:
-        y = int(np.floor(np.log2(x)))
-    return y
+    r"""get the previous lower power of 2.
+
+    Given an number :math:`x`, returns the first p such that :math:`2^p <=|x|`. 
+
+    Args:
+        x (int or float): an number.
+
+    Returns:
+        int: Next higher power of 2.
+
+    Examples:
+
+        ::
+
+            print(prevpow2(-5), nextpow2(-5))
+            print(prevpow2(5), nextpow2(5))
+            print(prevpow2(0.3), nextpow2(0.3))
+            print(prevpow2(7.3), nextpow2(7.3))
+            print(prevpow2(-3.5), nextpow2(-3.5))
+
+            # output
+            2 3
+            2 3
+            -2 -1
+            2 3
+            1 2
+
+    """
+    
+    return int(np.floor(np.log2(np.abs(x) + 1e-32)))
 
 
-def ebemulcc(A, B):
-    """Element-by-element complex multiplication
+def ematmul(A, B, cdim=None):
+    r"""Element-by-element complex multiplication
 
     like A .* B in matlab
 
     Parameters
     ----------
-    A : {torch array}
-        any size torch array, both complex and real representation are supported.
+    A : tensor
+        any size torch tensor, both complex and real representation are supported.
         For real representation, the last dimension is 2 (the first --> real part, the second --> imaginary part).
-    B : {torch array}
-        any size torch array, both complex and real representation are supported.
+    B : tensor
+        any size torch tensor, both complex and real representation are supported.
         For real representation, the last dimension is 2 (the first --> real part, the second --> imaginary part).
         :attr:`B` has the same size as :attr:`A`.
+    cdim : int or None
+        if :attr:`A` and :attr:`B` are represented in real format, :attr:`cdim`
+        should be specified (None for -1).
 
     Returns
     -------
-    torch array
-        result of element-by-element complex multiplication with the same repesentation as :attr:`A`.
+    tensor
+        result of element-by-element complex multiplication with the same repesentation as :attr:`A` and :attr:`B`.
+    
+    Examples
+    ----------
+
+    ::
+
+        th.manual_seed(2020)
+        Ar = th.randn((3, 3, 2))
+        Br = th.randn((3, 3, 2))
+
+        Ac = th.view_as_complex(Ar)
+        Bc = th.view_as_complex(Br)
+
+        Mr = th.view_as_real(Ac * Bc)
+        print(th.sum(Mr - ematmul(Ar, Br)))
+        print(th.sum(Ac * Bc - ematmul(Ac, Bc)))
+
+        # output
+        tensor(-1.1921e-07)
+        tensor(-1.1921e-07+0.j)
+
     """
 
     if th.is_complex(A) and th.is_complex(B):
         return A.real * B.real - A.imag * B.imag + 1j * (A.real * B.imag + A.imag * B.real)
     else:
-        return th.stack((A[..., 0] * B[..., 0] - A[..., 1] * B[..., 1], A[..., 0] * B[..., 1] + A[..., 1] * B[..., 0]), dim=-1)
+        cdim = -1 if cdim is None else cdim
+        d = A.dim()
+        return th.stack((A[tl.sl(d, cdim, [0])] * B[tl.sl(d, cdim, [0])] - A[tl.sl(d, cdim, [1])] * B[tl.sl(d, cdim, [1])], A[tl.sl(d, cdim, [0])] * B[tl.sl(d, cdim, [1])] + A[tl.sl(d, cdim, [1])] * B[tl.sl(d, cdim, [0])]), dim=cdim)
 
 
-def mmcc(A, B):
-    """Complex matrix multiplication
-
-    like A * B in matlab
-
-    Parameters
-    ----------
-    A : {torch array}
-        any size torch array, both complex and real representation are supported.
-        For real representation, the last dimension is 2 (the first --> real part, the second --> imaginary part).
-    B : {torch array}
-        any size torch array, both complex and real representation are supported.
-        For real representation, the last dimension is 2 (the first --> real part, the second --> imaginary part).
-
-    Returns
-    -------
-    torch array
-        result of complex multiplication with the same repesentation as :attr:`A`.
-    """
-
-    if th.is_complex(A) and th.is_complex(B):
-        return th.mm(A.real, B.real) - th.mm(A.imag, B.imag) + 1j * (th.mm(A.real, B.imag) + th.mm(A.imag, B.real))
-    else:
-        return th.stack((th.mm(A[..., 0], B[..., 0]) - th.mm(A[..., 1], B[..., 1]), th.mm(A[..., 0], B[..., 1]) + th.mm(A[..., 1], B[..., 0])), dim=-1)
-
-
-def matmulcc(A, B):
-    """Complex matrix multiplication
+def matmul(A, B, cdim=None):
+    r"""Complex matrix multiplication
 
     like A * B in matlab
 
     Parameters
     ----------
-    A : {torch array}
-        any size torch array, both complex and real representation are supported.
+    A : tensor
+        any size torch tensor, both complex and real representation are supported.
         For real representation, the last dimension is 2 (the first --> real part, the second --> imaginary part).
-    B : {torch array}
-        any size torch array, both complex and real representation are supported.
+    B : tensor
+        any size torch tensor, both complex and real representation are supported.
         For real representation, the last dimension is 2 (the first --> real part, the second --> imaginary part).
+    cdim : int or None
+        if :attr:`A` and :attr:`B` are represented in real format, :attr:`cdim`
+        should be specified (None for -1).
 
     Returns
     -------
-    torch array
-        result of complex multiplication with the same repesentation as :attr:`A`.
+    tensor
+        result of complex multiplication with the same repesentation as :attr:`A` and :attr:`B`.
+    
+    Examples
+    ----------
+
+    ::
+
+        th.manual_seed(2020)
+        Ar = th.randn((3, 3, 2))
+        Br = th.randn((3, 3, 2))
+
+        Ac = th.view_as_complex(Ar)
+        Bc = th.view_as_complex(Br)
+
+        print(th.sum(th.matmul(Ac, Bc) - matmul(Ac, Bc)))
+        Mr = matmul(Ar, Br)
+        Mc = th.view_as_real(th.matmul(Ac, Bc))
+        print(th.sum(Mr - Mc))
+
+        # output
+        tensor(-4.7684e-07+5.9605e-08j)
+        tensor(4.1723e-07)
     """
 
     if th.is_complex(A) and th.is_complex(B):
         return th.matmul(A.real, B.real) - th.matmul(A.imag, B.imag) + 1j * (th.matmul(A.real, B.imag) + th.matmul(A.imag, B.real))
     else:
-        return th.stack((th.matmul(A[..., 0], B[..., 0]) - th.matmul(A[..., 1], B[..., 1]), th.matmul(A[..., 0], B[..., 1]) + th.matmul(A[..., 1], B[..., 0])), dim=-1)
+        cdim = -1 if cdim is None else cdim
+        d = A.dim()
+        th.matmul(A[tl.sl(d, cdim, [0])], B[tl.sl(d, cdim, [0])])
+        th.matmul(A[tl.sl(d, cdim, [1])], B[tl.sl(d, cdim, [1])])
+        return th.stack((th.matmul(A[tl.sl(d, cdim, [0])], B[tl.sl(d, cdim, [0])]) - th.matmul(A[tl.sl(d, cdim, [1])], B[tl.sl(d, cdim, [1])]), th.matmul(A[tl.sl(d, cdim, [0])], B[tl.sl(d, cdim, [1])]) + th.matmul(A[tl.sl(d, cdim, [1])], B[tl.sl(d, cdim, [0])])), dim=cdim)
 
 
-def conj(X):
+def c2r(X, cdim=-1):
+    r"""complex representaion to real representaion
+
+    Parameters
+    ----------
+    X : tensor
+        input in complex representaion
+    cdim : int, optional
+        real and imag dimention in real format, by default -1
+
+    Returns
+    -------
+    tensor
+        output in real representaion
+
+    see also :func:`r2c`
+
+    Examples
+    ----------
+
+    ::
+
+        th.manual_seed(2020)
+        Xr = th.randint(0, 30, (3, 3, 2))
+        Xc = Xr[..., 0] + 1j * Xr[..., 1]
+        Yr = c2r(Xc, cdim=0)
+        Yc = r2c(Yr, cdim=0)
+        print(Xr, Xr.shape, 'Xr')
+        print(Xc, Xc.shape, 'Xc')
+        print(Yr, Yr.shape, 'Yr')
+        print(Yc, Yc.shape, 'Yc')
+
+        # ---output
+        tensor([[[20,  6],
+                [27, 12],
+                [25, 21]],
+
+                [[21, 19],
+                [29, 24],
+                [25, 10]],
+
+                [[16, 14],
+                [ 6,  9],
+                [ 5, 29]]]) torch.Size([3, 3, 2]) Xr
+        tensor([[20.+6.j, 27.+12.j, 25.+21.j],
+                [21.+19.j, 29.+24.j, 25.+10.j],
+                [16.+14.j,  6.+9.j,  5.+29.j]]) torch.Size([3, 3]) Xc
+        tensor([[[20., 27., 25.],
+                [21., 29., 25.],
+                [16.,  6.,  5.]],
+
+                [[ 6., 12., 21.],
+                [19., 24., 10.],
+                [14.,  9., 29.]]]) torch.Size([2, 3, 3]) Yr
+        tensor([[20.+6.j, 27.+12.j, 25.+21.j],
+                [21.+19.j, 29.+24.j, 25.+10.j],
+                [16.+14.j,  6.+9.j,  5.+29.j]]) torch.Size([3, 3]) Yc
+
+    """
+
+    return th.stack((X.real, X.imag), dim=cdim)
+
+
+def r2c(X, cdim=-1, keepdims=False):
+    r"""real representaion to complex representaion
+
+    Parameters
+    ----------
+    X : tensor
+        input in real representaion
+    cdim : int, optional
+        real and imag dimention in real format, by default -1
+    keepdims : bool, optional
+        keep dimensions?
+
+    Returns
+    -------
+    tensor
+        output in complex representaion
+
+    see also :func:`c2r`
+
+    Examples
+    ----------
+
+    ::
+
+        th.manual_seed(2020)
+        Xr = th.randint(0, 30, (3, 3, 2))
+        Xc = Xr[..., 0] + 1j * Xr[..., 1]
+        Yr = c2r(Xc, cdim=0)
+        Yc = r2c(Yr, cdim=0)
+        print(Xr, Xr.shape, 'Xr')
+        print(Xc, Xc.shape, 'Xc')
+        print(Yr, Yr.shape, 'Yr')
+        print(Yc, Yc.shape, 'Yc')
+
+        # ---output
+        tensor([[[20,  6],
+                [27, 12],
+                [25, 21]],
+
+                [[21, 19],
+                [29, 24],
+                [25, 10]],
+
+                [[16, 14],
+                [ 6,  9],
+                [ 5, 29]]]) torch.Size([3, 3, 2]) Xr
+        tensor([[20.+6.j, 27.+12.j, 25.+21.j],
+                [21.+19.j, 29.+24.j, 25.+10.j],
+                [16.+14.j,  6.+9.j,  5.+29.j]]) torch.Size([3, 3]) Xc
+        tensor([[[20., 27., 25.],
+                [21., 29., 25.],
+                [16.,  6.,  5.]],
+
+                [[ 6., 12., 21.],
+                [19., 24., 10.],
+                [14.,  9., 29.]]]) torch.Size([2, 3, 3]) Yr
+        tensor([[20.+6.j, 27.+12.j, 25.+21.j],
+                [21.+19.j, 29.+24.j, 25.+10.j],
+                [16.+14.j,  6.+9.j,  5.+29.j]]) torch.Size([3, 3]) Yc
+
+    """
+    d = X.dim()
+    if keepdims:
+        return X[tl.sl(d, cdim, [[0]])] + 1j * X[tl.sl(d, cdim, [[1]])]
+    else:
+        return X[tl.sl(d, cdim, [0])] + 1j * X[tl.sl(d, cdim, [1])]
+
+
+def conj(X, cdim=None):
+    r"""conjugates a tensor
+
+    Both complex and real representation are supported.
+
+    Parameters
+    ----------
+    X : tensor
+        input
+    cdim : int or None
+        If :attr:`X` is represented in real format, :attr:`cdim`
+        should be specified (None for -1).
+
+    Returns
+    -------
+    tensor
+         the inputs's conjugate matrix.
+
+    Examples
+    ---------
+
+    ::
+
+        th.manual_seed(2020)
+        X = th.rand((2, 3, 3))
+        Y = conj(X, cdim=0)
+        print(Y, Y.shape, 'Y')
+
+        Y = conj(X[0] + 1j * X[1])
+        print(Y, Y.shape, 'Y')
+
+        # ---output
+        tensor([[[ 0.4869,  0.1052,  0.5883],
+                [ 0.1161,  0.4949,  0.2824],
+                [ 0.5899,  0.8105,  0.2512]],
+
+                [[-0.6307, -0.5403, -0.8033],
+                [-0.7781, -0.4966, -0.8888],
+                [-0.5570, -0.7127, -0.0339]]]) torch.Size([2, 3, 3]) Y
+        tensor([[0.4869-0.6307j, 0.1052-0.5403j, 0.5883-0.8033j],
+                [0.1161-0.7781j, 0.4949-0.4966j, 0.2824-0.8888j],
+                [0.5899-0.5570j, 0.8105-0.7127j, 0.2512-0.0339j]]) torch.Size([3, 3]) Y
+
+    """
 
     if th.is_complex(X):
         return th.conj(X)
-    elif X.size(-1) == 2:
-        return th.stack((X[..., 0], -X[..., 1]), dim=-1)
     else:
-        raise TypeError('Not known type! Only real and imag representions are supported!')
-
-
-def absc(X):
-
-    if X.size(-1) == 2:
-        X = X.pow(2).sum(axis=-1).sqrt()
-    else:
-        X = th.abs(X)
-
-    return X
+        cdim = -1 if cdim is None else cdim
+        d = X.dim()
+        return th.cat((X[tl.sl(d, axis=cdim, idx=[[0]])], -X[tl.sl(d, axis=cdim, idx=[[1]])]), dim=cdim)
 
 
 if __name__ == '__main__':
 
+    print(prevpow2(-5), nextpow2(-5))
+    print(prevpow2(5), nextpow2(5))
+    print(prevpow2(0.3), nextpow2(0.3))
+    print(prevpow2(7.3), nextpow2(7.3))
+    print(prevpow2(-3.5), nextpow2(-3.5))
+
+    th.manual_seed(2020)
     Ar = th.randn((3, 3, 2))
     Br = th.randn((3, 3, 2))
 
     Ac = th.view_as_complex(Ar)
     Bc = th.view_as_complex(Br)
 
-    Mr = ebemulcc(Ar, Br)
-    Mc = th.view_as_real(Ac * Bc)
+    Mr = th.view_as_real(Ac * Bc)
+    print(th.sum(Mr - ematmul(Ar, Br)))
+    print(th.sum(Ac * Bc - ematmul(Ac, Bc)))
+
+    print(th.sum(th.matmul(Ac, Bc) - matmul(Ac, Bc)))
+    Mr = matmul(Ar, Br)
+    Mc = th.view_as_real(th.matmul(Ac, Bc))
     print(th.sum(Mr - Mc))
 
-    Mc = mmcc(Ac, Bc)
-    Mr = mmcc(Ar, Br)
-    Mc = th.view_as_real(Mc)
-    print(th.sum(Mr - Mc))
+    th.manual_seed(2020)
+    Xr = th.randint(0, 30, (3, 3, 2))
+    Xc = Xr[..., 0] + 1j * Xr[..., 1]
+    Yr = c2r(Xc, cdim=0)
+    Yc = r2c(Yr, cdim=0)
+    print(Xr, Xr.shape, 'Xr')
+    print(Xc, Xc.shape, 'Xc')
+    print(Yr, Yr.shape, 'Yr')
+    print(Yc, Yc.shape, 'Yc')
 
-    Mc = matmulcc(Ac, Bc)
-    Mr = matmulcc(Ar, Br)
-    Mc = th.view_as_real(Mc)
-    print(th.sum(Mr - Mc))
+    th.manual_seed(2020)
+    X = th.rand((2, 3, 3))
+    Y = conj(X, cdim=0)
+    print(Y, Y.shape, 'Y')
+
+    Y = conj(X[0] + 1j * X[1])
+    print(Y, Y.shape, 'Y')

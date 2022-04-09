@@ -17,16 +17,16 @@ def jaccard_index(X, Y, TH=None):
 
     Parameters
     ----------
-    X : {Torch Tensor}
+    X : tensor
         retrieval results, retrieved-->1, not retrieved-->0
-    Y : {Torch Tensor}
+    Y : tensor
         referenced, positive-->1, negative-->0
-    TH : {float number}
+    TH : float
         X > TH --> 1, X <= TH --> 0
 
     Returns
     -------
-    JS : {float number}
+    JS : float
         the jaccard similarity coefficient.
 
     """
@@ -56,16 +56,16 @@ def dice_coeff(X, Y, TH=0.5):
 
     Parameters
     ----------
-    X : {Torch Tensor}
+    X : tensor
         retrieval results, retrieved-->1, not retrieved-->0
-    Y : {Torch Tensor}
+    Y : tensor
         referenced, positive-->1, negative-->0
-    TH : {float number}
+    TH : float
         X > TH --> 1, X <= TH --> 0
 
     Returns
     -------
-    DC : {float number}
+    DC : float
         the dice coefficient.
     """
 

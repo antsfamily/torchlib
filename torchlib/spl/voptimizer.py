@@ -26,11 +26,11 @@ class Binary(object):
 
         Parameters
         ----------
-        rankr : {float number}, optional
+        rankr : float, optional
             the initial proportion :math:`r` of the selected samples (with weights vi=1); (the default is 0.6)
-        maxrankr : {number}, optional
+        maxrankr : int, optional
             the upper bound of the annealed sample proportion :math:`r_{max}`. (the default is 1)
-        mu : {number}, optional
+        mu : int, optional
             the annealing parameter :math`\mu`, the incremental ratio of the proportion of the selected
             samples in each iteration. (the default is 1.003)
         """
@@ -53,7 +53,7 @@ class Binary(object):
 
         Parameters
         ----------
-        loss : {Torch Tensor}
+        loss : tensor
             The loss values of N samples. (:math:`N×1` tensor)
         """
 
@@ -105,11 +105,11 @@ class Linear(object):
 
         Parameters
         ----------
-        rankr : {float number}, optional
+        rankr : float, optional
             the initial proportion :math:`r` of the selected samples (with weights vi=1); (the default is 0.6)
-        maxrankr : {number}, optional
+        maxrankr : int, optional
             the upper bound of the annealed sample proportion :math:`r_{max}`. (the default is 1)
-        mu : {number}, optional
+        mu : int, optional
             the annealing parameter :math`\mu`, the incremental ratio of the proportion of the selected
             samples in each iteration. (the default is 1.003)
         """
@@ -132,7 +132,7 @@ class Linear(object):
 
         Parameters
         ----------
-        loss : {Torch Tensor}
+        loss : tensor
             The loss values of N samples. (:math:`N×1` tensor)
         """
 
@@ -182,11 +182,11 @@ class Logarithmic(object):
 
         Parameters
         ----------
-        rankr : {float number}, optional
+        rankr : float, optional
             the initial proportion :math:`r` of the selected samples (with weights vi=1); (the default is 0.6)
-        maxrankr : {number}, optional
+        maxrankr : int, optional
             the upper bound of the annealed sample proportion :math:`r_{max}`. (the default is 1)
-        mu : {number}, optional
+        mu : int, optional
             the annealing parameter :math`\mu`, the incremental ratio of the proportion of the selected
             samples in each iteration. (the default is 1.003)
         """
@@ -209,7 +209,7 @@ class Logarithmic(object):
 
         Parameters
         ----------
-        loss : {Torch Tensor}
+        loss : tensor
             The loss values of N samples. (:math:`N×1` tensor)
         """
 
@@ -269,11 +269,11 @@ class Mixture(object):
 
         Parameters
         ----------
-        rankr : {float number}, optional
+        rankr : float, optional
             the initial proportion :math:`r` of the selected samples (with weights vi=1); (the default is 0.6)
-        maxrankr : {number}, optional
+        maxrankr : int, optional
             the upper bound of the annealed sample proportion :math:`r_{max}`. (the default is 1)
-        mu : {number}, optional
+        mu : int, optional
             the annealing parameter :math`\mu`, the incremental ratio of the proportion of the selected
             samples in each iteration. (the default is 1.003)
         """
@@ -297,7 +297,7 @@ class Mixture(object):
 
         Parameters
         ----------
-        loss : {Torch Tensor}
+        loss : tensor
             The loss values of N samples. (:math:`N×1` tensor)
         """
 

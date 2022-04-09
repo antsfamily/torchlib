@@ -20,22 +20,22 @@ def mapping(X, drange=(0., 255.), mode='amplitude', method='2Sigma', odtype='aut
 
     Parameters
     ----------
-    X : {torch tensor}
+    X : tensor
         data to be converted
-    drange : {tuple}, optional
+    drange : tuple, optional
         dynamic range (the default is (0., 255.))
-    mode : {str}, optional
+    mode : str, optional
         data mode in :attr:`X`, ``'amplitude'`` (default) or ``'power'``.
-    method : {str}, optional
+    method : str, optional
         converting method, surpported values are ``'1Sigma'``, ``'2Sigma'``, ``'3Sigma'``
         (the default is '2Sigma', which means two-sigma mapping)
-    odtype : {str, None... }, optional
+    odtype : str or None, optional
         output data type, supportted are ``'auto'`` (auto infer, default), or torch tensor's dtype string.
         If the type of :attr:`odtype` is not string, the output data type is ``'th.float32'``.
 
     Returns
     -------
-    Y : {torch tensor}
+    Y : tensor
         converted image data
 
     """

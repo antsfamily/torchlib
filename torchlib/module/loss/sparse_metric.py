@@ -9,9 +9,7 @@ import torch as th
 
 
 class LogSparseLoss(th.nn.Module):
-    r"""Log Sparse loss
-
-
+    """Log sparse loss
 
     """
 

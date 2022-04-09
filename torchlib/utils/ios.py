@@ -93,7 +93,7 @@ def loadh5(filename, keys=None):
 
     Parameters
     ----------
-    filename : {str}
+    filename : str
         File's full path string.
 
     Returns
@@ -119,11 +119,11 @@ def saveh5(filename, mdict, mode='w'):
 
     Parameters
     ----------
-    filename : {str}
+    filename : str
         filename string
     mdict : {dict}
         each dict is store in group, the elements in dict are store in dataset
-    mode : {str}
+    mode : str
         save mode, ``'w'`` for write, ``'a'`` for add.
 
     Returns

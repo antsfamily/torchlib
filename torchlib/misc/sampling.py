@@ -33,6 +33,8 @@ def slidegrid(start, stop, step, shake=0, n=None):
     Raises:
         TypeError: The number of samples should be an integer or None.
 
+
+
     """
 
     starts = [start] if type(start) is int else start

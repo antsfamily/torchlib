@@ -8,7 +8,7 @@ class Interp1(torch.autograd.Function):
         return self.forward(x, y, xnew, out)
 
     def forward(ctx, x, y, xnew, out=None):
-        """
+        r"""
         Linear 1D interpolation on the GPU for Pytorch.
         This function returns interpolated values of a set of 1-D functions at
         the desired query points `xnew`.

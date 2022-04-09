@@ -15,11 +15,11 @@ def accuracy(X, Y, TH=None):
 
     Parameters
     ----------
-    X : {Torch Tensor}
+    X : tensor
         Predicted one hot matrix, :math:`\{0, 1\}`
-    Y : {Torch Tensor}
+    Y : tensor
         Referenced one hot matrix, :math:`\{0, 1\}`
-    TH : {[type]}, optional
+    TH : float, optional
         threshold: X > TH --> 1, X <= TH --> 0
     """
 

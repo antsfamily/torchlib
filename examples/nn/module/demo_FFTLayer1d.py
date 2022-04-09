@@ -2,7 +2,7 @@ import time
 import numpy as np
 import torch as th
 import torchlib as tl
-import psar as ps
+import pyailib as pl
 import matplotlib.pyplot as plt
 
 PI = np.pi
@@ -15,7 +15,7 @@ nSamples = 256
 
 T = th.zeros(nSamples, Ns)
 for n in range(nSamples):
-    To = ps.randperm(-Ns, Ns, 1)[0] / Fs
+    To = pl.randperm(-Ns, Ns, 1)[0] / Fs
     T[n, :] = th.linspace(To, Ts + To, Ns)
 
 
@@ -45,7 +45,7 @@ f = th.tensor(98., device=device, dtype=dtype, requires_grad=True)
 lr = 1e-3
 
 for k in range(num_epochs):
-    idx = ps.randperm(0, nSamples, nSamples)
+    idx = pl.randperm(0, nSamples, nSamples)
     T, P = T[idx], P[idx]
 
     tstart = time.time()

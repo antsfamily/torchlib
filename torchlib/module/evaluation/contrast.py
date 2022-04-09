@@ -6,7 +6,7 @@
 # @Version : $1.0$
 
 import torch as th
-from torchlib.utils.const import EPS
+import torchlib as tl
 
 
 class Contrast(th.nn.Module):
@@ -26,47 +26,97 @@ class Contrast(th.nn.Module):
     [1] Efficient Nonparametric ISAR Autofocus Algorithm Based on Contrast Maximization and Newton
     [2] section 13.4.1 in "Ian G. Cumming's SAR book"
 
+    Parameters
+    ----------
+    X : numpy ndarray
+        The image array.
+    mode : str, optional
+        ``'way1'`` or ``'way2'``
+    axis : tuple, None, optional
+        the dimensions for compute entropy. by default None (if input's dimension > 2, then all but the first, else all).
+    caxis : int or None
+        If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    reduction : str, optional
+        The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
+    Returns
+    -------
+    scalar
+        The contrast value of input.
+
+    Examples
+    --------
+
+    ::
+
+        th.manual_seed(2020)
+        X = th.randn(1, 3, 4, 2)
+        ctst_func = Contrast(mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
+        V = ctst_func(X)
+        print(V)
+
+        X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
+        ctst_func = Contrast(mode='way1', axis=(1, 2), caxis=None, reduction='mean')
+        V = ctst_func(X)
+        print(V)
+
+        ctst_func = Contrast(mode='way1', axis=None, caxis=None, reduction='mean')
+        V = ctst_func(X)
+        print(V)
+
+        ctst_func = Contrast(mode='way1', axis=(2), caxis=None, reduction='mean')
+        V = ctst_func(X)
+        print(V)
+
+        ctst_func = Contrast(mode='way1', axis=(2), caxis=None, reduction=None)
+        V = ctst_func(X)
+        print(V)
+    
+        # output
+        tensor(1.2694)
+        tensor(1.2694)
+        tensor(1.2694)
+        tensor(0.7724)
+        tensor([[[0.9093],
+                [1.0752],
+                [0.3326]]])
     """
 
-    def __init__(self, mode='way1', reduction='mean'):
+    def __init__(self, mode='way1', axis=None, caxis=None, reduction='mean'):
         super(Contrast, self).__init__()
         self.mode = mode
+        self.axis = axis
+        self.caxis = caxis
         self.reduction = reduction
 
     def forward(self, X):
 
-        if th.is_complex(X):
-            X = (X * X.conj()).real
-        elif X.size(-1) == 2:
-            X = X.pow(2).sum(axis=-1)
-
-        D = X.dim()
-        axis = list(range(1, D))
-
-        if X.dtype is not th.float32 or th.double:
-            X = X.to(th.float32)
-
-        if self.mode in ['way1', 'WAY1']:
-            Xmean = X.mean(axis=axis, keepdims=True)
-            C = (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() / (Xmean + EPS)
-        if self.mode in ['way2', 'WAY2']:
-            C = X.mean(axis=axis, keepdims=True) / ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + EPS)
-
-        if self.reduction == 'mean':
-            C = th.mean(C)
-        if self.reduction == 'sum':
-            C = th.sum(C)
-        return C
+        return tl.contrast(X, mode=self.mode, axis=self.axis, caxis=self.caxis, reduction=self.reduction)
 
 
 if __name__ == '__main__':
 
-    c_func = Contrast(reduction='mean')
+    th.manual_seed(2020)
     X = th.randn(1, 3, 4, 2)
-    V = c_func(X)
+    ctst_func = Contrast(mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
+    V = ctst_func(X)
     print(V)
 
     X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-    V = c_func(X)
+    ctst_func = Contrast(mode='way1', axis=(1, 2), caxis=None, reduction='mean')
+    V = ctst_func(X)
+    print(V)
+
+    ctst_func = Contrast(mode='way1', axis=None, caxis=None, reduction='mean')
+    V = ctst_func(X)
+    print(V)
+
+    ctst_func = Contrast(mode='way1', axis=(2), caxis=None, reduction='mean')
+    V = ctst_func(X)
+    print(V)
+
+    ctst_func = Contrast(mode='way1', axis=(2), caxis=None, reduction=None)
+    V = ctst_func(X)
     print(V)

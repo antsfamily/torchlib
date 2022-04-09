@@ -7,7 +7,7 @@
 
 import numpy as np
 from torchlib.dsp.ffts import padfft, fft, ifft
-from torchlib.base.mathops import nextpow2, ebemulcc
+from torchlib.base.mathops import nextpow2, ematmul
 from torchlib.base.arrayops import cut
 
 
@@ -18,28 +18,28 @@ def cutfftconv1(y, nfft, Nx, Nh, shape='same', axis=0, ftshift=False):
 
     Parameters
     ----------
-    y : {torch.tensor}
+    y : tensor
         array after ``iff``.
-    nfft : {number}
+    nfft : int
         number of fft points.
-    Nx : {number}
+    Nx : int
         signal length
-    Nh : {number}
+    Nh : int
         filter length
-    shape : {str}
+    shape : str
         output shape:
         1. ``'same' --> same size as input x``, :math:`N_x`
         2. ``'valid' --> valid convolution output``
         3. ``'full' --> full convolution output``, :math:`N_x+N_h-1`
         (the default is 'same')
-    axis : {number}
+    axis : int
         convolution axis (the default is 0)
-    ftshift : {[type]}
+    ftshift : bool
         whether to shift zero the frequency to center (the default is False)
 
     Returns
     -------
-    y : {torch.tensor}
+    y : tensor
         array with shape specified by :attr:`same`.
     """
 
@@ -81,35 +81,35 @@ def cutfftconv1(y, nfft, Nx, Nh, shape='same', axis=0, ftshift=False):
 
 
 def fftconv1(x, h, axis=0, nfft=None, shape='same', ftshift=False, eps=None):
-    """Convolution using Fast Fourier Transformation
+    r"""Convolution using Fast Fourier Transformation
 
     Convolution using Fast Fourier Transformation.
 
     Parameters
     ----------
-    x : {torch.tensor}
+    x : tensor
         data to be convolved.
-    h : {torch.tensor}
+    h : tensor
         filter array
-    shape : {str}, optional
+    shape : str, optional
         output shape:
         1. ``'same' --> same size as input x``, :math:`N_x`
         2. ``'valid' --> valid convolution output``
         3. ``'full' --> full convolution output``, :math:`N_x+N_h-1`
         (the default is 'same')
-    axis : {number}, optional
+    axis : int, optional
         convolution axis (the default is 0)
-    nfft : {number}, optional
-        number of fft points (the default is :math:`2^nextpow2(N_x+N_h-1)`),
+    nfft : int, optional
+        number of fft points (the default is :math:`2^{nextpow2(N_x+N_h-1)}`),
         note that :attr:`nfft` can not be smaller than :math:`N_x+N_h-1`.
-    ftshift : {bool}, optional
+    ftshift : bool, optional
         whether shift frequencies (the default is False)
-    eps : {None or float}, optional
+    eps : None or float, optional
         x[abs(x)<eps] = 0 (the default is None, does nothing)
 
     Returns
     -------
-    y : {torch.tensor}
+    y : tensor
         Convolution result array.
 
     """
@@ -134,7 +134,7 @@ def fftconv1(x, h, axis=0, nfft=None, shape='same', ftshift=False, eps=None):
     h = padfft(h, nfft, axis, ftshift)
     x = fft(x, nfft, axis, norm=None, shift=ftshift)
     h = fft(h, nfft, axis, norm=None, shift=ftshift)
-    y = ebemulcc(x, h)  # element-by-element complex multiplication
+    y = ematmul(x, h)  # element-by-element complex multiplication
 
     y = ifft(y, nfft, axis, norm=None, shift=ftshift)
     y = cutfftconv1(y, nfft, Nx, Nh, shape, axis, ftshift)
@@ -146,8 +146,8 @@ def fftconv1(x, h, axis=0, nfft=None, shape='same', ftshift=False, eps=None):
 
 
 if __name__ == '__main__':
+    import pyailib as pl
     import torchlib as tl
-    import psar as ps
     import torch as th
 
     shape = 'same'
@@ -161,7 +161,7 @@ if __name__ == '__main__':
     x_th = th.stack([x_th, th.zeros(x_th.size())], dim=-1)
     h_th = th.stack([h_th.real, h_th.imag], dim=-1)
 
-    y1 = ps.fftconv1(x_np, h_np, axis=0, Nfft=None, shape=shape, ftshift=ftshift)
+    y1 = pl.fftconv1(x_np, h_np, axis=0, nfft=None, shape=shape, ftshift=ftshift)
     y2 = tl.fftconv1(x_th, h_th, axis=0, nfft=None, shape=shape, ftshift=ftshift)
 
     y2 = th.view_as_complex(y2)

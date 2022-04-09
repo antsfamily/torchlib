@@ -7,13 +7,15 @@
 
 import torch as th
 import torchlib as tl
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 device = 'cpu'
 device = 'cuda:0'
 axis = (0, 1)
 
-X = tl.imread('../../../data/images/Einstein256.png')
+X = tl.imread('data/images/Einstein256.png')
 
 X = X
 X = X * 1e5
@@ -34,26 +36,29 @@ for a in axis:
 loss_mse_fn = th.nn.MSELoss(reduction='mean')
 loss_mae_fn = th.nn.L1Loss(reduction='mean')
 
-loss_fda_mse_fn = tl.FourierDomainAmplitudeLoss(mode='mse', axis=axis, norm=False, reduction='mean')
-loss_fda_mae_fn = tl.FourierDomainAmplitudeLoss(mode='mae', axis=axis, norm=False, reduction='mean')
-
-loss_fda_mse_norm_fn = tl.FourierDomainAmplitudeLoss(mode='mse', axis=axis, norm=True, reduction='mean')
-loss_fda_mae_norm_fn = tl.FourierDomainAmplitudeLoss(mode='mae', axis=axis, norm=True, reduction='mean')
+loss_fda_mse_fn = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+loss_fda_mae_fn = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mae', reduction='mean')
 
 print(loss_mse_fn(Y.abs(), X.abs()), "MSE")
 print(loss_mae_fn(Y.abs(), X.abs()), "MAE")
 print(loss_fda_mse_fn(Y, X), "FDA MSE")
 print(loss_fda_mae_fn(Y, X), "FDA MAE")
-print(loss_fda_mse_fn(Y / Y.abs().max(), X / X.abs().max()))
-print(loss_fda_mae_fn(Y / Y.abs().max(), X / X.abs().max()))
 
-maxv = max(Y.abs().max(), X.abs().max())
+th.manual_seed(2020)
+xr = th.randn(10, 2, 4, 4) * 10000
+yr = th.randn(10, 2, 4, 4) * 10000
+xc = xr[:, [0], ...] + 1j * xr[:, [1], ...]
+yc = yr[:, [0], ...] + 1j * yr[:, [1], ...]
 
-print(loss_fda_mse_fn(Y / maxv, X / maxv))
-print(loss_fda_mae_fn(Y / maxv, X / maxv))
+flossr = tl.FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+flossc = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+print(flossr(xr, yr))
+print(flossc(xc, yc))
 
-print(loss_fda_mse_norm_fn(Y, X), "FDA MSE norm")
-print(loss_fda_mae_norm_fn(Y, X), "FDA MAE norm")
+flossr = tl.FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+flossc = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+print(flossr(xr, yr))
+print(flossc(xc, yc))
 
 plt.figure()
 plt.subplot(121)

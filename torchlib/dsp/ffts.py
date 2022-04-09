@@ -27,17 +27,17 @@ def freq(n, fs, norm=False, shift=False, dtype=th.float32, device='cpu'):
 
     Parameters
     ----------
-    fs : {float}
+    fs : float
         Sampling rate.
-    n : {int}
+    n : int
         Number of samples.
-    norm : {bool}
+    norm : bool
         Normalize the frequencies.
-    shift : {bool}
+    shift : bool
         Does shift the zero frequency to center.
     dtype : {torch tensor type}
         Data type, default is ``th.float32``.
-    device : {str}
+    device : str
         device string, default is ``'cpu'``.
 
     Returns
@@ -78,13 +78,13 @@ def fftfreq(n, fs, norm=False, shift=False, dtype=th.float32, device='cpu'):
 
     Parameters
     ----------
-    n : {int}
+    n : int
         Number of samples.
-    fs : {float}
+    fs : float
         Sampling rate.
-    norm : {bool}
+    norm : bool
         Normalize the frequencies.
-    shift : {bool}
+    shift : bool
         Does shift the zero frequency to center.
     dtype : {torch tensor type}
         Data type, default is ``th.float32``.
@@ -147,14 +147,14 @@ def fftshift(x, axis=None):
 
     Parameters
     ----------
-    x : {torch tensor}
+    x : tensor
         Input tensor.
-    axis : {int}, optional
+    axis : int, optional
         Axes over which to shift. (Default is None, which shifts all axes.)
 
     Returns
     -------
-    y : {torch tensor}
+    y : tensor
         The shifted tensor.
 
     See Also
@@ -220,14 +220,14 @@ def ifftshift(x, axis=None):
 
     Parameters
     ----------
-    x : {torch tensor}
+    x : tensor
         The input tensor.
-    axis : {int}, optional
+    axis : int, optional
         Axes over which to shift. (Default is None, which shifts all axes.)
 
     Returns
     -------
-    y : {torch tensor}
+    y : tensor
         The shifted tensor.
 
     See Also
@@ -292,18 +292,18 @@ def padfft(X, nfft=None, axis=0, shift=False):
 
     Parameters
     ----------
-    X : {torch tensor}
+    X : tensor
         Data to be padded.
     nfft : {int or None}
         Padding size.
-    axis : {int}, optional
+    axis : int, optional
         Padding dimension. (the default is 0)
-    shift : {bool}, optional
+    shift : bool, optional
         Whether to shift the frequency (the default is False)
 
     Returns
     -------
-    y : {torch tensor}
+    y : tensor
         The padded tensor.
     """
 
@@ -335,31 +335,31 @@ def padfft(X, nfft=None, axis=0, shift=False):
 
 
 def fft(x, n=None, axis=0, norm="backward", shift=False):
-    """FFT in torchlib
+    r"""FFT in torchlib
 
     FFT in torchlib.
 
     Parameters
     ----------
-    x : {tensor}
+    x : tensor
         complex representation is supported. Since torch1.7 and above support complex array,
         when :attr:`x` is in real-representation formation(last dimension is 2, real, imag),
         we will change the representation in complex formation, after FFT, it will be change back.
-    n : {int}, optional
+    n : int, optional
         the number of fft points (the default is None --> equals to signal dimension)
-    axis : {int}, optional
+    axis : int, optional
         axis of fft (the default is 0, which the first dimension)
-    norm : {None or str}, optional
+    norm : None or str, optional
         Normalization mode. For the forward transform (fft()), these correspond to:
         - "forward" - normalize by ``1/n``
         - "backward" - no normalization (default)
         - "ortho" - normalize by ``1/sqrt(n)`` (making the FFT orthonormal)
-    shift : {bool}, optional
+    shift : bool, optional
         shift the zero frequency to center (the default is False)
 
     Returns
     -------
-    y : {tensor}
+    y : tensor
         fft results tensor with the same type as :attr:`x`
 
     Raises
@@ -400,7 +400,7 @@ def fft(x, n=None, axis=0, norm="backward", shift=False):
 
 
 def ifft(x, n=None, axis=0, norm="backward", shift=False):
-    """IFFT in torchlib
+    r"""IFFT in torchlib
 
     IFFT in torchlib, since ifft in torch only supports complex-complex transformation,
     for real ifft, we insert imaginary part with zeros (torch.stack((x,torch.zeros_like(x), dim=-1))),
@@ -408,25 +408,25 @@ def ifft(x, n=None, axis=0, norm="backward", shift=False):
 
     Parameters
     ----------
-    x : {tensor}
+    x : tensor
         both complex and real representation are supported. Since torch does not
         support complex array, when :attr:`x` is complex, we will change the representation
         in real formation(last dimension is 2, real, imag), after IFFT, it will be change back.
-    n : {int}, optional
+    n : int, optional
         the number of ifft points (the default is None --> equals to signal dimension)
-    axis : {int}, optional
+    axis : int, optional
         axis of ifft (the default is 0, which the first dimension)
-    norm : {bool}, optional
+    norm : bool, optional
         Normalization mode. For the backward transform (ifft()), these correspond to:
         - "forward" - no normalization
         - "backward" - normalize by ``1/n`` (default)
         - "ortho" - normalize by 1``/sqrt(n)`` (making the IFFT orthonormal)
-    shift : {bool}, optional
+    shift : bool, optional
         shift the zero frequency to center (the default is False)
 
     Returns
     -------
-    y : {tensor}
+    y : tensor
         ifft results tensor with the same type as :attr:`x`
 
     Raises

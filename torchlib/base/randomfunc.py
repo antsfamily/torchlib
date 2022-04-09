@@ -18,9 +18,9 @@ def setseed(seed=None, target='torch'):
 
     Parameters
     ----------
-    seed : {int or None}, optional
+    seed : int or None, optional
         seed for random number generator (the default is None)
-    target : {str}, optional
+    target : str, optional
         - ``'numpy'``: ``np.random.seed(seed)``
         - ``'random'``: ``random.seed(seed)``
         - ``'torch'``: ``torch.manual_seed(seed)`` (default)
@@ -55,12 +55,12 @@ def permutation(x):
 
     Parameters
     ----------
-    x : {torch.tensor}
+    x : tensor
         inputs, can have any dimensions.
 
     Returns
     -------
-    x : {torch.tensor}
+    x : tensor
         permutated tensor
     """
 
@@ -80,11 +80,11 @@ def randperm(start, stop, n):
 
     Parameters
     ----------
-    start : {int or list}
+    start : int or list
         start sampling point
-    stop : {int or list}
+    stop : int or list
         stop sampling point
-    n : {int or list or None}
+    n : int, list or None
         the number of samples (default None, int((stop - start)))
 
     see :func:`randgrid`.
@@ -115,12 +115,12 @@ def randperm2d(H, W, number, population=None, mask=None):
 
     Parameters
     ----------
-    H : {int}
+    H : int
         height
 
-    W : {int}
+    W : int
         width
-    number : {int}
+    number : int
         random numbers
     population : {list or numpy array(1d or 2d)}
         part of population in range(0, H*W)
@@ -154,16 +154,16 @@ def randgrid(start, stop, step, shake=0, n=None):
 
     Parameters
     ----------
-    start : {int or list}
+    start : int or list
         start sampling point
-    stop : {int or list}
+    stop : int or list
         stop sampling point
-    step : {int or list}
+    step : int or list
         sampling stepsize
-    shake : {float}
+    shake : float
         the shake rate, if :attr:`shake` is 0, no shake, (default),
         if positive, add a positive shake, if negative, add a negative.
-    n : {int or None}
+    n : int or None
         the number of samples (default None, int((stop0 - start0) / step0) * int((stop1 - start1) / step1)...).
 
     Returns
@@ -172,6 +172,8 @@ def randgrid(start, stop, step, shake=0, n=None):
 
     Example
     -------
+
+
 
     ::
 
@@ -248,6 +250,8 @@ def randgrid(start, stop, step, shake=0, n=None):
 
 if __name__ == '__main__':
 
+    import matplotlib
+    matplotlib.use('TkAgg')
     import matplotlib.pyplot as plt
 
     setseed(2021)
