@@ -422,8 +422,8 @@ we will change the representation in complex formation, after FFT, it will be ch
 <li><p><strong>fs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – Sampling rate.</p></li>
 <li><p><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Normalize the frequencies.</p></li>
 <li><p><strong>shift</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Does shift the zero frequency to center.</p></li>
-<li><p><strong>dtype</strong> (<em>{torch tensor type}</em>) – Data type, default is <code class="docutils literal notranslate"><span class="pre">th.float32</span></code>.</p></li>
-<li><p><strong>device</strong> (<em>{torch tensor device}</em>) – device string, <code class="docutils literal notranslate"><span class="pre">'cpu',</span> <span class="pre">'cuda:0',</span> <span class="pre">'cuda:1'</span></code></p></li>
+<li><p><strong>dtype</strong> (<em>torch tensor type</em>) – Data type, default is <code class="docutils literal notranslate"><span class="pre">th.float32</span></code>.</p></li>
+<li><p><strong>device</strong> (<em>torch device</em>) – device string, <code class="docutils literal notranslate"><span class="pre">'cpu',</span> <span class="pre">'cuda:0',</span> <span class="pre">'cuda:1'</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -520,7 +520,7 @@ Note that <code class="docutils literal notranslate"><span class="pre">y[0]</spa
 <li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of samples.</p></li>
 <li><p><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Normalize the frequencies.</p></li>
 <li><p><strong>shift</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Does shift the zero frequency to center.</p></li>
-<li><p><strong>dtype</strong> (<em>{torch tensor type}</em>) – Data type, default is <code class="docutils literal notranslate"><span class="pre">th.float32</span></code>.</p></li>
+<li><p><strong>dtype</strong> (<em>torch tensor type</em>) – Data type, default is <code class="docutils literal notranslate"><span class="pre">th.float32</span></code>.</p></li>
 <li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – device string, default is <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code>.</p></li>
 </ul>
 </dd>
@@ -640,7 +640,7 @@ functions differ by one sample for odd-length <cite>x</cite>.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>tensor</em>) – Data to be padded.</p></li>
-<li><p><strong>nfft</strong> (<em>{int</em><em> or </em><em>None}</em>) – Padding size.</p></li>
+<li><p><strong>nfft</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Padding size.</p></li>
 <li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Padding dimension. (the default is 0)</p></li>
 <li><p><strong>shift</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to shift the frequency (the default is False)</p></li>
 </ul>
@@ -650,6 +650,98 @@ functions differ by one sample for odd-length <cite>x</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-torchlib.dsp.function_base">
+<span id="torchlib-dsp-function-base-module"></span><h2>torchlib.dsp.function_base module<a class="headerlink" href="#module-torchlib.dsp.function_base" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.dsp.function_base.unwrap">
+<span class="sig-prename descclassname"><span class="pre">torchlib.dsp.function_base.</span></span><span class="sig-name descname"><span class="pre">unwrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discont</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.141592653589793</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.dsp.function_base.unwrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unwrap by changing deltas between values to <span class="math">\(2\pi\)</span> complement.</p>
+<p>Unwrap radian phase <cite>x</cite> by changing absolute jumps greater than
+<cite>discont</cite> to their <span class="math">\(2\pi\)</span> complement along the given axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Tensor</em><em> or </em><em>ndarray</em>) – The input.</p></li>
+<li><p><strong>discont</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – Maximum discontinuity between values, default is <span class="math">\(\pi\)</span>.</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Axis along which unwrap will operate, default is the last axis.</p></li>
+<li><p><strong>imp</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The implenmentation way, <code class="docutils literal notranslate"><span class="pre">'numpy'</span></code> –&gt; numpy, None or <code class="docutils literal notranslate"><span class="pre">'torch'</span></code> –&gt; torch (default)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The unwrapped.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tensor or ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>x_np = np.array([3.14, -3.12, 3.12, 3.13, -3.11])
+y_np = unwrap(x_np)
+print(y_np, y_np.shape, type(y_np))
+x_th = th.Tensor(x_np)
+y_th = unwrap(x_th)
+print(y_th, y_th.shape, type(y_th))
+
+print(&quot;------------------------&quot;)
+x_th = th.tensor([3.14, -3.12, 3.12, 3.13, -3.11])
+x_th = th.cat((th.flip(x_th, dims=[0]), x_th), axis=0)
+print(x_th)
+y_th = unwrap2(x_th)
+print(y_th, y_th.shape, type(y_th))
+
+print(&quot;------------------------&quot;)
+x_np = np.array([3.14, -3.12, 3.12, 3.13, -3.11])
+x_th = th.Tensor(x_np)
+y_th = unwrap(x_th, imp=&#39;numpy&#39;)
+print(y_th, y_th.shape, type(y_th))
+
+y_th = unwrap(x_th, imp=None)
+print(y_th, y_th.shape, type(y_th))
+
+# output
+
+tensor([3.1400, 3.1632, 3.1200, 3.1300, 3.1732], dtype=torch.float64) torch.Size([5]) &lt;class &#39;torch.Tensor&#39;&gt;
+tensor([3.1400, 3.1632, 3.1200, 3.1300, 3.1732]) torch.Size([5]) &lt;class &#39;torch.Tensor&#39;&gt;
+------------------------
+tensor([-3.1100,  3.1300,  3.1200, -3.1200,  3.1400,  3.1400, -3.1200,  3.1200,
+        3.1300, -3.1100])
+tensor([3.1732, 3.1300, 3.1200, 3.1632, 3.1400, 3.1400, 3.1632, 3.1200, 3.1300,
+        3.1732]) torch.Size([10]) &lt;class &#39;torch.Tensor&#39;&gt;
+------------------------
+tensor([3.1400, 3.1632, 3.1200, 3.1300, 3.1732]) torch.Size([5]) &lt;class &#39;torch.Tensor&#39;&gt;
+tensor([3.1400, 3.1632, 3.1200, 3.1300, 3.1732]) torch.Size([5]) &lt;class &#39;torch.Tensor&#39;&gt;
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.dsp.function_base.unwrap2">
+<span class="sig-prename descclassname"><span class="pre">torchlib.dsp.function_base.</span></span><span class="sig-name descname"><span class="pre">unwrap2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discont</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.141592653589793</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.dsp.function_base.unwrap2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unwrap by changing deltas between values to <span class="math">\(2\pi\)</span> complement.</p>
+<p>Unwrap radian phase <cite>x</cite> by changing absolute jumps greater than
+<cite>discont</cite> to their <span class="math">\(2\pi\)</span> complement along the given axis. The elements
+are divided into 2 parts (with equal length) along the given axis.
+The first part is unwrapped in inverse order, while the second part
+is unwrapped in normal order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Tensor</em>) – The input.</p></li>
+<li><p><strong>discont</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – Maximum discontinuity between values, default is <span class="math">\(\pi\)</span>.</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Axis along which unwrap will operate, default is the last axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Tensor</em> – The unwrapped.</p></li>
+<li><p>see <a class="reference internal" href="#torchlib.dsp.function_base.unwrap" title="torchlib.dsp.function_base.unwrap"><code class="xref py py-func docutils literal notranslate"><span class="pre">unwrap()</span></code></a></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

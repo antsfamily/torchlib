@@ -28,6 +28,14 @@ torchlib.dsp.ffts module
    :undoc-members:
    :show-inheritance:
 
+torchlib.dsp.function\_base module
+----------------------------------
+
+.. automodule:: torchlib.dsp.function_base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 torchlib.dsp.interpolation module
 ---------------------------------
 

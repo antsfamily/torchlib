@@ -348,6 +348,28 @@ All tensors must either have the same shape (except in the concatenating dimensi
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.base.baseops.dreplace">
+<span class="sig-prename descclassname"><span class="pre">torchlib.base.baseops.</span></span><span class="sig-name descname"><span class="pre">dreplace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'None'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.baseops.dreplace" title="Permalink to this definition">¶</a></dt>
+<dd><p>replace dict value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – the dict</p></li>
+<li><p><strong>fv</strong> (<em>any</em><em>, </em><em>optional</em>) – to be replaced, by default None</p></li>
+<li><p><strong>rv</strong> (<em>any</em><em>, </em><em>optional</em>) – replaced with, by default ‘None’</p></li>
+<li><p><strong>new</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if true, deep copy dict, will not change input, by default False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict with replaced value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-torchlib.base.mathops">
 <span id="torchlib-base-mathops-module"></span><h2>torchlib.base.mathops module<a class="headerlink" href="#module-torchlib.base.mathops" title="Permalink to this headline">¶</a></h2>

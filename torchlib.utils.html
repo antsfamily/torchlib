@@ -442,34 +442,63 @@ would be [0, 1, 2, 1, 0, 1, 2].</p>
 <dt class="sig sig-object py" id="torchlib.utils.ios.loadh5">
 <span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">loadh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.loadh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>load h5 file</p>
-<p>load all the data from a h5 file.</p>
+<p>load data from a h5 file. (<code class="docutils literal notranslate"><span class="pre">'None'</span></code> will be replaced by <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – File’s full path string.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – File’s full path string.</p></li>
+<li><p><strong>keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – list of keys.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>D</strong> – The loaded data in <code class="docutils literal notranslate"><span class="pre">dict</span></code> type.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{dict}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.utils.ios.loadjson">
-<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">loadjson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.loadjson" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">loadjson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.loadjson" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a json file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The file path string.</p></li>
+<li><p><strong>field</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The string of field that want to be loaded.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.utils.ios.loadmat">
-<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">loadmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.loadmat" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">loadmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.loadmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>load data from an <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+<p>load data from an <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file (<code class="docutils literal notranslate"><span class="pre">'None'</span></code> will be replaced by <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
+<p>see <a class="reference external" href="https://stackoverflow.com/questions/7008608/scipy-io-loadmat-nested-structures-i-e-dictionaries">https://stackoverflow.com/questions/7008608/scipy-io-loadmat-nested-structures-i-e-dictionaries</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The file path string.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.utils.ios.loadyaml">
-<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">loadyaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.loadyaml" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">loadyaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.loadyaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a yaml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The file path string.</p></li>
+<li><p><strong>field</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The string of field that want to be loaded.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.utils.ios.mvkeyh5">
@@ -497,12 +526,12 @@ would be [0, 1, 2, 1, 0, 1, 2].</p>
 <dt class="sig sig-object py" id="torchlib.utils.ios.saveh5">
 <span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">saveh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.saveh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>save data to h5 file</p>
-<p>save data to h5 file</p>
+<p>save data to h5 file (<code class="docutils literal notranslate"><span class="pre">None</span></code> will be replaced by <code class="docutils literal notranslate"><span class="pre">'None'</span></code>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – filename string</p></li>
-<li><p><strong>mdict</strong> (<em>{dict}</em>) – each dict is store in group, the elements in dict are store in dataset</p></li>
+<li><p><strong>mdict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – each dict is store in group, the elements in dict are store in dataset</p></li>
 <li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – save mode, <code class="docutils literal notranslate"><span class="pre">'w'</span></code> for write, <code class="docutils literal notranslate"><span class="pre">'a'</span></code> for add.</p></li>
 </ul>
 </dd>
@@ -517,8 +546,25 @@ would be [0, 1, 2, 1, 0, 1, 2].</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.utils.ios.savemat">
-<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">savemat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.savemat" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.ios.</span></span><span class="sig-name descname"><span class="pre">savemat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'5'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.ios.savemat" title="Permalink to this definition">¶</a></dt>
+<dd><p>save data to an <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file</p>
+<p>save data to <code class="docutils literal notranslate"><span class="pre">.mat</span></code> file (<code class="docutils literal notranslate"><span class="pre">None</span></code> will be replaced by <code class="docutils literal notranslate"><span class="pre">'None'</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – savefile path</p></li>
+<li><p><strong>mdict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – data in dict formation.</p></li>
+<li><p><strong>fmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – mat formation, by default ‘5’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>all is ok!</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>0</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-torchlib.utils.plot_show">
