@@ -11,44 +11,122 @@ import json
 import yaml
 import numpy as np
 import scipy.io as scio
+from torchlib.base.baseops import dreplace
 
 
-def loadyaml(filename, dbname=None):
-    f = open(filename, 'r', encoding='utf-8')
-    if dbname is None:
+def loadyaml(filepath, field=None):
+    """Load a yaml file.
+
+    Parameters
+    ----------
+    filepath : str
+        The file path string.
+    field : None, optional
+        The string of field that want to be loaded.
+
+    """
+    f = open(filepath, 'r', encoding='utf-8')
+    if field is None:
         if int(yaml.__version__[0]) > 3:
             data = yaml.load(f, Loader=yaml.FullLoader)
         else:
             data = yaml.load(f)
     else:
         if int(yaml.__version__[0]) > 3:
-            data = yaml.load(f, Loader=yaml.FullLoader)[dbname]
+            data = yaml.load(f, Loader=yaml.FullLoader)[field]
         else:
             data = yaml.load(f)
     return data
 
 
-def loadjson(filename, dbname=None):
-    with open(filename, 'r', encoding='utf-8') as f:
-        if dbname is None:
+def loadjson(filepath, field=None):
+    """load a json file
+
+    Parameters
+    ----------
+    filepath : str
+        The file path string.
+    field : None, optional
+        The string of field that want to be loaded.
+
+    """
+    with open(filepath, 'r', encoding='utf-8') as f:
+        if field is None:
             data = json.load(f)
         else:
-            data = json.load(f)[dbname]
+            data = json.load(f)[field]
     return data
 
 
-def loadmat(filename):
+def _check_keys(d):
+    '''
+    checks if entries in dictionary are mat-objects. If yes
+    todict is called to change them to nested dictionaries
+    '''
+    for key in d:
+        if isinstance(d[key], scio.matlab.mio5_params.mat_struct):
+            d[key] = _todict(d[key])
+    return d
 
-    return scio.loadmat(filename)
+
+def _todict(matobj):
+    '''
+    A recursive function which constructs from matobjects nested dictionaries
+    '''
+    d = {}
+    # print(dir(matobj),  "jjjj")
+    for strg in matobj._fieldnames:
+        elem = matobj.__dict__[strg]
+        if isinstance(elem, scio.matlab.mio5_params.mat_struct):
+            d[strg] = _todict(elem)
+        else:
+            d[strg] = elem
+    return d
 
 
-def savemat(filename, mdict, fmt='5', dtype=None):
-    for k, v in mdict.items():
-        if np.iscomplex(v).any() and np.ndim(v) > 1:
-            mdict[k] = np.array(
-                [np.real(v), np.imag(v)]).transpose(1, 2, 0)
-            mdict[k] = mdict[k].astype('float32')
-    scio.savemat(filename, mdict, format=fmt)
+def loadmat(filepath):
+    """load data from an ``.mat`` file
+
+    load data from an ``.mat`` file (``'None'`` will be replaced by ``None``)
+
+    see https://stackoverflow.com/questions/7008608/scipy-io-loadmat-nested-structures-i-e-dictionaries
+
+    Parameters
+    ----------
+    filepath : str
+        The file path string.
+
+    """
+    mdict = scio.loadmat(filepath, struct_as_record=False, squeeze_me=True)
+    mdict = _check_keys(mdict)
+    dreplace(mdict, fv='None', rv=None, new=False)
+    del mdict['__header__'], mdict['__version__'], mdict['__globals__']
+
+    return mdict
+
+
+def savemat(filepath, mdict, fmt='5'):
+    """save data to an ``.mat`` file
+
+    save data to ``.mat`` file (``None`` will be replaced by ``'None'``)
+
+    Parameters
+    ----------
+    filepath : str
+        savefile path
+    mdict : dict
+        data in dict formation. 
+    fmt : str, optional
+        mat formation, by default '5'
+
+    Returns
+    -------
+    0
+        all is ok!
+    """
+    dreplace(mdict, fv=None, rv='None', new=False)
+    scio.savemat(filepath, mdict, format=fmt)
+    dreplace(mdict, fv='None', rv=None, new=False)
 
     return 0
 
@@ -62,8 +140,6 @@ def _create_group_dataset(group, mdict):
             subgroup = group.create_group(k)
             _create_group_dataset(subgroup, v)
         else:
-            if v is None:
-                v = []
             group.create_dataset(k, data=v)
 
 
@@ -89,16 +165,18 @@ def _read_group_dataset(group, mdict, keys=None):
 def loadh5(filename, keys=None):
     """load h5 file
 
-    load all the data from a h5 file.
+    load data from a h5 file. (``'None'`` will be replaced by ``None``)
 
     Parameters
     ----------
     filename : str
         File's full path string.
+    keys : list
+        list of keys.
 
     Returns
     -------
-    D : {dict}
+    D : dict
         The loaded data in ``dict`` type.
 
     """
@@ -108,6 +186,8 @@ def loadh5(filename, keys=None):
 
     _read_group_dataset(f, D, keys)
 
+    dreplace(D, fv='None', rv=None, new=False)
+
     f.close()
     return D
 
@@ -115,13 +195,13 @@ def loadh5(filename, keys=None):
 def saveh5(filename, mdict, mode='w'):
     """save data to h5 file
 
-    save data to h5 file
+    save data to h5 file (``None`` will be replaced by ``'None'``)
 
     Parameters
     ----------
     filename : str
         filename string
-    mdict : {dict}
+    mdict : dict
         each dict is store in group, the elements in dict are store in dataset
     mode : str
         save mode, ``'w'`` for write, ``'a'`` for add.
@@ -132,11 +212,15 @@ def saveh5(filename, mdict, mode='w'):
         0 --> all is well.
     """
 
+    dreplace(mdict, fv=None, rv='None', new=False)
     f = h5py.File(filename, mode)
 
     _create_group_dataset(f, mdict)
 
     f.close()
+
+    dreplace(mdict, fv='None', rv=None, new=False)
+
     return 0
 
 
@@ -179,15 +263,24 @@ if __name__ == '__main__':
     a = np.random.randn(3, 4)
     b = 10
     c = [1, 2, 3]
-    d = {'1': 1, '2': a}
+    d = {'d1': 1, 'd2': a}
     s = 'Hello, the future!'
     t = (0, 1)
+    n = None
 
-    saveh5('./data.h5', {'a': {'x': a}, 'b': b, 'c': c, 'd': d, 's': s})
-    data = loadh5('./data.h5', keys=['a', 's'])
+    savemat('./data.mat', {'a': {'x': a, 'y': 1}, 'b': b, 'c': c, 'd': d, 's': s, 'n': n})
+    saveh5('./data.h5', {'a': {'x': a}, 'b': b, 'c': c, 'd': d, 's': s, 'n': n})
+    data = loadh5('./data.h5', keys=['a', 'd', 's', 'n'])
+    for k, v in data.items():
+        print(k, v)
     print(data.keys())
+    print("==========1")
 
-    print("==========")
+    data = loadmat('./data.mat')
+    for k, v in data.items():
+        print(k, v)
+
+    print("==========2")
     # saveh5('./data.h5', {'t': t}, 'w')
     saveh5('./data.h5', {'t': t}, 'a')
     saveh5('./data.h5', {'t': (2, 3, 4)}, 'a')

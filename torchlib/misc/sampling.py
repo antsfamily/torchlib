@@ -194,6 +194,7 @@ def sample_tensor(x, n, axis=0, groups=1, mode='sequentially', seed=None, extra=
 
 
     Example:
+    
         ::
 
             setseed(2020, 'torch')

@@ -9,6 +9,38 @@
 import torch as th
 import copy
 
+def dreplace(d, fv=None, rv='None', new=False):
+    """replace dict value
+
+    Parameters
+    ----------
+    d : dict
+        the dict
+    fv : any, optional
+        to be replaced, by default None
+    rv : any, optional
+        replaced with, by default 'None'
+    new : bool, optional
+        if true, deep copy dict, will not change input, by default False
+
+    Returns
+    -------
+    dict
+        dict with replaced value
+    """
+    
+    fvtype = type(fv)
+    if new:
+        d = copy.deepcopy(d)
+    for k, v in d.items():
+        if type(v) is dict:
+            dreplace(v, fv=fv, rv=rv)
+        else:
+            if type(v) == fvtype:
+                if v == fv:
+                    d[k] = rv
+    return d
+
 
 def dmka(D, Ds):
     r"""Multiple key-value assign to a dict

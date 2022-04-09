@@ -8,7 +8,7 @@ from .utils.convert import str2list, str2num
 from .utils.colors import rgb2gray
 from .utils.plot_show import cplot, plots, Plots
 
-from .base.baseops import dmka, cat
+from .base.baseops import dreplace, dmka, cat
 from .base.arrayops import sl, cut, arraycomb
 from .base.mathops import sinc, nextpow2, prevpow2, ematmul, matmul, conj
 from .base.randomfunc import setseed, randgrid, randperm, randperm2d
@@ -19,6 +19,7 @@ from .dsp.correlation import cutfftcorr1, fftcorr1
 from .dsp.normalsignals import rect, chirp
 from .dsp.interpolation import interpolate, interpolatec
 from .dsp.polynomialfit import polyfit, polyval, rmlinear
+from .dsp.function_base import unwrap, unwrap2
 
 from .evaluation.contrast import contrast
 from .evaluation.entropy import entropy

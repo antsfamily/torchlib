@@ -60,7 +60,7 @@ def scale(X, st=[0, 1], sf=None, istrunc=True, extra=False):
         x \in [a, b] \rightarrow y \in [c, d]
 
     .. math::
-        y = (d-c)*(x-a) / (b-a) + c.
+        y = (d-c)(x-a) / (b-a) + c.
 
     Parameters
     ----------
@@ -125,7 +125,7 @@ def quantization(X, idrange=None, odrange=[0, 31], odtype='auto', extra=False):
         x \in [a, b] \rightarrow y \in [c, d]
 
     .. math::
-        y = (d-c)*(x-a) / (b-a) + c.
+        y = (d-c)(x-a) / (b-a) + c.
 
     Parameters
     ----------

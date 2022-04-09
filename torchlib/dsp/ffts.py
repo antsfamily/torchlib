@@ -35,7 +35,7 @@ def freq(n, fs, norm=False, shift=False, dtype=th.float32, device='cpu'):
         Normalize the frequencies.
     shift : bool
         Does shift the zero frequency to center.
-    dtype : {torch tensor type}
+    dtype : torch tensor type
         Data type, default is ``th.float32``.
     device : str
         device string, default is ``'cpu'``.
@@ -86,9 +86,9 @@ def fftfreq(n, fs, norm=False, shift=False, dtype=th.float32, device='cpu'):
         Normalize the frequencies.
     shift : bool
         Does shift the zero frequency to center.
-    dtype : {torch tensor type}
+    dtype : torch tensor type
         Data type, default is ``th.float32``.
-    device : {torch tensor device}
+    device : torch device
         device string, ``'cpu', 'cuda:0', 'cuda:1'``
 
     Returns
@@ -294,7 +294,7 @@ def padfft(X, nfft=None, axis=0, shift=False):
     ----------
     X : tensor
         Data to be padded.
-    nfft : {int or None}
+    nfft : int or None
         Padding size.
     axis : int, optional
         Padding dimension. (the default is 0)

@@ -88,8 +88,6 @@ def randperm(start, stop, n):
         the number of samples (default None, int((stop - start)))
 
     see :func:`randgrid`.
-
-
     """
 
     if (n is not None) and (type(n) is not int):
@@ -172,7 +170,6 @@ def randgrid(start, stop, step, shake=0, n=None):
 
     Example
     -------
-
 
 
     ::

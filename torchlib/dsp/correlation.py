@@ -248,8 +248,8 @@ def accc(Sr, isplot=False):
 
 
 if __name__ == '__main__':
-    import torchlib as tl
     import pyailib as pl
+    import torchlib as tl
     import torch as th
 
     shape = 'same'
