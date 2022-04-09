@@ -92,6 +92,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Get Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">torchlib</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="torchlib.html">torchlib package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="torchlib.html#subpackages">Subpackages</a><ul class="current">
@@ -194,7 +195,7 @@
 <span id="torchlib-module-evaluation-contrast-module"></span><h2>torchlib.module.evaluation.contrast module<a class="headerlink" href="#module-torchlib.module.evaluation.contrast" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchlib.module.evaluation.contrast.Contrast">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">torchlib.module.evaluation.contrast.</span></span><span class="sig-name descname"><span class="pre">Contrast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'way1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.module.evaluation.contrast.Contrast" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">torchlib.module.evaluation.contrast.</span></span><span class="sig-name descname"><span class="pre">Contrast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'way1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.module.evaluation.contrast.Contrast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>way1 is defined as follows, see [1]:</p>
 <div class="math">
@@ -208,6 +209,59 @@
 \]</div>
 <p>[1] Efficient Nonparametric ISAR Autofocus Algorithm Based on Contrast Maximization and Newton
 [2] section 13.4.1 in “Ian G. Cumming’s SAR book”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy ndarray</em>) – The image array.</p></li>
+<li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">'way1'</span></code> or <code class="docutils literal notranslate"><span class="pre">'way2'</span></code></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – the dimensions for compute entropy. by default None (if input’s dimension &gt; 2, then all but the first, else all).</p></li>
+<li><p><strong>caxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>reduction</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The operation in batch dim, <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> or <code class="docutils literal notranslate"><span class="pre">'sum'</span></code> (the default is ‘mean’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The contrast value of input.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ctst_func</span> <span class="o">=</span> <span class="n">Contrast</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ctst_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">ctst_func</span> <span class="o">=</span> <span class="n">Contrast</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ctst_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">ctst_func</span> <span class="o">=</span> <span class="n">Contrast</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ctst_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">ctst_func</span> <span class="o">=</span> <span class="n">Contrast</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ctst_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">ctst_func</span> <span class="o">=</span> <span class="n">Contrast</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ctst_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="c1"># output</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.2694</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.2694</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.2694</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">0.7724</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">([[[</span><span class="mf">0.9093</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.0752</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.3326</span><span class="p">]]])</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchlib.module.evaluation.contrast.Contrast.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.module.evaluation.contrast.Contrast.forward" title="Permalink to this definition">¶</a></dt>
@@ -234,8 +288,69 @@ registered hooks while the latter silently ignores them.</p>
 <span id="torchlib-module-evaluation-entropy-module"></span><h2>torchlib.module.evaluation.entropy module<a class="headerlink" href="#module-torchlib.module.evaluation.entropy" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchlib.module.evaluation.entropy.Entropy">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">torchlib.module.evaluation.entropy.</span></span><span class="sig-name descname"><span class="pre">Entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shannon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.module.evaluation.entropy.Entropy" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">torchlib.module.evaluation.entropy.</span></span><span class="sig-name descname"><span class="pre">Entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shannon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.module.evaluation.entropy.Entropy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>compute the entropy of the inputs</p>
+<div class="math">
+\[{\rm S} = -\sum_{n=0}^N p_i{\rm log}_2 p_n
+
+\]</div>
+<p>where <span class="math">\(N\)</span> is the number of pixels, <span class="math">\(p_n=\frac{|X_n|^2}{\sum_{n=0}^N|X_n|^2}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>tensor</em>) – The complex or real inputs, for complex inputs, both complex and real representations are surpported.</p></li>
+<li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The entropy mode: <code class="docutils literal notranslate"><span class="pre">'shannon'</span></code> or <code class="docutils literal notranslate"><span class="pre">'natural'</span></code> (the default is ‘shannon’)</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – the dimensions for compute entropy. by default None (if input’s dimension &gt; 2, then all but the first, else all).</p></li>
+<li><p><strong>caxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>reduction</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The operation in batch dim, <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> or <code class="docutils literal notranslate"><span class="pre">'sum'</span></code> (the default is ‘mean’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>S</strong> – The entropy of the inputs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;natural&#39;</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;shannon&#39;</span>
+<span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ent_func</span> <span class="o">=</span> <span class="n">Entropy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ent_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">ent_func</span> <span class="o">=</span> <span class="n">Entropy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ent_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">ent_func</span> <span class="o">=</span> <span class="n">Entropy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ent_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">ent_func</span> <span class="o">=</span> <span class="n">Entropy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ent_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">ent_func</span> <span class="o">=</span> <span class="n">Entropy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">ent_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="c1"># output</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">2.8302</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">2.8302</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">2.8302</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.5349</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">([[[</span><span class="mf">1.3829</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.3055</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.9163</span><span class="p">]]])</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchlib.module.evaluation.entropy.Entropy.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.module.evaluation.entropy.Entropy.forward" title="Permalink to this definition">¶</a></dt>
@@ -343,7 +458,7 @@ registered hooks while the latter silently ignores them.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>F1 distance</p>
 <div class="math" id="equation-equ-f-measure">
-<span class="eqno">(1)<a class="headerlink" href="#equation-equ-f-measure" title="Permalink to this equation">¶</a></span>\[F_{\beta} = 1 -\frac{(1+\beta^2) * P * R}{\beta^2 *P + R}
+<span class="eqno">(1)<a class="headerlink" href="#equation-equ-f-measure" title="Permalink to this equation">¶</a></span>\[F_{\beta} = 1 -\frac{(1+\beta^2)  P  R}{\beta^2 P + R}
 
 \]</div>
 <p>where,</p>

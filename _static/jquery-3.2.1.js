@@ -852,11 +852,11 @@ function Sizzle( selector, context, results, seed ) {
 
 					// Prefix every selector in the list
 					groups = tokenize( selector );
-					i = groups.length;
+					i = groupl.length;
 					while ( i-- ) {
 						groups[i] = "#" + nid + " " + toSelector( groups[i] );
 					}
-					newSelector = groups.join( "," );
+					newSelector = groupl.join( "," );
 
 					// Expand context for sibling selectors
 					newContext = rsibling.test( selector ) && testContext( context.parentNode ) ||
@@ -936,7 +936,7 @@ function assert( fn ) {
 
 /**
  * Adds the same handler for all of the specified attrs
- * @param {String} attrs Pipe-separated list of attributes
+ * @param str attrs Pipe-separated list of attributes
  * @param {Function} handler The method that will be applied
  */
 function addHandle( attrs, handler ) {
@@ -978,7 +978,7 @@ function siblingCheck( a, b ) {
 
 /**
  * Returns a function to use in pseudos for input types
- * @param {String} type
+ * @param str type
  */
 function createInputPseudo( type ) {
 	return function( elem ) {
@@ -989,7 +989,7 @@ function createInputPseudo( type ) {
 
 /**
  * Returns a function to use in pseudos for buttons
- * @param {String} type
+ * @param str type
  */
 function createButtonPseudo( type ) {
 	return function( elem ) {
@@ -2188,7 +2188,7 @@ tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
 				// Don't consume trailing commas as valid
 				soFar = soFar.slice( match[0].length ) || soFar;
 			}
-			groups.push( (tokens = []) );
+			groupl.push( (tokens = []) );
 		}
 
 		matched = false;
@@ -7175,12 +7175,12 @@ jQuery.Animation = jQuery.extend( Animation, {
 			callback = props;
 			props = [ "*" ];
 		} else {
-			props = props.match( rnothtmlwhite );
+			props = propl.match( rnothtmlwhite );
 		}
 
 		var prop,
 			index = 0,
-			length = props.length;
+			length = propl.length;
 
 		for ( ; index < length; index++ ) {
 			prop = props[ index ];
@@ -9943,10 +9943,10 @@ jQuery.offset = {
 		}
 
 		if ( options.top != null ) {
-			props.top = ( options.top - curOffset.top ) + curTop;
+			propl.top = ( options.top - curOffset.top ) + curTop;
 		}
 		if ( options.left != null ) {
-			props.left = ( options.left - curOffset.left ) + curLeft;
+			propl.left = ( options.left - curOffset.left ) + curLeft;
 		}
 
 		if ( "using" in options ) {

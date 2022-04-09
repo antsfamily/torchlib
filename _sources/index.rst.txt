@@ -4,15 +4,14 @@
    contain the root `toctree` directive.
 
 Welcome to torchlib's documentation!
-==================================
+====================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   intro
+   getstarted
    modules
-   tutorials
 
 
 Indices and tables

@@ -92,6 +92,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Get Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">torchlib</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="torchlib.html">torchlib package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="torchlib.html#subpackages">Subpackages</a><ul class="current">
@@ -418,19 +419,19 @@ L_{o} &= \left\lfloor\frac{L_{i}  + 2 \times P_l - D_l \times (K_l - 1) - 1}{S_l
 
 \]</div>
 <dl class="simple">
-<dt>CLi<span class="classifier">{tulpe or list}</span></dt><dd><p>input data shape (C, L)</p>
+<dt>CLi<span class="classifier">{tuple or list}</span></dt><dd><p>input data shape (C, L)</p>
 </dd>
 <dt>Co<span class="classifier">{integer number}</span></dt><dd><p>number of output chanels.</p>
 </dd>
-<dt>K<span class="classifier">{tulpe}</span></dt><dd><p>kernel size</p>
+<dt>K<span class="classifier">tuple</span></dt><dd><p>kernel size</p>
 </dd>
-<dt>S<span class="classifier">{tulpe}</span></dt><dd><p>stride size</p>
+<dt>S<span class="classifier">tuple</span></dt><dd><p>stride size</p>
 </dd>
-<dt>P<span class="classifier">{tulpe}</span></dt><dd><p>padding size</p>
+<dt>P<span class="classifier">tuple</span></dt><dd><p>padding size</p>
 </dd>
 <dt>D<span class="classifier">{tuple}, optional</span></dt><dd><p>dilation size (the default is 1)</p>
 </dd>
-<dt>groups<span class="classifier">{number}, optional</span></dt><dd><p>[description] (the default is 1, which [default_description])</p>
+<dt>groups<span class="classifier">int, optional</span></dt><dd><p>[description] (the default is 1, which [default_description])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -438,7 +439,7 @@ L_{o} &= \left\lfloor\frac{L_{i}  + 2 \times P_l - D_l \times (K_l - 1) - 1}{S_l
 <dd class="field-odd"><p>shape after 2D-Convolution</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tulpe</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – dilation should be greater than zero.</p>
@@ -458,19 +459,19 @@ W_{o} &= \left\lfloor\frac{W_{i}  + 2 \times P_w - D_w \times (K_w - 1) - 1}{S_w
 
 \]</div>
 <dl class="simple">
-<dt>CHWi<span class="classifier">{tulpe or list}</span></dt><dd><p>input data shape (C, H, W)</p>
+<dt>CHWi<span class="classifier">{tuple or list}</span></dt><dd><p>input data shape (C, H, W)</p>
 </dd>
 <dt>Co<span class="classifier">{integer number}</span></dt><dd><p>number of output chanels.</p>
 </dd>
-<dt>K<span class="classifier">{tulpe}</span></dt><dd><p>kernel size</p>
+<dt>K<span class="classifier">tuple</span></dt><dd><p>kernel size</p>
 </dd>
-<dt>S<span class="classifier">{tulpe}</span></dt><dd><p>stride size</p>
+<dt>S<span class="classifier">tuple</span></dt><dd><p>stride size</p>
 </dd>
-<dt>P<span class="classifier">{tulpe}</span></dt><dd><p>padding size</p>
+<dt>P<span class="classifier">tuple</span></dt><dd><p>padding size</p>
 </dd>
 <dt>D<span class="classifier">{tuple}, optional</span></dt><dd><p>dilation size (the default is (1, 1))</p>
 </dd>
-<dt>groups<span class="classifier">{number}, optional</span></dt><dd><p>[description] (the default is 1, which [default_description])</p>
+<dt>groups<span class="classifier">int, optional</span></dt><dd><p>[description] (the default is 1, which [default_description])</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -478,7 +479,7 @@ W_{o} &= \left\lfloor\frac{W_{i}  + 2 \times P_w - D_w \times (K_w - 1) - 1}{S_w
 <dd class="field-odd"><p>shape after 2D-Convolution</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tulpe</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – dilation should be greater than zero.</p>
@@ -499,11 +500,11 @@ L_{o} &= (L_{i} - 1) \times S_l - 2 \times P_l + D_l \times (K_l - 1) + OP_l + 1
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>CLi</strong> (<em>{tulpe</em><em> or </em><em>list}</em>) – input data shape (C, H, W)</p></li>
+<li><p><strong>CLi</strong> (<em>{tuple</em><em> or </em><em>list}</em>) – input data shape (C, H, W)</p></li>
 <li><p><strong>Co</strong> (<em>{integer number}</em>) – number of output chanels.</p></li>
-<li><p><strong>K</strong> (<em>{tulpe}</em>) – kernel size</p></li>
-<li><p><strong>S</strong> (<em>{tulpe}</em>) – stride size</p></li>
-<li><p><strong>P</strong> (<em>{tulpe}</em>) – padding size</p></li>
+<li><p><strong>K</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – kernel size</p></li>
+<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – stride size</p></li>
+<li><p><strong>P</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – padding size</p></li>
 <li><p><strong>D</strong> (<em>{tuple}</em><em>, </em><em>optional</em>) – dilation size (the default is 1)</p></li>
 <li><p><strong>OP</strong> (<em>{tuple}</em><em>, </em><em>optional</em>) – output padding size (the default is 0)</p></li>
 <li><p><strong>groups</strong> (<em>{integer number}</em><em>, </em><em>optional</em>) – one group (the default is 1)</p></li>
@@ -513,7 +514,7 @@ L_{o} &= (L_{i} - 1) \times S_l - 2 \times P_l + D_l \times (K_l - 1) + OP_l + 1
 <dd class="field-even"><p>shape after 2D-Transpose Convolution</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tulpe</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – output padding must be smaller than either stride or dilation</p>
@@ -535,11 +536,11 @@ W_{o} &= (W_{i} - 1) \times S_w - 2 \times P_w + D_w \times (K_w - 1) + OP_w + 1
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>CHWi</strong> (<em>{tulpe</em><em> or </em><em>list}</em>) – input data shape (C, H, W)</p></li>
+<li><p><strong>CHWi</strong> (<em>{tuple</em><em> or </em><em>list}</em>) – input data shape (C, H, W)</p></li>
 <li><p><strong>Co</strong> (<em>{integer number}</em>) – number of output chanels.</p></li>
-<li><p><strong>K</strong> (<em>{tulpe}</em>) – kernel size</p></li>
-<li><p><strong>S</strong> (<em>{tulpe}</em>) – stride size</p></li>
-<li><p><strong>P</strong> (<em>{tulpe}</em>) – padding size</p></li>
+<li><p><strong>K</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – kernel size</p></li>
+<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – stride size</p></li>
+<li><p><strong>P</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – padding size</p></li>
 <li><p><strong>D</strong> (<em>{tuple}</em><em>, </em><em>optional</em>) – dilation size (the default is (1, 1))</p></li>
 <li><p><strong>OP</strong> (<em>{tuple}</em><em>, </em><em>optional</em>) – output padding size (the default is (0, 0))</p></li>
 <li><p><strong>groups</strong> (<em>{integer number}</em><em>, </em><em>optional</em>) – one group (the default is 1)</p></li>
@@ -549,7 +550,7 @@ W_{o} &= (W_{i} - 1) \times S_w - 2 \times P_w + D_w \times (K_w - 1) + OP_w + 1
 <dd class="field-even"><p>shape after 2D-Transpose Convolution</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tulpe</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – output padding must be smaller than either stride or dilation</p>

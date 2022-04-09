@@ -92,6 +92,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Get Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">torchlib</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="torchlib.html">torchlib package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="torchlib.html#subpackages">Subpackages</a><ul class="current">
@@ -197,9 +198,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – Predicted one hot matrix, <span class="math">\(\{0, 1\}\)</span></p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – Referenced one hot matrix, <span class="math">\(\{0, 1\}\)</span></p></li>
-<li><p><strong>TH</strong> (<em>{</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><em>type</em></a><em>]</em><em>}</em><em>, </em><em>optional</em>) – threshold: X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – Predicted one hot matrix, <span class="math">\(\{0, 1\}\)</span></p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – Referenced one hot matrix, <span class="math">\(\{0, 1\}\)</span></p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – threshold: X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 </dl>
@@ -210,19 +211,68 @@
 <span id="torchlib-evaluation-contrast-module"></span><h2>torchlib.evaluation.contrast module<a class="headerlink" href="#module-torchlib.evaluation.contrast" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.evaluation.contrast.contrast">
-<span class="sig-prename descclassname"><span class="pre">torchlib.evaluation.contrast.</span></span><span class="sig-name descname"><span class="pre">contrast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'way1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.evaluation.contrast.contrast" title="Permalink to this definition">¶</a></dt>
-<dd><p>way1 is defined as follows, see [1]:</p>
+<span class="sig-prename descclassname"><span class="pre">torchlib.evaluation.contrast.</span></span><span class="sig-name descname"><span class="pre">contrast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'way1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.evaluation.contrast.contrast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute contrast of an complex image</p>
+<p><code class="docutils literal notranslate"><span class="pre">'way1'</span></code> is defined as follows, see [1]:</p>
 <div class="math">
 \[C = \frac{\sqrt{{\rm E}\left(|I|^2 - {\rm E}(|I|^2)\right)^2}}{{\rm E}(|I|^2)}
 
 \]</div>
-<p>way2 is defined as follows, see [2]:</p>
+<p><code class="docutils literal notranslate"><span class="pre">'way2'</span></code> is defined as follows, see [2]:</p>
 <div class="math">
 \[C = \frac{{\rm E}(|I|^2)}{\left({\rm E}(|I|)\right)^2}
 
 \]</div>
 <p>[1] Efficient Nonparametric ISAR Autofocus Algorithm Based on Contrast Maximization and Newton
 [2] section 13.4.1 in “Ian G. Cumming’s SAR book”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>numpy ndarray</em>) – The image array.</p></li>
+<li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">'way1'</span></code> or <code class="docutils literal notranslate"><span class="pre">'way2'</span></code></p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – the dimensions for compute entropy. by default None (if input’s dimension &gt; 2, then all but the first, else all).</p></li>
+<li><p><strong>caxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>reduction</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The operation in batch dim, <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> or <code class="docutils literal notranslate"><span class="pre">'sum'</span></code> (the default is ‘mean’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The contrast value of input.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">V</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">V</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">V</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;way1&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="c1"># output</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.2694</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.2694</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.2694</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">0.7724</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">([[[</span><span class="mf">0.9093</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.0752</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.3326</span><span class="p">]]])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -230,24 +280,61 @@
 <span id="torchlib-evaluation-entropy-module"></span><h2>torchlib.evaluation.entropy module<a class="headerlink" href="#module-torchlib.evaluation.entropy" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.evaluation.entropy.entropy">
-<span class="sig-prename descclassname"><span class="pre">torchlib.evaluation.entropy.</span></span><span class="sig-name descname"><span class="pre">entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shannon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.evaluation.entropy.entropy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">torchlib.evaluation.entropy.</span></span><span class="sig-name descname"><span class="pre">entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'shannon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.evaluation.entropy.entropy" title="Permalink to this definition">¶</a></dt>
 <dd><p>compute the entropy of the inputs</p>
-<p>[description]</p>
+<div class="math">
+\[{\rm S} = -\sum_{n=0}^N p_i{\rm log}_2 p_n
+
+\]</div>
+<p>where <span class="math">\(N\)</span> is the number of pixels, <span class="math">\(p_n=\frac{|X_n|^2}{\sum_{n=0}^N|X_n|^2}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{torch tensor}</em>) – The complex or real inputs, for complex inputs, both complex and real representations are surpported.</p></li>
-<li><p><strong>mode</strong> (<em>{str}</em><em>, </em><em>optional</em>) – The entropy mode: <code class="docutils literal notranslate"><span class="pre">'shannon'</span></code> or <code class="docutils literal notranslate"><span class="pre">'natural'</span></code> (the default is ‘shannon’)</p></li>
-<li><p><strong>reduction</strong> (<em>{str}</em><em>, </em><em>optional</em>) – The operation in batch dim, <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> or <code class="docutils literal notranslate"><span class="pre">'sum'</span></code> (the default is ‘mean’)</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – The complex or real inputs, for complex inputs, both complex and real representations are surpported.</p></li>
+<li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The entropy mode: <code class="docutils literal notranslate"><span class="pre">'shannon'</span></code> or <code class="docutils literal notranslate"><span class="pre">'natural'</span></code> (the default is ‘shannon’)</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – the dimensions for compute entropy. by default None (if input’s dimension &gt; 2, then all but the first, else all).</p></li>
+<li><p><strong>caxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">caxis</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>reduction</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The operation in batch dim, <code class="docutils literal notranslate"><span class="pre">'None'</span></code>, <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> or <code class="docutils literal notranslate"><span class="pre">'sum'</span></code> (the default is ‘mean’)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>S</strong> – The entropy of the inputs.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{torch tensor}</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;shannon&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;shannon&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">V</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;shannon&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">V</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;shannon&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="n">V</span> <span class="o">=</span> <span class="n">entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;shannon&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">caxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+<span class="c1"># output</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">2.8302</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">2.8302</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">2.8302</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">(</span><span class="mf">1.5349</span><span class="p">)</span>
+<span class="n">tensor</span><span class="p">([[[</span><span class="mf">1.3829</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.3055</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.9163</span><span class="p">]]])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -277,16 +364,16 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>FDR</strong> – False Discovery Rate</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -300,8 +387,8 @@ and retrieved as negative in X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -309,7 +396,7 @@ and retrieved as negative in X.</p>
 In FN, false negative elements are ones, while others are zeros.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{Torch Tensor}</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -323,8 +410,8 @@ and retrieved as positive in X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -332,7 +419,7 @@ and retrieved as positive in X.</p>
 In FP, false positive elements are ones, while others are zeros.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{Torch Tensor}</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -348,17 +435,17 @@ In FP, false positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
-<li><p><strong>beta</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>beta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>F</strong> – F-measure</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -374,16 +461,16 @@ In FP, false positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>FNR</strong> – False Negative Rate</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -399,16 +486,16 @@ In FP, false positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>P</strong> – precision</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -424,16 +511,16 @@ In FP, false positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>R</strong> – recall</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -449,16 +536,16 @@ In FP, false positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>S</strong> – selectivity</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -474,16 +561,16 @@ In FP, false positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>R</strong> – recall</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -497,8 +584,8 @@ and retrieved as negative in X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -506,7 +593,7 @@ and retrieved as negative in X.</p>
 In TN, true negative elements are ones, while others are zeros.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{Torch Tensor}</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -520,8 +607,8 @@ and retrieved as positive in X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -529,7 +616,7 @@ and retrieved as positive in X.</p>
 In TP, true positive elements are ones, while others are zeros.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{Torch Tensor}</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -548,16 +635,16 @@ In TP, true positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>DC</strong> – the dice coefficient.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -573,16 +660,16 @@ In TP, true positive elements are ones, while others are zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{Torch Tensor}</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
-<li><p><strong>Y</strong> (<em>{Torch Tensor}</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
-<li><p><strong>TH</strong> (<em>{float number}</em>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
+<li><p><strong>X</strong> (<em>tensor</em>) – retrieval results, retrieved–&gt;1, not retrieved–&gt;0</p></li>
+<li><p><strong>Y</strong> (<em>tensor</em>) – referenced, positive–&gt;1, negative–&gt;0</p></li>
+<li><p><strong>TH</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – X &gt; TH –&gt; 1, X &lt;= TH –&gt; 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>JS</strong> – the jaccard similarity coefficient.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>{float number}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -593,17 +680,19 @@ In TP, true positive elements are ones, while others are zeros.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.evaluation.ssims.gaussian_filter">
 <span class="sig-prename descclassname"><span class="pre">torchlib.evaluation.ssims.</span></span><span class="sig-name descname"><span class="pre">gaussian_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.evaluation.ssims.gaussian_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Blur input with 1-D kernel
-:param input: a batch of tensors to be blurred
-:type input: torch.Tensor
-:param window: 1-D gauss kernel
-:type window: torch.Tensor</p>
+<dd><p>Blur input with 1-D kernel</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>blurred tensors</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>torch.Tensor</em>) – a batch of tensors to be blurred</p></li>
+<li><p><strong>window</strong> (<em>torch.Tensor</em>) – 1-D gauss kernel</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>torch.Tensor</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>blurred tensors</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -611,29 +700,26 @@ In TP, true positive elements are ones, while others are zeros.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.evaluation.ssims.msssim">
 <span class="sig-prename descclassname"><span class="pre">torchlib.evaluation.ssims.</span></span><span class="sig-name descname"><span class="pre">msssim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win_sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.01,</span> <span class="pre">0.03)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.evaluation.ssims.msssim" title="Permalink to this definition">¶</a></dt>
-<dd><p>interface of ms-ssim
-:param X: a batch of images, (N,C,[T,]H,W)
-:type X: torch.Tensor
-:param Y: a batch of images, (N,C,[T,]H,W)
-:type Y: torch.Tensor
-:param data_range: value range of input images. (usually 1.0 or 255)
-:type data_range: float or int, optional
-:param size_average: if size_average=True, ssim of all images will be averaged as a scalar
-:type size_average: bool, optional
-:param win_size: (int, optional): the size of gauss kernel
-:param win_sigma: (float, optional): sigma of normal distribution
-:param win: 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
-:type win: torch.Tensor, optional
-:param weights: weights for different levels
-:type weights: list, optional
-:param K: scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
-:type K: list or tuple, optional</p>
+<dd><p>interface of ms-ssim</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>msssim results</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>torch.Tensor</em>) – a batch of images, (N,C,[T,]H,W)</p></li>
+<li><p><strong>Y</strong> (<em>torch.Tensor</em>) – a batch of images, (N,C,[T,]H,W)</p></li>
+<li><p><strong>data_range</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – value range of input images. (usually 1.0 or 255)</p></li>
+<li><p><strong>size_average</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if size_average=True, ssim of all images will be averaged as a scalar</p></li>
+<li><p><strong>win_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – the size of gauss kernel</p></li>
+<li><p><strong>win_sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – sigma of normal distribution</p></li>
+<li><p><strong>win</strong> (<em>torch.Tensor</em><em>, </em><em>optional</em>) – 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma</p></li>
+<li><p><strong>weights</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) – weights for different levels</p></li>
+<li><p><strong>K</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><em>optional</em>) – scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>torch.Tensor</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>msssim results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -641,29 +727,26 @@ In TP, true positive elements are ones, while others are zeros.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.evaluation.ssims.ssim">
 <span class="sig-prename descclassname"><span class="pre">torchlib.evaluation.ssims.</span></span><span class="sig-name descname"><span class="pre">ssim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win_sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">win</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.01,</span> <span class="pre">0.03)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonnegative_ssim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.evaluation.ssims.ssim" title="Permalink to this definition">¶</a></dt>
-<dd><p>interface of ssim
-:param X: a batch of images, (N,C,H,W)
-:type X: torch.Tensor
-:param Y: a batch of images, (N,C,H,W)
-:type Y: torch.Tensor
-:param data_range: value range of input images. (usually 1.0 or 255)
-:type data_range: float or int, optional
-:param size_average: if size_average=True, ssim of all images will be averaged as a scalar
-:type size_average: bool, optional
-:param win_size: (int, optional): the size of gauss kernel
-:param win_sigma: (float, optional): sigma of normal distribution
-:param win: 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
-:type win: torch.Tensor, optional
-:param K: scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
-:type K: list or tuple, optional
-:param nonnegative_ssim: force the ssim response to be nonnegative with relu
-:type nonnegative_ssim: bool, optional</p>
+<dd><p>interface of ssim</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>ssim results</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>torch.Tensor</em>) – a batch of images, (N,C,H,W)</p></li>
+<li><p><strong>Y</strong> (<em>torch.Tensor</em>) – a batch of images, (N,C,H,W)</p></li>
+<li><p><strong>data_range</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – value range of input images. (usually 1.0 or 255)</p></li>
+<li><p><strong>size_average</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if size_average=True, ssim of all images will be averaged as a scalar</p></li>
+<li><p><strong>win_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – the size of gauss kernel</p></li>
+<li><p><strong>win_sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – sigma of normal distribution</p></li>
+<li><p><strong>win</strong> (<em>torch.Tensor</em><em>, </em><em>optional</em>) – 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma</p></li>
+<li><p><strong>K</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><em>optional</em>) – scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.</p></li>
+<li><p><strong>nonnegative_ssim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – force the ssim response to be nonnegative with relu</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>torch.Tensor</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ssim results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.Tensor</p>
 </dd>
 </dl>
 </dd></dl>
