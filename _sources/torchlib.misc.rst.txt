@@ -4,6 +4,14 @@ torchlib.misc package
 Submodules
 ----------
 
+torchlib.misc.draw\_shapes module
+---------------------------------
+
+.. automodule:: torchlib.misc.draw_shapes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 torchlib.misc.mapping\_operation module
 ---------------------------------------
 

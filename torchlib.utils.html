@@ -93,6 +93,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getstarted.html">Get Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">torchlib</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="torchlib.html">torchlib package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="torchlib.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="torchlib.base.html">torchlib.base package</a></li>
@@ -109,6 +110,8 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">torchlib.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="torchlib.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="torchlib.html#module-torchlib.version">torchlib.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="torchlib.html#module-torchlib">Module contents</a></li>
 </ul>
 </li>
@@ -188,8 +191,59 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </section>
+<section id="module-torchlib.utils.colormaps">
+<span id="torchlib-utils-colormaps-module"></span><h2>torchlib.utils.colormaps module<a class="headerlink" href="#module-torchlib.utils.colormaps" title="Permalink to this headline">¶</a></h2>
+</section>
 <section id="module-torchlib.utils.colors">
 <span id="torchlib-utils-colors-module"></span><h2>torchlib.utils.colors module<a class="headerlink" href="#module-torchlib.utils.colors" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.utils.colors.gray2rgb">
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.colors.</span></span><span class="sig-name descname"><span class="pre">gray2rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">255]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmtstr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.colors.gray2rgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts gray images to rgb image</p>
+<p>converts <cite>gray</cite> images to rgb image according to the specified colormap string ‘cmap’,
+supported are: <code class="docutils literal notranslate"><span class="pre">'parula'</span></code>, <code class="docutils literal notranslate"><span class="pre">'jet'</span></code>, <code class="docutils literal notranslate"><span class="pre">'hsv'</span></code>, <code class="docutils literal notranslate"><span class="pre">'hot'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cool'</span></code>, <code class="docutils literal notranslate"><span class="pre">'spring'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'summer'</span></code>, <code class="docutils literal notranslate"><span class="pre">'autumn'</span></code>, <code class="docutils literal notranslate"><span class="pre">'winter'</span></code>, <code class="docutils literal notranslate"><span class="pre">'gray'</span></code>, <code class="docutils literal notranslate"><span class="pre">'bone'</span></code>, <code class="docutils literal notranslate"><span class="pre">'copper'</span></code>, <code class="docutils literal notranslate"><span class="pre">'pink'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'lines'</span></code>, <code class="docutils literal notranslate"><span class="pre">'colorcube'</span></code>, <code class="docutils literal notranslate"><span class="pre">'prism'</span></code>, <code class="docutils literal notranslate"><span class="pre">'flag'</span></code>, <code class="docutils literal notranslate"><span class="pre">'white'</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gray</strong> (<em>torch tensor</em>) – The gray image <span class="math">\(N\times H\times W\)</span>, or the gray images <span class="math">\(N\times H\times W\)</span>, <span class="math">\(N\)</span> is the number of images.</p></li>
+<li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>colormap</em>) – colormap string</p></li>
+<li><p><strong>drange</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – The low and high value, default is <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">255]</span></code></p></li>
+<li><p><strong>fmtstr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Specifies the format (<code class="docutils literal notranslate"><span class="pre">'int'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uint8'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uint16'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uint32'</span></code>, <code class="docutils literal notranslate"><span class="pre">'float16'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'float32'</span></code>, , <code class="docutils literal notranslate"><span class="pre">'float64'</span></code>) for the output rgb matrix. (default is <code class="docutils literal notranslate"><span class="pre">False</span></code>, don’t change)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchlib</span> <span class="k">as</span> <span class="nn">tl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">torch</span> <span class="k">as</span> <span class="nn">th</span>
+
+<span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;jet&#39;</span>
+<span class="c1"># cmap = &#39;hsv&#39;</span>
+<span class="c1"># cmap = &#39;hot&#39;</span>
+<span class="c1"># cmap = &#39;parula&#39;</span>
+<span class="n">gray</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;../../data/images/LenaGRAY256.png&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gray</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">rgb</span> <span class="o">=</span> <span class="n">gray2rgb</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># rgb --&gt; double, [0, 1]</span>
+<span class="c1"># rgb = gray2rgb(gray, cmap, [0, 255], False)  # rgb --&gt; double, [0., 255.]</span>
+<span class="c1"># rgb = gray2rgb(gray, cmap, [0, 255], True)  # rgb --&gt; uint8, [0, 255]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">gray</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">th</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">gray</span><span class="p">),</span> <span class="n">th</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">gray</span><span class="p">),</span> <span class="n">gray</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rgb</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">th</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">rgb</span><span class="p">),</span> <span class="n">th</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rgb</span><span class="p">),</span> <span class="n">rgb</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">parula</span> <span class="k">if</span> <span class="n">cmap</span> <span class="o">==</span> <span class="s1">&#39;parula&#39;</span> <span class="k">else</span> <span class="n">cmap</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">rgb</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="torchlib.utils.colors.rgb2gray">
 <span class="sig-prename descclassname"><span class="pre">torchlib.utils.colors.</span></span><span class="sig-name descname"><span class="pre">rgb2gray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rgb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chnllast'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.colors.rgb2gray" title="Permalink to this definition">¶</a></dt>
@@ -245,6 +299,29 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.utils.convert.str2sec">
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.convert.</span></span><span class="sig-name descname"><span class="pre">str2sec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">':'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.convert.str2sec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts second in a time string.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">hh:mm:ss</span></code>  –&gt;  <code class="docutils literal notranslate"><span class="pre">hh*3600</span> <span class="pre">+</span> <span class="pre">mm*60</span> <span class="pre">+</span> <span class="pre">ss</span></code></p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The string or string list/tuple.</p></li>
+<li><p><strong>sep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The separator between hour, minute and seconds, default is <code class="docutils literal notranslate"><span class="pre">':'</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – The seconds.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -315,6 +392,28 @@ The default is None, which means any extension.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="torchlib.utils.file.readcsv">
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.file.</span></span><span class="sig-name descname"><span class="pre">readcsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vfn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.file.readcsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a csv file and extract numbers in it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The path string of the file.</p></li>
+<li><p><strong>sep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The separation character. Such as <code class="docutils literal notranslate"><span class="pre">','</span></code> or <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">'</span></code>. If None (default) or <code class="docutils literal notranslate"><span class="pre">''</span></code> (empty) return a list of all the lines.</p></li>
+<li><p><strong>vfn</strong> (<em>function</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The function for formating the numbers. <code class="docutils literal notranslate"><span class="pre">float</span></code> –&gt; convert to float number; <code class="docutils literal notranslate"><span class="pre">int</span></code> –&gt; convert to integer number…, The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>, which means won’t converted, string format.</p></li>
+<li><p><strong>nlines</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The number of lines for reading, the default is None, which means all the lines.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of numbers or strings.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="torchlib.utils.file.readnum">
 <span class="sig-prename descclassname"><span class="pre">torchlib.utils.file.</span></span><span class="sig-name descname"><span class="pre">readnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">filepath</span></em>, <em class="sig-param"><span class="pre">pmain='Train'</span></em>, <em class="sig-param"><span class="pre">psub='loss'</span></em>, <em class="sig-param"><span class="pre">vfn=&lt;class</span> <span class="pre">'float'&gt;</span></em>, <em class="sig-param"><span class="pre">nshots=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.file.readnum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a file and extract numbers in it.</p>
@@ -333,6 +432,32 @@ The default is None, which means any extension.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.utils.file.readsec">
+<span class="sig-prename descclassname"><span class="pre">torchlib.utils.file.</span></span><span class="sig-name descname"><span class="pre">readsec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">filepath</span></em>, <em class="sig-param"><span class="pre">pmain='Train'</span></em>, <em class="sig-param"><span class="pre">psub='time:</span> <span class="pre">'</span></em>, <em class="sig-param"><span class="pre">vfn=&lt;class</span> <span class="pre">'int'&gt;</span></em>, <em class="sig-param"><span class="pre">nshots=None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.utils.file.readsec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a file and extract seconds in it.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">hh:mm:ss</span></code>  –&gt;  <code class="docutils literal notranslate"><span class="pre">hh*3600</span> <span class="pre">+</span> <span class="pre">mm*60</span> <span class="pre">+</span> <span class="pre">ss</span></code></p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The path string of the file.</p></li>
+<li><p><strong>pmain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The matching pattern string, such as ‘—&gt;Train’.</p></li>
+<li><p><strong>psub</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The sub-matching pattern string, such as ‘loss’.</p></li>
+<li><p><strong>vfn</strong> (<em>function</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The function for formating the numbers. <code class="docutils literal notranslate"><span class="pre">float</span></code> –&gt; convert to float number; <code class="docutils literal notranslate"><span class="pre">int</span></code> –&gt; convert to integer number.</p></li>
+<li><p><strong>nshots</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The number of shots of sub-matching pattern.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of seconds.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -389,7 +514,7 @@ The default is None, which means any extension.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>img</strong> (<em>ndarray</em>) – Input image.</p></li>
+<li><p><strong>img</strong> (<em>tensor</em>) – Input image.</p></li>
 <li><p><strong>oshape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><em>optional</em>) – output shape (the default is None, which is the same as the input)</p></li>
 <li><p><strong>odtype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – output data type, <code class="docutils literal notranslate"><span class="pre">'uint8',</span> <span class="pre">'uint16',</span> <span class="pre">'int8',</span> <span class="pre">...</span></code> (the default is None, float)</p></li>
 <li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – The order of the spline interpolation, default is 1. The order has to
@@ -411,7 +536,7 @@ image is converted according to the conventions of <cite>img_as_float</cite>.</p
 <dd class="field-even"><p><strong>resized</strong> – Resized version of the input.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>

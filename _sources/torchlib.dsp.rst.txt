@@ -28,6 +28,14 @@ torchlib.dsp.ffts module
    :undoc-members:
    :show-inheritance:
 
+torchlib.dsp.ffts1 module
+-------------------------
+
+.. automodule:: torchlib.dsp.ffts1
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 torchlib.dsp.function\_base module
 ----------------------------------
 

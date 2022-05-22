@@ -94,6 +94,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getstarted.html">Get Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">torchlib</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="torchlib.html">torchlib package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="torchlib.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">torchlib.base package</a></li>
@@ -110,6 +111,8 @@
 <li class="toctree-l4"><a class="reference internal" href="torchlib.utils.html">torchlib.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="torchlib.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="torchlib.html#module-torchlib.version">torchlib.version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="torchlib.html#module-torchlib">Module contents</a></li>
 </ul>
 </li>
@@ -374,6 +377,53 @@ All tensors must either have the same shape (except in the concatenating dimensi
 <section id="module-torchlib.base.mathops">
 <span id="torchlib-base-mathops-module"></span><h2>torchlib.base.mathops module<a class="headerlink" href="#module-torchlib.base.mathops" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="torchlib.base.mathops.abs">
+<span class="sig-prename descclassname"><span class="pre">torchlib.base.mathops.</span></span><span class="sig-name descname"><span class="pre">abs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.mathops.abs" title="Permalink to this definition">¶</a></dt>
+<dd><p>obtain amplitude of a tensor</p>
+<p>Both complex and real representation are supported.</p>
+<div class="math">
+\[{\rm abs}({\bf X}) = |x| = \sqrt{u^2 + v^2}, x\in {\bf X}
+
+\]</div>
+<p>where, <span class="math">\(u, v\)</span> are the real and imaginary part of x, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>tensor</em>) – input</p></li>
+<li><p><strong>cdim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>keepdims</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – keep dimensions?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the inputs’s amplitude.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---abs&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">cdim</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># ---output</span>
+<span class="o">---</span><span class="nb">abs</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.7968</span><span class="p">,</span> <span class="mf">0.5504</span><span class="p">,</span> <span class="mf">0.9957</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.7868</span><span class="p">,</span> <span class="mf">0.7011</span><span class="p">,</span> <span class="mf">0.9326</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.8113</span><span class="p">,</span> <span class="mf">1.0793</span><span class="p">,</span> <span class="mf">0.2535</span><span class="p">]])</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.7968</span><span class="p">,</span> <span class="mf">0.5504</span><span class="p">,</span> <span class="mf">0.9957</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.7868</span><span class="p">,</span> <span class="mf">0.7011</span><span class="p">,</span> <span class="mf">0.9326</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.8113</span><span class="p">,</span> <span class="mf">1.0793</span><span class="p">,</span> <span class="mf">0.2535</span><span class="p">]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="torchlib.base.mathops.c2r">
 <span class="sig-prename descclassname"><span class="pre">torchlib.base.mathops.</span></span><span class="sig-name descname"><span class="pre">c2r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.mathops.c2r" title="Permalink to this definition">¶</a></dt>
 <dd><p>complex representaion to real representaion</p>
@@ -441,8 +491,9 @@ All tensors must either have the same shape (except in the concatenating dimensi
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>tensor</em>) – input</p></li>
-<li><p><strong>cdim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is represented in real format, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code>
-should be specified (None for -1).</p></li>
+<li><p><strong>cdim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -455,23 +506,23 @@ should be specified (None for -1).</p></li>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">conj</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">cdim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
 
-<span class="n">Y</span> <span class="o">=</span> <span class="n">conj</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---conj&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conj</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">cdim</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conj</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
 <span class="c1"># ---output</span>
+<span class="o">---</span><span class="n">conj</span>
 <span class="n">tensor</span><span class="p">([[[</span> <span class="mf">0.4869</span><span class="p">,</span>  <span class="mf">0.1052</span><span class="p">,</span>  <span class="mf">0.5883</span><span class="p">],</span>
         <span class="p">[</span> <span class="mf">0.1161</span><span class="p">,</span>  <span class="mf">0.4949</span><span class="p">,</span>  <span class="mf">0.2824</span><span class="p">],</span>
         <span class="p">[</span> <span class="mf">0.5899</span><span class="p">,</span>  <span class="mf">0.8105</span><span class="p">,</span>  <span class="mf">0.2512</span><span class="p">]],</span>
 
         <span class="p">[[</span><span class="o">-</span><span class="mf">0.6307</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5403</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8033</span><span class="p">],</span>
         <span class="p">[</span><span class="o">-</span><span class="mf">0.7781</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4966</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8888</span><span class="p">],</span>
-        <span class="p">[</span><span class="o">-</span><span class="mf">0.5570</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7127</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0339</span><span class="p">]]])</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="n">Y</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.5570</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7127</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0339</span><span class="p">]]])</span>
 <span class="n">tensor</span><span class="p">([[</span><span class="mf">0.4869</span><span class="o">-</span><span class="mf">0.6307</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.1052</span><span class="o">-</span><span class="mf">0.5403</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.5883</span><span class="o">-</span><span class="mf">0.8033</span><span class="n">j</span><span class="p">],</span>
         <span class="p">[</span><span class="mf">0.1161</span><span class="o">-</span><span class="mf">0.7781</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.4949</span><span class="o">-</span><span class="mf">0.4966</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.2824</span><span class="o">-</span><span class="mf">0.8888</span><span class="n">j</span><span class="p">],</span>
-        <span class="p">[</span><span class="mf">0.5899</span><span class="o">-</span><span class="mf">0.5570</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.8105</span><span class="o">-</span><span class="mf">0.7127</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.2512</span><span class="o">-</span><span class="mf">0.0339</span><span class="n">j</span><span class="p">]])</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="n">Y</span>
+        <span class="p">[</span><span class="mf">0.5899</span><span class="o">-</span><span class="mf">0.5570</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.8105</span><span class="o">-</span><span class="mf">0.7127</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.2512</span><span class="o">-</span><span class="mf">0.0339</span><span class="n">j</span><span class="p">]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -515,6 +566,48 @@ should be specified (None for -1).</p></li>
 <span class="c1"># output</span>
 <span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1921e-07</span><span class="p">)</span>
 <span class="n">tensor</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1921e-07</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.base.mathops.imag">
+<span class="sig-prename descclassname"><span class="pre">torchlib.base.mathops.</span></span><span class="sig-name descname"><span class="pre">imag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.mathops.imag" title="Permalink to this definition">¶</a></dt>
+<dd><p>obtain imaginary part of a tensor</p>
+<p>Both complex and real representation are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>tensor</em>) – input</p></li>
+<li><p><strong>cdim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>keepdims</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – keep dimensions?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the inputs’s imaginary part tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---imag&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">cdim</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># ---output</span>
+<span class="o">---</span><span class="n">imag</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.6307</span><span class="p">,</span> <span class="mf">0.5403</span><span class="p">,</span> <span class="mf">0.8033</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.7781</span><span class="p">,</span> <span class="mf">0.4966</span><span class="p">,</span> <span class="mf">0.8888</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.5570</span><span class="p">,</span> <span class="mf">0.7127</span><span class="p">,</span> <span class="mf">0.0339</span><span class="p">]])</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.6307</span><span class="p">,</span> <span class="mf">0.5403</span><span class="p">,</span> <span class="mf">0.8033</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.7781</span><span class="p">,</span> <span class="mf">0.4966</span><span class="p">,</span> <span class="mf">0.8888</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.5570</span><span class="p">,</span> <span class="mf">0.7127</span><span class="p">,</span> <span class="mf">0.0339</span><span class="p">]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -591,6 +684,53 @@ should be specified (None for -1).</p></li>
 <span class="o">-</span><span class="mi">2</span> <span class="o">-</span><span class="mi">1</span>
 <span class="mi">2</span> <span class="mi">3</span>
 <span class="mi">1</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.base.mathops.pow">
+<span class="sig-prename descclassname"><span class="pre">torchlib.base.mathops.</span></span><span class="sig-name descname"><span class="pre">pow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.mathops.pow" title="Permalink to this definition">¶</a></dt>
+<dd><p>obtain power of a tensor</p>
+<p>Both complex and real representation are supported.</p>
+<div class="math">
+\[{\rm pow}({\bf X}) = |x|^2 = u^2 + v^2, x\in {\bf X}
+
+\]</div>
+<p>where, <span class="math">\(u, v\)</span> are the real and imaginary part of x, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>tensor</em>) – input</p></li>
+<li><p><strong>cdim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>keepdims</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – keep dimensions?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the inputs’s power.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---pow&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">cdim</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># ---output</span>
+<span class="o">---</span><span class="nb">pow</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.6349</span><span class="p">,</span> <span class="mf">0.3030</span><span class="p">,</span> <span class="mf">0.9914</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.6190</span><span class="p">,</span> <span class="mf">0.4915</span><span class="p">,</span> <span class="mf">0.8697</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.6583</span><span class="p">,</span> <span class="mf">1.1649</span><span class="p">,</span> <span class="mf">0.0643</span><span class="p">]])</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.6349</span><span class="p">,</span> <span class="mf">0.3030</span><span class="p">,</span> <span class="mf">0.9914</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.6190</span><span class="p">,</span> <span class="mf">0.4915</span><span class="p">,</span> <span class="mf">0.8697</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.6583</span><span class="p">,</span> <span class="mf">1.1649</span><span class="p">,</span> <span class="mf">0.0643</span><span class="p">]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -684,6 +824,48 @@ should be specified (None for -1).</p></li>
 <span class="n">tensor</span><span class="p">([[</span><span class="mf">20.</span><span class="o">+</span><span class="mf">6.</span><span class="n">j</span><span class="p">,</span> <span class="mf">27.</span><span class="o">+</span><span class="mf">12.</span><span class="n">j</span><span class="p">,</span> <span class="mf">25.</span><span class="o">+</span><span class="mf">21.</span><span class="n">j</span><span class="p">],</span>
         <span class="p">[</span><span class="mf">21.</span><span class="o">+</span><span class="mf">19.</span><span class="n">j</span><span class="p">,</span> <span class="mf">29.</span><span class="o">+</span><span class="mf">24.</span><span class="n">j</span><span class="p">,</span> <span class="mf">25.</span><span class="o">+</span><span class="mf">10.</span><span class="n">j</span><span class="p">],</span>
         <span class="p">[</span><span class="mf">16.</span><span class="o">+</span><span class="mf">14.</span><span class="n">j</span><span class="p">,</span>  <span class="mf">6.</span><span class="o">+</span><span class="mf">9.</span><span class="n">j</span><span class="p">,</span>  <span class="mf">5.</span><span class="o">+</span><span class="mf">29.</span><span class="n">j</span><span class="p">]])</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="n">Yc</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.base.mathops.real">
+<span class="sig-prename descclassname"><span class="pre">torchlib.base.mathops.</span></span><span class="sig-name descname"><span class="pre">real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.mathops.real" title="Permalink to this definition">¶</a></dt>
+<dd><p>obtain real part of a tensor</p>
+<p>Both complex and real representation are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>tensor</em>) – input</p></li>
+<li><p><strong>cdim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is complex-valued, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is ignored. If <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> is real-valued and <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> is integer
+then <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as complex-valued, in this case, <code class="xref py py-attr docutils literal notranslate"><span class="pre">cdim</span></code> specifies the complex axis;
+otherwise (None), <code class="xref py py-attr docutils literal notranslate"><span class="pre">X</span></code> will be treated as real-valued</p></li>
+<li><p><strong>keepdims</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – keep dimensions?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the inputs’s real part tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">th</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">2020</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---real&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">cdim</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># ---output</span>
+<span class="o">---</span><span class="n">real</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.4869</span><span class="p">,</span> <span class="mf">0.1052</span><span class="p">,</span> <span class="mf">0.5883</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.1161</span><span class="p">,</span> <span class="mf">0.4949</span><span class="p">,</span> <span class="mf">0.2824</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.5899</span><span class="p">,</span> <span class="mf">0.8105</span><span class="p">,</span> <span class="mf">0.2512</span><span class="p">]])</span>
+<span class="n">tensor</span><span class="p">([[</span><span class="mf">0.4869</span><span class="p">,</span> <span class="mf">0.1052</span><span class="p">,</span> <span class="mf">0.5883</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.1161</span><span class="p">,</span> <span class="mf">0.4949</span><span class="p">,</span> <span class="mf">0.2824</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">0.5899</span><span class="p">,</span> <span class="mf">0.8105</span><span class="p">,</span> <span class="mf">0.2512</span><span class="p">]])</span>
 </pre></div>
 </div>
 </dd></dl>
