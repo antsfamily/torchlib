@@ -90,7 +90,7 @@ def imresize(img, oshape=None, odtype=None, order=1, mode='constant', cval=0, cl
 
     Parameters
     ----------
-    img : ndarray
+    img : tensor
         Input image.
     oshape : tuple, optional
         output shape (the default is None, which is the same as the input)
@@ -117,7 +117,7 @@ def imresize(img, oshape=None, odtype=None, order=1, mode='constant', cval=0, cl
 
     Returns
     -------
-    resized : ndarray
+    resized : tensor
         Resized version of the input.
 
     Notes

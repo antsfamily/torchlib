@@ -33,7 +33,7 @@ def standardization(X, mean=None, std=None, axis=None, extra=False):
         if True, also return the mean and std (the default is False, which means just return the standardized data)
     """
 
-    if type(X) is np.ndarray:
+    if type(X) is not th.Tensor:
         X = th.from_numpy(X)
 
     if mean is None:
@@ -85,7 +85,7 @@ def scale(X, st=[0, 1], sf=None, istrunc=True, extra=False):
         If :attr:`extra` is true, also be returned
     """
 
-    if type(X) is np.ndarray:
+    if type(X) is not th.Tensor:
         X = th.from_numpy(X)
 
     X = X.float()
@@ -129,13 +129,13 @@ def quantization(X, idrange=None, odrange=[0, 31], odtype='auto', extra=False):
 
     Parameters
     ----------
-    X : tensor_like
+    X : tensor
         The data to be quantized with shape :math:`N_a×N_r ∈ {\mathbb R}`, or :math:`N_a×N_r ∈ {\mathbb C}`.
     idrange : tuple, list, optional
         Specifies the range of data. Default [min(X), max(X)].
     odrange : tuple, list, optional
         Specifies the range of data after beening quantized. Default [0, 31].
-    odtype : str or None, optional
+    odtype : str, None, optional
         output data type, supportted are ``'auto'`` (auto infer, default), or torch tensor's dtype string.
         If the type of :attr:`odtype` is not string(such as None),
         the type of output data is the same with input.
@@ -150,7 +150,7 @@ def quantization(X, idrange=None, odrange=[0, 31], odtype='auto', extra=False):
         If :attr:`extra` is true, also be returned
     """
 
-    if type(X) is np.ndarray:
+    if type(X) is not th.Tensor:
         X = th.from_numpy(X)
 
     if th.is_complex(X):
@@ -267,7 +267,7 @@ def rt2ct(y, axis=0):
     Y = th.fft.fft(y, axis=axis)
     X = Y[sl(d, axis, range(0, int(n / 2)))]
     X[sl(d, axis, [[0]])].imag = Y[sl(d, axis, [[int(n / 2)]])].real
-
+    del y, Y
     x = th.fft.ifft(X, axis=axis)
     return x
 

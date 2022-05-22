@@ -178,6 +178,49 @@ def readnum(filepath, pmain='Train', psub='loss', vfn=float, nshots=None):
     return v
 
 
+def readcsv(filepath, sep=None, vfn=None, nlines=None):
+    """Read a csv file and extract numbers in it.
+
+    Parameters
+    ----------
+    filepath : str
+        The path string of the file.
+    sep : str, optional
+        The separation character. Such as ``','`` or ``' '``. If None (default) or ``''`` (empty) return a list of all the lines.
+    vfn : function or None, optional
+        The function for formating the numbers. ``float`` --> convert to float number; ``int`` --> convert to integer number..., The default is ``None``, which means won't converted, string format.
+    nlines : None, optional
+        The number of lines for reading, the default is None, which means all the lines.
+
+    Returns
+    -------
+    list
+        The list of numbers or strings.
+    """
+    if nlines is None:
+        nlines = float('Inf')
+    numbers = []
+    cnt = 1
+    with open(filepath, 'r') as f:
+        while True:
+            datastr = f.readline().strip()
+            if not datastr:
+                break
+            if datastr != '':
+                if (sep is not None) and sep != '':
+                    datalist = datastr.split(sep)
+                    if vfn is None:
+                        numbers.append(datalist)
+                    else:
+                        numbers.append([vfn(v) for v in datalist])
+                else:
+                    numbers.append(datastr)
+                cnt += 1
+            if cnt > nlines:
+                break
+    return numbers
+
+
 def readsec(filepath, pmain='Train', psub='time: ', vfn=int, nshots=None):
     """Read a file and extract seconds in it.
 

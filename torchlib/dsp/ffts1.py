@@ -23,7 +23,7 @@ def matnoise(mat, noise='awgn', snr=30, peak='maxv'):
     Keyword Arguments
     --------------------
     noise : str
-        type of noise (default: ``'awgn'``)
+        type of noise (default: ``'wgn'``)
     snr : float
         Signal-to-noise ratio (default: 30)
     peak : None or float

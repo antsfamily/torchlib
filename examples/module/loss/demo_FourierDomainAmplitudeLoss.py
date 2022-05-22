@@ -7,8 +7,6 @@
 
 import torch as th
 import torchlib as tl
-import matplotlib
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 device = 'cpu'

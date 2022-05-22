@@ -6,10 +6,8 @@
 # @Version : $1.0$
 #
 
-import math
 import torch as th
 import torchlib as tl
-import matplotlib.pyplot as plt
 
 tl.setseed(2020, 'torch')
 x = th.randint(1000, (20, 3, 4))

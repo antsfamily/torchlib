@@ -37,9 +37,11 @@ from .misc.noising import matnoise, imnoise, awgn, wgn
 from .misc.transform import standardization, scale, quantization, db20, ct2rt, rt2ct
 from .misc.mapping_operation import mapping
 from .misc.sampling import slidegrid, dnsampling, sample_tensor, shuffle_tensor, split_tensor, tensor2patch, patch2tensor, read_samples
+from .misc.draw_shapes import draw_rectangle, draw_eclipse
 
 from .linalg.orthogonalization import orth
 
+from .layerfunction.cplxfunc import csign, csoftshrink, softshrink
 from .layerfunction.complex_functions import complex_relu, complex_leaky_relu, complex_max_pool2d, complex_dropout, complex_dropout2d, complex_upsample
 
 from .module.dsp.convolution import FFTConv1, Conv1, MaxPool1, Conv2, MaxPool2
@@ -65,11 +67,11 @@ from .module.loss.variation import TotalVariation
 from .module.loss.fourier_domain import FourierDomainLoss, FourierDomainAmplitudeLoss, FourierDomainPhaseLoss, FourierDomainNormLoss
 from .module.loss.error import MSELoss, SSELoss, MAELoss, SAELoss
 from .module.loss.sparse_metric import LogSparseLoss, FourierDomainLogSparseLoss
-from .module.loss.regularization import LogSparseLoss
 
 from .module.loss.semantic import EdgeLoss
 # from .module.loss.segmentation import SoftDiceLoss, FocalLoss, BinaryCrossEntropyLoss, ContourLoss, EdgeAwareLoss
 
+from .module.layers.balanceconv2d import BalaConv2d
 from .module.layers.cnnsize import ConvSize1d, ConvTransposeSize1d, PoolSize1d, UnPoolSize1d, ConvSize2d, ConvTransposeSize2d, PoolSize2d, UnPoolSize2d
 from .module.layers.edge import EdgeDetector, EdgeFeatureExtractor
 from .module.layers.pool import MeanSquarePool2d, PnormPool2d

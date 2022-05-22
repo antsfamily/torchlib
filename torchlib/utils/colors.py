@@ -181,7 +181,6 @@ if __name__ == '__main__':
 
     import torchlib as tl
     import matplotlib.pyplot as plt
-    import numpy as np
 
     cmap = 'jet'
     # cmap = 'hsv'

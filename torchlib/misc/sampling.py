@@ -28,12 +28,12 @@ def slidegrid(start, stop, step, shake=0, n=None):
         n (int or None): the number of samples (default None, int((stop0 - start0) / step0) * int((stop1 - start1) / step1)...).
 
     Returns:
-        see :func:`randperm`, :func:`randgrid`.
+        for multi-dimension, return a 2-d tensor, for 1-dimension, return a 1d-tensor.
 
     Raises:
         TypeError: The number of samples should be an integer or None.
 
-
+    see :func:`randperm`, :func:`randgrid`.
 
     """
 
@@ -450,7 +450,7 @@ def patch2tensor(p, size=(256, 256), axis=(1, 2), mode='nfirst'):
 
 
     Args:
-        p (type): A tensor of patches.
+        p (Tensor): A tensor of patches.
         size (tuple, optional): Merged tensor size in the dimension (the default is (256, 256)).
         axis (tuple, optional): Merged axis of patch (the default is (1, 2))
         mode (str, optional): Patch mode ``'nfirst'`` or ``'nlast'`` (the default is 'nfirst',

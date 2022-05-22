@@ -9,8 +9,6 @@
 import math
 import torch as th
 import torchlib as tl
-import matplotlib
-matplotlib.use('Tkagg')
 import matplotlib.pyplot as plt
 
 filename = '../../data/images/Lotus512.png'

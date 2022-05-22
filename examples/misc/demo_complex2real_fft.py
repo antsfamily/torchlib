@@ -7,8 +7,6 @@
 #
 
 import torchlib as tl
-import matplotlib
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 filename = '../../data/images/Lotus512.png'

@@ -1,0 +1,12 @@
+include *.in
+include *.ini
+include *.rst
+include *.txt
+
+include LICENSE
+
+
+global-exclude __pycache__ *.py[cod]
+
+global-exclude ./torchlib/misc/sampling.py
+exclude ./torchlib/misc/sampling.py

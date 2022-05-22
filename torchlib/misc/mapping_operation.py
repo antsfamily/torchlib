@@ -39,6 +39,10 @@ def mapping(X, drange=(0., 255.), mode='amplitude', method='2Sigma', odtype='aut
         converted image data
 
     """
+
+    if type(X) is not th.Tensor:
+        X = th.tensor(X)
+
     if method is None:
         return X
 
