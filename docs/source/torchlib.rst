@@ -20,6 +20,17 @@ Subpackages
    torchlib.summary
    torchlib.utils
 
+Submodules
+----------
+
+torchlib.version module
+-----------------------
+
+.. automodule:: torchlib.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

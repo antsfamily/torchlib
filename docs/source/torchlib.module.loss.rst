@@ -52,14 +52,6 @@ torchlib.module.loss.perceptual module
    :undoc-members:
    :show-inheritance:
 
-torchlib.module.loss.regularization module
-------------------------------------------
-
-.. automodule:: torchlib.module.loss.regularization
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 torchlib.module.loss.retrieval module
 -------------------------------------
 

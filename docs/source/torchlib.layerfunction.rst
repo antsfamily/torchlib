@@ -12,6 +12,14 @@ torchlib.layerfunction.complex\_functions module
    :undoc-members:
    :show-inheritance:
 
+torchlib.layerfunction.cplxfunc module
+--------------------------------------
+
+.. automodule:: torchlib.layerfunction.cplxfunc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
