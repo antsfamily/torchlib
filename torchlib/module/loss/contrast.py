@@ -9,8 +9,8 @@ import torch as th
 import torchlib as tl
 
 
-class ContrastReciprocalLoss(th.nn.Module):
-    r"""ContrastReciprocalLoss
+class ReciprocalContrastLoss(th.nn.Module):
+    r"""ReciprocalContrastLoss
 
     way1 is defined as follows, for contrast, see [1]:
 
@@ -28,22 +28,22 @@ class ContrastReciprocalLoss(th.nn.Module):
 
     Parameters
     ----------
-    X : numpy ndarray
+    X : torch tensor
         The image array.
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    dim : tuple, None, optional
+        The dimension axis (:attr:`cdim` is not included) for computing contrast. The default is ``None``, which means all.
     mode : str, optional
         ``'way1'`` or ``'way2'``
-    axis : tuple, None, optional
-        the dimensions for compute entropy. by default None (if input's dimension > 2, then all but the first, else all).
-    caxis : int or None
-        If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
-        then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
-        otherwise (None), :attr:`X` will be treated as real-valued
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
     Returns
     -------
-    scalar
+    C : scalar or tensor
         The contrast value of input.
 
     Examples
@@ -52,63 +52,64 @@ class ContrastReciprocalLoss(th.nn.Module):
     ::
 
         th.manual_seed(2020)
-        X = th.randn(1, 3, 4, 2)
-        ctst_func = ContrastReciprocalLoss(mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        X = th.randn(5, 2, 3, 4)
 
-        X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-        ctst_func = ContrastReciprocalLoss(mode='way1', axis=(1, 2), caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # real
+        C1 = ReciprocalContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = ReciprocalContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = ReciprocalContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = ContrastReciprocalLoss(mode='way1', axis=None, caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # complex in real format
+        C1 = ReciprocalContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = ReciprocalContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = ReciprocalContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = ContrastReciprocalLoss(mode='way1', axis=(2), caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # complex in complex format
+        X = X[:, 0, ...] + 1j * X[:, 1, ...]
+        C1 = ReciprocalContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = ReciprocalContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = ReciprocalContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = ContrastReciprocalLoss(mode='way1', axis=(2), caxis=None, reduction=None)
-        V = ctst_func(X)
-        print(V)
-
+        tensor([[0.7929, 0.9021],
+                [0.6253, 0.8248],
+                [1.2193, 1.0114],
+                [0.6956, 0.9909],
+                [0.8774, 0.8432]]) tensor(8.7830) tensor(0.8783)
+        tensor([1.5821, 0.8469, 1.6997, 0.8813, 1.6563]) tensor(6.6663) tensor(1.3333)
+        tensor([1.5821, 0.8469, 1.6997, 0.8813, 1.6563]) tensor(6.6663) tensor(1.3333)
     """
 
-    def __init__(self, mode='way1', axis=None, caxis=None, reduction='mean'):
-        super(ContrastReciprocalLoss, self).__init__()
+    def __init__(self, cdim=None, dim=None, mode='way1', reduction='mean'):
+        super(ReciprocalContrastLoss, self).__init__()
         self.mode = mode
-        self.axis = axis
-        self.caxis = caxis
+        self.dim = dim
+        self.cdim = cdim
         self.reduction = reduction
 
     def forward(self, X):
 
-        if th.is_complex(X):
+        if th.is_complex(X):  # complex in complex
             X = (X * X.conj()).real
         else:
-            if type(self.caxis) is int:
-                if X.shape[self.caxis] != 2:
-                    raise ValueError('The complex input is represented in real-valued formation, but you specifies wrong axis!')
-                X = th.pow(X, 2).sum(axis=self.caxis, keepdims=True)
-            if self.caxis is None:
-                X = th.pow(X, 2)
-
-        if self.axis is None:
-            D = X.dim()
-            axis = tuple(range(1, D)) if D > 2 else tuple(range(0, D))
-        else:
-            axis = self.axis
+            if self.cdim is None:  # real
+                X = X**2
+            else:  # complex in real
+                X = th.sum(X**2, axis=self.cdim)
 
         if X.dtype is not th.float32 or th.double:
             X = X.to(th.float32)
 
+        axis = tuple(range(X.ndim)) if self.dim is None else self.dim
         if self.mode in ['way1', 'WAY1']:
             Xmean = X.mean(axis=axis, keepdims=True)
-            C = Xmean / ((X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() + EPS)
+            C = (Xmean + tl.EPS) / (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt()
+            C = th.sum(C, axis=axis, keepdims=False)
         if self.mode in ['way2', 'WAY2']:
-            C = (X.sqrt().mean(axis=axis, keepdims=True)).pow(2) / (X.mean(axis=axis, keepdims=True) + EPS)
+            C = ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + tl.EPS) / X.mean(axis=axis, keepdims=True)
+            C = th.sum(C, axis=axis, keepdims=False)
 
         if self.reduction == 'mean':
             C = th.mean(C)
@@ -118,15 +119,15 @@ class ContrastReciprocalLoss(th.nn.Module):
 
 
 class NegativeContrastLoss(th.nn.Module):
-    r"""NegativeContrastLoss
+    r"""Negative Contrast Loss
 
-    way1 is defined as follows, for contrast, see [1]:
+    way1 is defined as follows, see [1]:
 
     .. math::
        C = -\frac{\sqrt{{\rm E}\left(|I|^2 - {\rm E}(|I|^2)\right)^2}}{{\rm E}(|I|^2)}
 
 
-    way2 is defined as follows, for contrast, see [2]:
+    way2 is defined as follows, see [2]:
 
     .. math::
         C = -\frac{{\rm E}(|I|^2)}{\left({\rm E}(|I|)\right)^2}
@@ -136,77 +137,77 @@ class NegativeContrastLoss(th.nn.Module):
 
     Parameters
     ----------
-    X : numpy ndarray
-        The image array.
+    X : torch tensor
+        The image tensor.
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    dim : tuple, None, optional
+        The dimension axis (:attr:`cdim` is not included) for computing contrast. The default is ``None``, which means all.
     mode : str, optional
         ``'way1'`` or ``'way2'``
-    axis : tuple, None, optional
-        the dimensions for compute entropy. by default None (if input's dimension > 2, then all but the first, else all).
-    caxis : int or None
-        If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
-        then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
-        otherwise (None), :attr:`X` will be treated as real-valued
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
     Returns
     -------
-    scalar
+    C : scalar or tensor
         The contrast value of input.
-
+    
     Examples
     --------
 
     ::
 
         th.manual_seed(2020)
-        X = th.randn(1, 3, 4, 2)
-        ctst_func = NegativeContrastLoss(mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        X = th.randn(5, 2, 3, 4)
 
-        X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-        ctst_func = NegativeContrastLoss(mode='way1', axis=(1, 2), caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # real
+        C1 = NegativeContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = NegativeContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = NegativeContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = NegativeContrastLoss(mode='way1', axis=None, caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # complex in real format
+        C1 = NegativeContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = NegativeContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = NegativeContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = NegativeContrastLoss(mode='way1', axis=(2), caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # complex in complex format
+        X = X[:, 0, ...] + 1j * X[:, 1, ...]
+        C1 = NegativeContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = NegativeContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = NegativeContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = NegativeContrastLoss(mode='way1', axis=(2), caxis=None, reduction=None)
-        V = ctst_func(X)
-        print(V)
-    
+
         # output
-        tensor(-1.2694)
-        tensor(-1.2694)
-        tensor(-1.2694)
-        tensor(-0.7724)
-        tensor([[[-0.9093],
-                [-1.0752],
-                [-0.3326]]])
-
+        tensor([[-1.2612, -1.1085],
+                [-1.5992, -1.2124],
+                [-0.8201, -0.9887],
+                [-1.4376, -1.0091],
+                [-1.1397, -1.1860]]) tensor(-11.7626) tensor(-1.1763)
+        tensor([-0.6321, -1.1808, -0.5884, -1.1346, -0.6038]) tensor(-4.1396) tensor(-0.8279)
+        tensor([-0.6321, -1.1808, -0.5884, -1.1346, -0.6038]) tensor(-4.1396) tensor(-0.8279)
 
     """
 
-    def __init__(self, mode='way1', axis=None, caxis=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, mode='way1', reduction='mean'):
         super(NegativeContrastLoss, self).__init__()
         self.mode = mode
-        self.axis = axis
-        self.caxis = caxis
+        self.dim = dim
+        self.cdim = cdim
         self.reduction = reduction
 
     def forward(self, X):
-        return -tl.contrast(X, mode=self.mode, axis=self.axis, caxis=self.caxis, reduction=self.reduction)
+
+        return -tl.contrast(X, cdim=self.cdim, dim=self.dim, mode=self.mode, reduction=self.reduction)
 
 
 class ContrastLoss(th.nn.Module):
-    r"""Contrast Loss
+    r"""Contrast
 
     way1 is defined as follows, see [1]:
 
@@ -224,95 +225,99 @@ class ContrastLoss(th.nn.Module):
 
     Parameters
     ----------
-    X : numpy ndarray
-        The image array.
+    X : torch tensor
+        The image tensor.
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    dim : tuple, None, optional
+        The dimension axis (:attr:`cdim` is not included) for computing contrast. The default is ``None``, which means all.
     mode : str, optional
         ``'way1'`` or ``'way2'``
-    axis : tuple, None, optional
-        the dimensions for compute entropy. by default None (if input's dimension > 2, then all but the first, else all).
-    caxis : int or None
-        If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
-        then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
-        otherwise (None), :attr:`X` will be treated as real-valued
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
     Returns
     -------
-    scalar
+    C : scalar or tensor
         The contrast value of input.
-
+    
     Examples
     --------
 
     ::
 
         th.manual_seed(2020)
-        X = th.randn(1, 3, 4, 2)
-        ctst_func = ContrastLoss(mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        X = th.randn(5, 2, 3, 4)
 
-        X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-        ctst_func = ContrastLoss(mode='way1', axis=(1, 2), caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # real
+        C1 = ContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = ContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = ContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = ContrastLoss(mode='way1', axis=None, caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # complex in real format
+        C1 = ContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = ContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = ContrastLoss(cdim=1, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = ContrastLoss(mode='way1', axis=(2), caxis=None, reduction='mean')
-        V = ctst_func(X)
-        print(V)
+        # complex in complex format
+        X = X[:, 0, ...] + 1j * X[:, 1, ...]
+        C1 = ContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+        C2 = ContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+        C3 = ContrastLoss(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+        print(C1, C2, C3)
 
-        ctst_func = ContrastLoss(mode='way1', axis=(2), caxis=None, reduction=None)
-        V = ctst_func(X)
-        print(V)
-    
+
         # output
-        tensor(1.2694)
-        tensor(1.2694)
-        tensor(1.2694)
-        tensor(0.7724)
-        tensor([[[0.9093],
-                [1.0752],
-                [0.3326]]])
+        tensor([[1.2612, 1.1085],
+                [1.5992, 1.2124],
+                [0.8201, 0.9887],
+                [1.4376, 1.0091],
+                [1.1397, 1.1860]]) tensor(11.7626) tensor(1.1763)
+        tensor([0.6321, 1.1808, 0.5884, 1.1346, 0.6038]) tensor(4.1396) tensor(0.8279)
+        tensor([0.6321, 1.1808, 0.5884, 1.1346, 0.6038]) tensor(4.1396) tensor(0.8279)
+
     """
 
-    def __init__(self, mode='way1', axis=None, caxis=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, mode='way1', reduction='mean'):
         super(ContrastLoss, self).__init__()
         self.mode = mode
-        self.axis = axis
-        self.caxis = caxis
+        self.dim = dim
+        self.cdim = cdim
         self.reduction = reduction
 
     def forward(self, X):
 
-        return tl.contrast(X, mode=self.mode, axis=self.axis, caxis=self.caxis, reduction=self.reduction)
+        return tl.contrast(X, cdim=self.cdim, dim=self.dim, mode=self.mode, reduction=self.reduction)
 
 
 if __name__ == '__main__':
 
     th.manual_seed(2020)
-    X = th.randn(1, 3, 4, 2)
-    ctst_func = NegativeContrastLoss(mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
-    V = ctst_func(X)
-    print(V)
+    X = th.randn(5, 2, 3, 4)
 
-    X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-    ctst_func = NegativeContrastLoss(mode='way1', axis=(1, 2), caxis=None, reduction='mean')
-    V = ctst_func(X)
-    print(V)
+    LossFunc = ContrastLoss
+    LossFunc = NegativeContrastLoss
+    LossFunc = ReciprocalContrastLoss
 
-    ctst_func = NegativeContrastLoss(mode='way1', axis=None, caxis=None, reduction='mean')
-    V = ctst_func(X)
-    print(V)
+    # real
+    C1 = LossFunc(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+    C2 = LossFunc(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+    C3 = LossFunc(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+    print(C1, C2, C3)
 
-    ctst_func = NegativeContrastLoss(mode='way1', axis=(2), caxis=None, reduction='mean')
-    V = ctst_func(X)
-    print(V)
+    # complex in real format
+    C1 = LossFunc(cdim=1, dim=(-2, -1), mode='way1', reduction=None)(X)
+    C2 = LossFunc(cdim=1, dim=(-2, -1), mode='way1', reduction='sum')(X)
+    C3 = LossFunc(cdim=1, dim=(-2, -1), mode='way1', reduction='mean')(X)
+    print(C1, C2, C3)
 
-    ctst_func = NegativeContrastLoss(mode='way1', axis=(2), caxis=None, reduction=None)
-    V = ctst_func(X)
-    print(V)
+    # complex in complex format
+    X = X[:, 0, ...] + 1j * X[:, 1, ...]
+    C1 = LossFunc(cdim=None, dim=(-2, -1), mode='way1', reduction=None)(X)
+    C2 = LossFunc(cdim=None, dim=(-2, -1), mode='way1', reduction='sum')(X)
+    C3 = LossFunc(cdim=None, dim=(-2, -1), mode='way1', reduction='mean')(X)
+    print(C1, C2, C3)

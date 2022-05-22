@@ -26,9 +26,6 @@ def accuracy(X, Y, TH=None):
     if TH is not None:
         X = (X > TH).float()
 
-    X = (X > 0.5)
-    Y = (Y > 0.5)
-
     acc = th.mean((X == Y).float()).item()
 
     return acc

@@ -4,6 +4,14 @@ torchlib.utils package
 Submodules
 ----------
 
+torchlib.utils.colormaps module
+-------------------------------
+
+.. automodule:: torchlib.utils.colormaps
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 torchlib.utils.colors module
 ----------------------------
 

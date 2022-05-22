@@ -28,6 +28,14 @@ torchlib.evaluation.entropy module
    :undoc-members:
    :show-inheritance:
 
+torchlib.evaluation.error module
+--------------------------------
+
+.. automodule:: torchlib.evaluation.error
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 torchlib.evaluation.norm module
 -------------------------------
 

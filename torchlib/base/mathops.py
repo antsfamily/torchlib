@@ -351,8 +351,9 @@ def conj(X, cdim=None):
     X : tensor
         input
     cdim : int or None
-        If :attr:`X` is represented in real format, :attr:`cdim`
-        should be specified (None for -1).
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
 
     Returns
     -------
@@ -366,32 +367,265 @@ def conj(X, cdim=None):
 
         th.manual_seed(2020)
         X = th.rand((2, 3, 3))
-        Y = conj(X, cdim=0)
-        print(Y, Y.shape, 'Y')
 
-        Y = conj(X[0] + 1j * X[1])
-        print(Y, Y.shape, 'Y')
+        print('---conj')
+        print(conj(X, cdim=0))
+        print(conj(X[0] + 1j * X[1]))
 
         # ---output
+        ---conj
         tensor([[[ 0.4869,  0.1052,  0.5883],
                 [ 0.1161,  0.4949,  0.2824],
                 [ 0.5899,  0.8105,  0.2512]],
 
                 [[-0.6307, -0.5403, -0.8033],
                 [-0.7781, -0.4966, -0.8888],
-                [-0.5570, -0.7127, -0.0339]]]) torch.Size([2, 3, 3]) Y
+                [-0.5570, -0.7127, -0.0339]]])
         tensor([[0.4869-0.6307j, 0.1052-0.5403j, 0.5883-0.8033j],
                 [0.1161-0.7781j, 0.4949-0.4966j, 0.2824-0.8888j],
-                [0.5899-0.5570j, 0.8105-0.7127j, 0.2512-0.0339j]]) torch.Size([3, 3]) Y
+                [0.5899-0.5570j, 0.8105-0.7127j, 0.2512-0.0339j]])
 
     """
 
-    if th.is_complex(X):
+    if th.is_complex(X):  # complex in complex
         return th.conj(X)
     else:
-        cdim = -1 if cdim is None else cdim
-        d = X.dim()
-        return th.cat((X[tl.sl(d, axis=cdim, idx=[[0]])], -X[tl.sl(d, axis=cdim, idx=[[1]])]), dim=cdim)
+        if cdim is None:  # real
+            return X
+        else:  # complex in real
+            d = X.dim()
+            return th.cat((X[tl.sl(d, axis=cdim, idx=[[0]])], -X[tl.sl(d, axis=cdim, idx=[[1]])]), dim=cdim)
+
+
+def real(X, cdim=None, keepdim=False):
+    r"""obtain real part of a tensor
+
+    Both complex and real representation are supported.
+
+    Parameters
+    ----------
+    X : tensor
+        input
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    keepdims : bool, optional
+        keep dimensions?
+
+    Returns
+    -------
+    tensor
+         the inputs's real part tensor.
+
+    Examples
+    ---------
+
+    ::
+
+        th.manual_seed(2020)
+        X = th.rand((2, 3, 3))
+
+        print('---real')
+        print(real(X, cdim=0))
+        print(real(X[0] + 1j * X[1]))
+
+        # ---output
+        ---real
+        tensor([[0.4869, 0.1052, 0.5883],
+                [0.1161, 0.4949, 0.2824],
+                [0.5899, 0.8105, 0.2512]])
+        tensor([[0.4869, 0.1052, 0.5883],
+                [0.1161, 0.4949, 0.2824],
+                [0.5899, 0.8105, 0.2512]])
+    """
+
+    if th.is_complex(X):  # complex in complex
+        return X.real
+    else:
+        if cdim is None:  # real
+            return X
+        else:  # complex in real
+            d = X.ndim
+            idx = [[0]] if keepdim else [0]
+            return X[tl.sl(d, axis=cdim, idx=idx)]
+
+
+def imag(X, cdim=None, keepdim=False):
+    r"""obtain imaginary part of a tensor
+
+    Both complex and real representation are supported.
+
+    Parameters
+    ----------
+    X : tensor
+        input
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    keepdims : bool, optional
+        keep dimensions?
+
+    Returns
+    -------
+    tensor
+         the inputs's imaginary part tensor.
+
+    Examples
+    ---------
+
+    ::
+
+        th.manual_seed(2020)
+        X = th.rand((2, 3, 3))
+
+        print('---imag')
+        print(imag(X, cdim=0))
+        print(imag(X[0] + 1j * X[1]))
+
+        # ---output
+        ---imag
+        tensor([[0.6307, 0.5403, 0.8033],
+                [0.7781, 0.4966, 0.8888],
+                [0.5570, 0.7127, 0.0339]])
+        tensor([[0.6307, 0.5403, 0.8033],
+                [0.7781, 0.4966, 0.8888],
+                [0.5570, 0.7127, 0.0339]])
+
+    """
+
+    if th.is_complex(X):  # complex in complex
+        return X.imag
+    else:
+        if cdim is None:  # real
+            return th.zeros_like(X)
+        else:  # complex in real
+            d = X.ndim
+            idx = [[1]] if keepdim else [1]
+            return X[tl.sl(d, axis=cdim, idx=idx)]
+
+
+def abs(X, cdim=None, keepdim=False):
+    r"""obtain amplitude of a tensor
+
+    Both complex and real representation are supported.
+
+    .. math::
+       {\rm abs}({\bf X}) = |x| = \sqrt{u^2 + v^2}, x\in {\bf X}
+
+    where, :math:`u, v` are the real and imaginary part of x, respectively.
+
+    Parameters
+    ----------
+    X : tensor
+        input
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    keepdims : bool, optional
+        keep dimensions?
+
+    Returns
+    -------
+    tensor
+         the inputs's amplitude.
+
+    Examples
+    ---------
+
+    ::
+
+        th.manual_seed(2020)
+        X = th.rand((2, 3, 3))
+
+        print('---abs')
+        print(abs(X, cdim=0))
+        print(abs(X[0] + 1j * X[1]))
+
+        # ---output
+        ---abs
+        tensor([[0.7968, 0.5504, 0.9957],
+                [0.7868, 0.7011, 0.9326],
+                [0.8113, 1.0793, 0.2535]])
+        tensor([[0.7968, 0.5504, 0.9957],
+                [0.7868, 0.7011, 0.9326],
+                [0.8113, 1.0793, 0.2535]])
+    """
+
+    if th.is_complex(X):  # complex in complex
+        return X.abs()
+    else:
+        if cdim is None:  # real
+            return X.abs()
+        else:  # complex in real
+            d = X.ndim
+            idxreal = [[0]] if keepdim else [0]
+            idximag = [[1]] if keepdim else [1]
+
+            return (X[tl.sl(d, axis=cdim, idx=idxreal)]**2 + X[tl.sl(d, axis=cdim, idx=idximag)]**2).sqrt()
+
+
+def pow(X, cdim=None, keepdim=False):
+    r"""obtain power of a tensor
+
+    Both complex and real representation are supported.
+
+    .. math::
+       {\rm pow}({\bf X}) = |x|^2 = u^2 + v^2, x\in {\bf X}
+
+    where, :math:`u, v` are the real and imaginary part of x, respectively.
+
+    Parameters
+    ----------
+    X : tensor
+        input
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    keepdims : bool, optional
+        keep dimensions?
+
+    Returns
+    -------
+    tensor
+         the inputs's power.
+
+    Examples
+    ---------
+
+    ::
+
+        th.manual_seed(2020)
+        X = th.rand((2, 3, 3))
+
+        print('---pow')
+        print(pow(X, cdim=0))
+        print(pow(X[0] + 1j * X[1]))
+
+        # ---output
+        ---pow
+        tensor([[0.6349, 0.3030, 0.9914],
+                [0.6190, 0.4915, 0.8697],
+                [0.6583, 1.1649, 0.0643]])
+        tensor([[0.6349, 0.3030, 0.9914],
+                [0.6190, 0.4915, 0.8697],
+                [0.6583, 1.1649, 0.0643]])
+    """
+
+    if th.is_complex(X):  # complex in complex
+        return (X.conj() * X).real
+    else:
+        if cdim is None:  # real
+            return X**2
+        else:  # complex in real
+            d = X.ndim
+            idxreal = [[0]] if keepdim else [0]
+            idximag = [[1]] if keepdim else [1]
+
+            return X[tl.sl(d, axis=cdim, idx=idxreal)]**2 + X[tl.sl(d, axis=cdim, idx=idximag)]**2
 
 
 if __name__ == '__main__':
@@ -430,8 +664,23 @@ if __name__ == '__main__':
 
     th.manual_seed(2020)
     X = th.rand((2, 3, 3))
-    Y = conj(X, cdim=0)
-    print(Y, Y.shape, 'Y')
 
-    Y = conj(X[0] + 1j * X[1])
-    print(Y, Y.shape, 'Y')
+    print('---conj')
+    print(conj(X, cdim=0))
+    print(conj(X[0] + 1j * X[1]))
+
+    print('---real')
+    print(real(X, cdim=0))
+    print(real(X[0] + 1j * X[1]))
+
+    print('---imag')
+    print(imag(X, cdim=0))
+    print(imag(X[0] + 1j * X[1]))
+
+    print('---abs')
+    print(abs(X, cdim=0))
+    print(abs(X[0] + 1j * X[1]))
+
+    print('---pow')
+    print(pow(X, cdim=0))
+    print(pow(X[0] + 1j * X[1]))

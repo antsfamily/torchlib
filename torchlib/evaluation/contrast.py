@@ -9,7 +9,7 @@ import torch as th
 from torchlib.utils.const import EPS
 
 
-def contrast(X, mode='way1', axis=None, caxis=None, reduction='mean'):
+def contrast(X, cdim=None, dim=None, mode='way1', reduction='mean'):
     r"""Compute contrast of an complex image
 
     ``'way1'`` is defined as follows, see [1]:
@@ -28,22 +28,22 @@ def contrast(X, mode='way1', axis=None, caxis=None, reduction='mean'):
 
     Parameters
     ----------
-    X : numpy ndarray
+    X : torch tensor
         The image array.
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    dim : tuple, None, optional
+        The dimension axis (:attr:`cdim` is not included) for computing contrast. The default is ``None``, which means all.
     mode : str, optional
         ``'way1'`` or ``'way2'``
-    axis : tuple, None, optional
-        the dimensions for compute entropy. by default None (if input's dimension > 2, then all but the first, else all).
-    caxis : int or None
-        If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
-        then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
-        otherwise (None), :attr:`X` will be treated as real-valued
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
     Returns
     -------
-    scalar
+    C : scalar or tensor
         The contrast value of input.
     
     Examples
@@ -52,55 +52,57 @@ def contrast(X, mode='way1', axis=None, caxis=None, reduction='mean'):
     ::
 
         th.manual_seed(2020)
-        X = th.randn(1, 3, 4, 2)
-        V = contrast(X, mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
-        print(V)
+        X = th.randn(5, 2, 3, 4)
 
-        X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-        V = contrast(X, mode='way1', axis=(1, 2), caxis=None, reduction='mean')
-        print(V)
+        # real
+        C1 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction=None)
+        C2 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='sum')
+        C3 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='mean')
+        print(C1, C2, C3)
 
-        V = contrast(X, mode='way1', axis=None, caxis=None, reduction='mean')
-        print(V)
+        # complex in real format
+        C1 = contrast(X, cdim=1, dim=(-2, -1), mode='way1', reduction=None)
+        C2 = contrast(X, cdim=1, dim=(-2, -1), mode='way1', reduction='sum')
+        C3 = contrast(X, cdim=1, dim=(-2, -1), mode='way1', reduction='mean')
+        print(C1, C2, C3)
 
-        V = contrast(X, mode='way1', axis=(2), caxis=None, reduction='mean')
-        print(V)
+        # complex in complex format
+        X = X[:, 0, ...] + 1j * X[:, 1, ...]
+        C1 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction=None)
+        C2 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='sum')
+        C3 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='mean')
+        print(C1, C2, C3)
 
-        V = contrast(X, mode='way1', axis=(2), caxis=None, reduction=None)
-        print(V)
 
         # output
-        tensor(1.2694)
-        tensor(1.2694)
-        tensor(1.2694)
-        tensor(0.7724)
-        tensor([[[0.9093],
-                [1.0752],
-                [0.3326]]])
+        tensor([[1.2612, 1.1085],
+                [1.5992, 1.2124],
+                [0.8201, 0.9887],
+                [1.4376, 1.0091],
+                [1.1397, 1.1860]]) tensor(11.7626) tensor(1.1763)
+        tensor([0.6321, 1.1808, 0.5884, 1.1346, 0.6038]) tensor(4.1396) tensor(0.8279)
+        tensor([0.6321, 1.1808, 0.5884, 1.1346, 0.6038]) tensor(4.1396) tensor(0.8279)
     """
 
-    if th.is_complex(X):
+    if th.is_complex(X):  # complex in complex
         X = (X * X.conj()).real
     else:
-        if type(caxis) is int:
-            if X.shape[caxis] != 2:
-                raise ValueError('The complex input is represented in real-valued formation, but you specifies wrong axis!')
-            X = th.pow(X, 2).sum(axis=caxis, keepdims=True)
-        if caxis is None:
-            X = th.pow(X, 2)
-
-    if axis is None:
-        D = X.dim()
-        axis = tuple(range(1, D)) if D > 2 else tuple(range(0, D))
+        if cdim is None:  # real
+            X = X**2
+        else:  # complex in real
+            X = th.sum(X**2, axis=cdim)
 
     if X.dtype is not th.float32 or th.double:
         X = X.to(th.float32)
 
+    axis = tuple(range(X.ndim)) if dim is None else dim
     if mode in ['way1', 'WAY1']:
         Xmean = X.mean(axis=axis, keepdims=True)
         C = (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() / (Xmean + EPS)
+        C = th.sum(C, axis=axis, keepdims=False)
     if mode in ['way2', 'WAY2']:
         C = X.mean(axis=axis, keepdims=True) / ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + EPS)
+        C = th.sum(C, axis=axis, keepdims=False)
 
     if reduction == 'mean':
         C = th.mean(C)
@@ -112,19 +114,23 @@ def contrast(X, mode='way1', axis=None, caxis=None, reduction='mean'):
 if __name__ == '__main__':
 
     th.manual_seed(2020)
-    X = th.randn(1, 3, 4, 2)
-    V = contrast(X, mode='way1', axis=(1, 2), caxis=-1, reduction='mean')
-    print(V)
+    X = th.randn(5, 2, 3, 4)
 
-    X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-    V = contrast(X, mode='way1', axis=(1, 2), caxis=None, reduction='mean')
-    print(V)
+    # real
+    C1 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction=None)
+    C2 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='sum')
+    C3 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='mean')
+    print(C1, C2, C3)
 
-    V = contrast(X, mode='way1', axis=None, caxis=None, reduction='mean')
-    print(V)
+    # complex in real format
+    C1 = contrast(X, cdim=1, dim=(-2, -1), mode='way1', reduction=None)
+    C2 = contrast(X, cdim=1, dim=(-2, -1), mode='way1', reduction='sum')
+    C3 = contrast(X, cdim=1, dim=(-2, -1), mode='way1', reduction='mean')
+    print(C1, C2, C3)
 
-    V = contrast(X, mode='way1', axis=(2), caxis=None, reduction='mean')
-    print(V)
-
-    V = contrast(X, mode='way1', axis=(2), caxis=None, reduction=None)
-    print(V)
+    # complex in complex format
+    X = X[:, 0, ...] + 1j * X[:, 1, ...]
+    C1 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction=None)
+    C2 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='sum')
+    C3 = contrast(X, cdim=None, dim=(-2, -1), mode='way1', reduction='mean')
+    print(C1, C2, C3)

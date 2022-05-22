@@ -48,7 +48,7 @@ def str2num(s, tfunc=None):
     list
         The number list.
     """
-    numstr = re.findall(r'-?\d+\.?\d*e*E?-?\d*', s)
+    numstr = re.findall(r'-?\d+\.?\d*e*E?[-+]?\d*', s)
     if tfunc is None:
         return numstr
     else:
@@ -64,6 +64,35 @@ def str2num(s, tfunc=None):
             return [tfunc(i) for i in numstr]
 
 
+def str2sec(x, sep=':'):
+    """Extracts second in a time string.
+        
+        ``hh:mm:ss``  -->  ``hh*3600 + mm*60 + ss``
+
+    Parameters
+    ----------
+    s : str
+        The string or string list/tuple.
+    sep : str
+        The separator between hour, minute and seconds, default is ``':'``.
+
+    Returns
+    -------
+    y : int
+        The seconds.
+    """
+    if type(x) is str:
+        h, m, s = x.strip().split(sep)
+        return int(h) * 3600 + int(m) * 60 + int(s)
+    
+    if (type(x) is list) or (type(x) is tuple):
+        y = []
+        for xi in x:
+            h, m, s = xi.strip().split(sep)
+            y.append(int(h) * 3600 + int(m) * 60 + int(s))
+        return y
+
+
 if __name__ == '__main__':
 
     s = '[0, [[[[1], 2.], 33], 4], [5, [6, 2.E-3]], 7, [8]], 1e-3'
@@ -76,3 +105,8 @@ if __name__ == '__main__':
 
     print(2**(str2num('int8', int)[0]))
     print(str2num('int', int) == [])
+
+    print(str2sec('1:00:0'))
+    print(str2sec('1:10:0'))
+    print(str2sec('1:10:6'))
+    print(str2sec('1:10:30'))

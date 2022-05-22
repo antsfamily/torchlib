@@ -9,7 +9,7 @@ import torch as th
 from torchlib.utils.const import EPS
 
 
-def entropy(X, mode='shannon', axis=None, caxis=None, reduction='mean'):
+def entropy(X, cdim=None, dim=None, mode='shannon', reduction='mean'):
     r"""compute the entropy of the inputs
 
     .. math::
@@ -21,20 +21,20 @@ def entropy(X, mode='shannon', axis=None, caxis=None, reduction='mean'):
     ----------
     X : tensor
         The complex or real inputs, for complex inputs, both complex and real representations are surpported.
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    dim : tuple, None, optional
+        The dimension axis (:attr:`cdim` is not included) for computing entropy. The default is ``None``, which means all. 
     mode : str, optional
         The entropy mode: ``'shannon'`` or ``'natural'`` (the default is 'shannon')
-    axis : tuple, None, optional
-        the dimensions for compute entropy. by default None (if input's dimension > 2, then all but the first, else all).
-    caxis : int or None
-        If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
-        then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
-        otherwise (None), :attr:`X` will be treated as real-valued
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
     Returns
     -------
-    S : tensor
+    S : scalar or tensor
         The entropy of the inputs.
     
     Examples
@@ -43,31 +43,36 @@ def entropy(X, mode='shannon', axis=None, caxis=None, reduction='mean'):
     ::
 
         th.manual_seed(2020)
-        X = th.randn(1, 3, 4, 2)
-        V = entropy(X, mode='shannon', axis=(1, 2), caxis=-1, reduction='mean')
-        print(V)
+        X = th.randn(5, 2, 3, 4)
 
-        X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-        V = entropy(X, mode='shannon', axis=(1, 2), caxis=None, reduction='mean')
-        print(V)
+        # real
+        S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
+        S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
+        S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+        print(S1, S2, S3)
 
-        V = entropy(X, mode='shannon', axis=None, caxis=None, reduction='mean')
-        print(V)
+        # complex in real format
+        S1 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction=None)
+        S2 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='sum')
+        S3 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='mean')
+        print(S1, S2, S3)
 
-        V = entropy(X, mode='shannon', axis=(2), caxis=None, reduction='mean')
-        print(V)
-
-        V = entropy(X, mode='shannon', axis=(2), caxis=None, reduction=None)
-        print(V)
+        # complex in complex format
+        X = X[:, 0, ...] + 1j * X[:, 1, ...]
+        S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
+        S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
+        S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+        print(S1, S2, S3)
 
         # output
-        tensor(2.8302)
-        tensor(2.8302)
-        tensor(2.8302)
-        tensor(1.5349)
-        tensor([[[1.3829],
-                [1.3055],
-                [1.9163]]])
+        tensor([[2.5482, 2.7150],
+                [2.0556, 2.6142],
+                [2.9837, 2.9511],
+                [2.4296, 2.7979],
+                [2.7287, 2.5560]]) tensor(26.3800) tensor(2.6380)
+        tensor([3.2738, 2.5613, 3.2911, 2.7989, 3.2789]) tensor(15.2040) tensor(3.0408)
+        tensor([3.2738, 2.5613, 3.2911, 2.7989, 3.2789]) tensor(15.2040) tensor(3.0408)
+
     """
 
     if mode in ['Shannon', 'shannon', 'SHANNON']:
@@ -75,23 +80,19 @@ def entropy(X, mode='shannon', axis=None, caxis=None, reduction='mean'):
     if mode in ['Natural', 'natural', 'NATURAL']:
         logfunc = th.log
 
-    if th.is_complex(X):
+    if th.is_complex(X):  # complex in complex
         X = (X * X.conj()).real
     else:
-        if type(caxis) is int:
-            if X.shape[caxis] != 2:
-                raise ValueError('The complex input is represented in real-valued formation, but you specifies wrong axis!')
-            X = th.pow(X, 2).sum(axis=caxis, keepdims=True)
-        if caxis is None:
-            X = th.pow(X, 2)
+        if cdim is None:  # real
+            X = X**2
+        else:  # complex in real
+            X = th.sum(X**2, axis=cdim)
 
-    if axis is None:
-        D = X.dim()
-        axis = tuple(range(1, D)) if D > 2 else tuple(range(0, D))
+    axis = tuple(range(X.ndim)) if dim is None else dim
 
-    P = th.sum(X, axis, keepdims=True)
+    P = th.sum(X, axis=axis, keepdims=True)
     p = X / (P + EPS)
-    S = -th.sum(p * logfunc(p + EPS), axis, keepdims=True)
+    S = -th.sum(p * logfunc(p + EPS), axis)
     if reduction == 'mean':
         S = th.mean(S)
     if reduction == 'sum':
@@ -103,19 +104,24 @@ def entropy(X, mode='shannon', axis=None, caxis=None, reduction='mean'):
 if __name__ == '__main__':
 
     th.manual_seed(2020)
-    X = th.randn(1, 3, 4, 2)
-    V = entropy(X, mode='shannon', axis=(1, 2), caxis=-1, reduction='mean')
-    print(V)
+    X = th.randn(5, 2, 3, 4)
 
-    X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
-    V = entropy(X, mode='shannon', axis=(1, 2), caxis=None, reduction='mean')
-    print(V)
+    # real
+    S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
+    S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
+    S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+    print(S1, S2, S3)
 
-    V = entropy(X, mode='shannon', axis=None, caxis=None, reduction='mean')
-    print(V)
+    # complex in real format
+    S1 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction=None)
+    S2 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='sum')
+    S3 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='mean')
+    print(S1, S2, S3)
 
-    V = entropy(X, mode='shannon', axis=(2), caxis=None, reduction='mean')
-    print(V)
+    # complex in complex format
+    X = X[:, 0, ...] + 1j * X[:, 1, ...]
+    S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
+    S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
+    S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+    print(S1, S2, S3)
 
-    V = entropy(X, mode='shannon', axis=(2), caxis=None, reduction=None)
-    print(V)

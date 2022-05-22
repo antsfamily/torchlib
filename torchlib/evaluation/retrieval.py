@@ -249,7 +249,7 @@ def fmeasure(X, Y, TH=None, beta=1.0):
     r"""Compute F-measure
 
     .. math::
-       F_{\beta} = \frac{(1+\beta^2)鈰匬鈰匯}{\beta^2鈰匬 + R}
+       F_{\beta} = \frac{(1+\beta^2)PR}{\beta^2P + R}
        :label: equ-F-measure
 
     Parameters

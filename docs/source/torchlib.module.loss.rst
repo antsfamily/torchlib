@@ -20,18 +20,18 @@ torchlib.module.loss.entropy module
    :undoc-members:
    :show-inheritance:
 
-torchlib.module.loss.fourier\_domain module
--------------------------------------------
+torchlib.module.loss.error module
+---------------------------------
 
-.. automodule:: torchlib.module.loss.fourier_domain
+.. automodule:: torchlib.module.loss.error
    :members:
    :undoc-members:
    :show-inheritance:
 
-torchlib.module.loss.mean\_squared\_error module
-------------------------------------------------
+torchlib.module.loss.fourier\_domain module
+-------------------------------------------
 
-.. automodule:: torchlib.module.loss.mean_squared_error
+.. automodule:: torchlib.module.loss.fourier_domain
    :members:
    :undoc-members:
    :show-inheritance:

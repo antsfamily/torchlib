@@ -3,14 +3,15 @@ from __future__ import absolute_import
 from .utils.const import *
 from .utils.ios import loadyaml, loadjson, loadmat, savemat, loadh5, saveh5, mvkeyh5
 from .utils.image import imread, imsave, imadjust, imadjustlog, histeq, imresize
-from .utils.file import listxfile, pathjoin, fileparts, readtxt, readnum
-from .utils.convert import str2list, str2num
-from .utils.colors import rgb2gray
+from .utils.file import listxfile, pathjoin, fileparts, readtxt, readnum, readsec
+from .utils.convert import str2list, str2num, str2sec
+from .utils.colormaps import cmaps, viridis, parula
+from .utils.colors import rgb2gray, gray2rgb, DISTINCT_COLORS_HEX, DISTINCT_COLORS_RGB, DISTINCT_COLORS_CMYK, DISTINCT_COLORS_RGB_NORM, BASE_COLORS, TABLEAU_COLORS, CSS4_COLORS
 from .utils.plot_show import cplot, plots, Plots
 
 from .base.baseops import dreplace, dmka, cat
 from .base.arrayops import sl, cut, arraycomb
-from .base.mathops import sinc, nextpow2, prevpow2, ematmul, matmul, conj
+from .base.mathops import sinc, nextpow2, prevpow2, ematmul, matmul, c2r, r2c, conj, real, imag, abs, pow
 from .base.randomfunc import setseed, randgrid, randperm, randperm2d
 
 from .dsp.ffts import padfft, freq, fftfreq, fftshift, ifftshift, fft, ifft
@@ -24,7 +25,8 @@ from .dsp.function_base import unwrap, unwrap2
 from .evaluation.contrast import contrast
 from .evaluation.entropy import entropy
 from .evaluation.classification import accuracy
-from .evaluation.norm import frobenius
+from .evaluation.norm import fnorm, pnorm
+from .evaluation.error import mse, sse, mae, sae
 from .evaluation.retrieval import true_positive, true_negative, \
     false_positive, false_negative, \
     precision, recall, sensitivity, selectivity, fmeasure
@@ -49,19 +51,19 @@ from .module.misc.transform import Standardization
 
 from .module.evaluation.contrast import Contrast
 from .module.evaluation.entropy import Entropy
-from .module.evaluation.norm import Frobenius, LogFrobenius
+from .module.evaluation.norm import Fnorm, Pnorm
 from .module.evaluation.ssims import SSIM, MSSSIM
 from .module.evaluation.variation import TotalVariation
 from .module.evaluation.retrieval import Dice, Jaccard, F1
 
-from .module.loss.contrast import ContrastLoss, NegativeContrastLoss, ContrastReciprocalLoss
+from .module.loss.contrast import ContrastLoss, NegativeContrastLoss, ReciprocalContrastLoss
 from .module.loss.entropy import EntropyLoss
-from .module.loss.norm import FrobeniusLoss, LogFrobeniusLoss
+from .module.loss.norm import FnormLoss, PnormLoss
 from .module.loss.perceptual import RandomProjectionLoss
 from .module.loss.retrieval import DiceLoss, JaccardLoss, F1Loss
 from .module.loss.variation import TotalVariation
 from .module.loss.fourier_domain import FourierDomainLoss, FourierDomainAmplitudeLoss, FourierDomainPhaseLoss, FourierDomainNormLoss
-from .module.loss.mean_squared_error import CMAELoss, CMSELoss
+from .module.loss.error import MSELoss, SSELoss, MAELoss, SAELoss
 from .module.loss.sparse_metric import LogSparseLoss, FourierDomainLogSparseLoss
 from .module.loss.regularization import LogSparseLoss
 

@@ -5,8 +5,6 @@
 # @Link    : http://iridescent.ink
 # @Version : $1.0$
 
-import matplotlib
-matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
 

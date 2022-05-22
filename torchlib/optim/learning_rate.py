@@ -16,7 +16,7 @@ def gammalr(x, k=2, t=2, a=1):
 
 class LrFinder():
 
-    def __init__(self, device='cpu', plotdir=None):
+    def __init__(self, device='cpu', plotdir=None, logf=None):
         r"""init
 
         Initialize LrFinder.
@@ -28,9 +28,12 @@ class LrFinder():
         plotdir : str, optional
             If it is not None, plot the loss-lr curve and save the figure,
             otherwise plot and show but not save. (the default is None).
+        logf : str or None optional
+            print log to terminal or file.
         """
         self.device = device
         self.plotdir = plotdir
+        self.logf = logf
         self.lrs = []
         self.losses = []
         self.avg_losses = []
@@ -227,7 +230,7 @@ class LrFinder():
             # Update the lr for the next step
             lr *= mult
             optimizer.param_groups[0]['lr'] = lr
-
+            print('--->batch: %d, average loss: % .4f, smooth loss: %.4f, lr: %.12f ' % (b, avg_loss, smt_loss, lr), file=self.logf)
         return self.lrs, self.smt_losses, self.avg_losses, self.losses
 
 
