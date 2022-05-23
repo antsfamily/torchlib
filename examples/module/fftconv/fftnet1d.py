@@ -16,7 +16,7 @@ class FFTNet1d(th.nn.Module):
     def __init__(self):
         super(FFTNet1d, self).__init__()
 
-        self.f = Parameter(th.tensor(96., requires_grad=True))
+        self.f = Parameter(th.tensor(1., requires_grad=True))
         self.fftlayer1d = tl.FFTLayer1d()
 
     def forward(self, T):

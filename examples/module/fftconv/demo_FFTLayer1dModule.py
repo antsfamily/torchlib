@@ -34,8 +34,8 @@ for param in net.parameters():
     print(param)
 
 loss_func = th.nn.MSELoss(reduction='mean')
-optimizer = th.optim.Adam(filter(lambda p: p.requires_grad, net.parameters()), lr=1e-3)
-scheduler = th.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.999, last_epoch=-1)
+optimizer = th.optim.Adam(filter(lambda p: p.requires_grad, net.parameters()), lr=1)
+scheduler = th.optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.999, last_epoch=-1)
 # scheduler = th.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.999, last_epoch=-1)
 # scheduler = th.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100, eta_min=0, last_epoch=-1)
 

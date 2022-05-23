@@ -60,7 +60,7 @@ model = th.nn.Sequential(
 )
 
 
-lossfdafn = ts.FourierDomainAmplitudeLoss(mode='mae', axis=(2, 3), norm=True, reduction='mean')
+lossfdafn = ts.FourierAmplitudeLoss(mode='mae', axis=(2, 3), norm=True, reduction='mean')
 lossfdafn = ts.CMSELoss(caxis=-1, norm='max', reduction='mean')
 lossfdafn = th.nn.MSELoss()
 lossfn = tl.entropyLoss('natural', axis=(2, 3), reduction='mean')  # OK

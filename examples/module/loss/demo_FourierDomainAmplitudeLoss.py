@@ -34,8 +34,8 @@ for a in axis:
 loss_mse_fn = th.nn.MSELoss(reduction='mean')
 loss_mae_fn = th.nn.L1Loss(reduction='mean')
 
-loss_fda_mse_fn = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-loss_fda_mae_fn = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mae', reduction='mean')
+loss_fda_mse_fn = tl.FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+loss_fda_mae_fn = tl.FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mae', reduction='mean')
 
 print(loss_mse_fn(Y.abs(), X.abs()), "MSE")
 print(loss_mae_fn(Y.abs(), X.abs()), "MAE")
@@ -48,13 +48,13 @@ yr = th.randn(10, 2, 4, 4) * 10000
 xc = xr[:, [0], ...] + 1j * xr[:, [1], ...]
 yc = yr[:, [0], ...] + 1j * yr[:, [1], ...]
 
-flossr = tl.FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-flossc = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+flossr = tl.FourierLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+flossc = tl.FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
 print(flossr(xr, yr))
 print(flossc(xc, yc))
 
-flossr = tl.FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-flossc = tl.FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+flossr = tl.FourierLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+flossc = tl.FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
 print(flossr(xr, yr))
 print(flossc(xc, yc))
 

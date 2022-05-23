@@ -75,7 +75,7 @@ class ConvNet(th.nn.Module):
 
 net = ConvNet()
 
-loss_fda_fn = ts.FourierDomainAmplitudeLoss(mode='mae', axis=(2, 3), norm=True, reduction='mean')
+loss_fda_fn = ts.FourierAmplitudeLoss(mode='mae', axis=(2, 3), norm=True, reduction='mean')
 loss_ent_fn = tl.entropyLoss('natural', axis=(2, 3), reduction='mean')  # OK
 loss_mae_fn = ts.CMAELoss(reduction='mean', norm=False)
 optimizer = th.optim.AdamW([{'params': filter(lambda p: p.requires_grad, net.parameters()), 'initial_lr': 1e-1}], lr=1e2, weight_decay=1e-2)

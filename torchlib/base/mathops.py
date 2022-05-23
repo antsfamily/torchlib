@@ -11,6 +11,54 @@ import torch as th
 import torchlib as tl
 
 
+def ebeo(a, b, op='+'):
+    r"""element by element operation
+
+    Element by element operation.
+
+    Parameters
+    ----------
+    a : list, tuple, tensor or array
+        The first list/tuple/nparray/tensor.
+    b : list, tuple, tensor or array
+        The second list/tuple/nparray/tensor.
+    op : str, optional
+        Supported operations are:
+        - ``'+'`` or ``'add'`` for addition (default)
+        - ``'-'`` or ``'sub'`` for substraction
+        - ``'*'`` or ``'mul'`` for multiplication
+        - ``'/'`` or ``'div'`` for division
+        - ``'**'`` or ``pow`` for power
+        - ``'<'``, or ``'lt'`` for less than
+        - ``'<='``, or ``'le'`` for less than or equal to
+        - ``'>'``, or ``'gt'`` for greater than
+        - ``'>='``, or ``'ge'`` for greater than or equal to
+        - ``'&'`` for bitwise and
+        - ``'|'`` for bitwise or
+        - ``'^'`` for bitwise xor
+        - function for custom operation.
+
+    Raises
+    ------
+    TypeError
+        If the specified operator not in the above list, raise a TypeError.
+    """
+    if op in ['+', 'add']:
+        return [i + j for i, j in zip(a, b)]
+    if op in ['-', 'sub']:
+        return [i - j for i, j in zip(a, b)]
+    if op in ['*', 'mul']:
+        return [i * j for i, j in zip(a, b)]
+    if op in ['/', 'div']:
+        return [i / j for i, j in zip(a, b)]
+    if op in ['**', '^', 'pow']:
+        return [i ** j for i, j in zip(a, b)]
+    if isinstance(op, str):
+        raise TypeError("Not supported operation: " + op + "!")
+    else:
+        return [op(i, j) for i, j in zip(a, b)]
+
+
 def sinc(x):
     """Applies sinc function to a tensor
 

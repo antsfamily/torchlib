@@ -42,15 +42,15 @@ class LogSparseLoss(th.nn.Module):
         return S
 
 
-class FourierDomainLogSparseLoss(th.nn.Module):
-    r"""FourierDomainLogSparseLoss
+class FourierLogSparseLoss(th.nn.Module):
+    r"""FourierLogSparseLoss
 
 
 
     """
 
     def __init__(self, p=1, axis=(-2, -1), caxis=None, reduction='mean'):
-        super(FourierDomainLogSparseLoss, self).__init__()
+        super(FourierLogSparseLoss, self).__init__()
         self.p = p
         self.axis = [axis] if type(axis) is int else axis
         self.reduction = reduction
@@ -113,9 +113,9 @@ if __name__ == '__main__':
 
     # print(X)
 
-    sparse_func = FourierDomainLogSparseLoss(p=p)
-    sparse_func = FourierDomainLogSparseLoss(p=p, axis=(1, 2), caxis=-1)
-    sparse_func1 = FourierDomainLogSparseLoss(p=p, axis=(2, 3), caxis=1)
+    sparse_func = FourierLogSparseLoss(p=p)
+    sparse_func = FourierLogSparseLoss(p=p, axis=(1, 2), caxis=-1)
+    sparse_func1 = FourierLogSparseLoss(p=p, axis=(2, 3), caxis=1)
     S = sparse_func(X)
     print(S)
 

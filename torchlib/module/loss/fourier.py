@@ -9,7 +9,7 @@ import torch as th
 import torchlib as tl
 
 
-class FourierDomainLoss(th.nn.Module):
+class FourierLoss(th.nn.Module):
     r"""Fourier Domain Loss
 
     Compute loss in Fourier domain. Given input :math:`{\bm P}`, target :math:`\bm G`, 
@@ -66,13 +66,13 @@ class FourierDomainLoss(th.nn.Module):
         xc = xr[:, [0], ...] + 1j * xr[:, [1], ...]
         yc = yr[:, [0], ...] + 1j * yr[:, [1], ...]
 
-        flossr = FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-        flossc = FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+        flossr = FourierLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+        flossc = FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
         print(flossr(xr, yr))
         print(flossc(xc, yc))
 
-        flossr = FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-        flossc = FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+        flossr = FourierLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+        flossc = FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
         print(flossr(xr, yr))
         print(flossc(xc, yc))
 
@@ -84,7 +84,7 @@ class FourierDomainLoss(th.nn.Module):
     """
 
     def __init__(self, cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean'):
-        super(FourierDomainLoss, self).__init__()
+        super(FourierLoss, self).__init__()
         self.cdim = cdim
         self.ftdim = [ftdim] if (type(ftdim) is not list and type(ftdim) is not tuple) else ftdim
         self.iftdim = [iftdim] if (type(iftdim) is not list and type(iftdim) is not tuple) else iftdim
@@ -127,7 +127,7 @@ class FourierDomainLoss(th.nn.Module):
         return self.err(P, G)
 
 
-class FourierDomainAmplitudeLoss(th.nn.Module):
+class FourierAmplitudeLoss(th.nn.Module):
     r"""Fourier Domain Amplitude Loss
 
     compute amplitude loss in fourier domain.
@@ -178,13 +178,13 @@ class FourierDomainAmplitudeLoss(th.nn.Module):
         xc = xr[:, [0], ...] + 1j * xr[:, [1], ...]
         yc = yr[:, [0], ...] + 1j * yr[:, [1], ...]
 
-        flossr = FourierDomainAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-        flossc = FourierDomainAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+        flossr = FourierAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+        flossc = FourierAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
         print(flossr(xr, yr))
         print(flossc(xc, yc))
 
-        flossr = FourierDomainAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-        flossc = FourierDomainAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+        flossr = FourierAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+        flossc = FourierAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
         print(flossr(xr, yr))
         print(flossc(xc, yc))
 
@@ -197,7 +197,7 @@ class FourierDomainAmplitudeLoss(th.nn.Module):
     """
 
     def __init__(self, cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean'):
-        super(FourierDomainAmplitudeLoss, self).__init__()
+        super(FourierAmplitudeLoss, self).__init__()
         self.cdim = cdim
         self.ftdim = [ftdim] if (type(ftdim) is not list and type(ftdim) is not tuple) else ftdim
         self.iftdim = [iftdim] if (type(iftdim) is not list and type(iftdim) is not tuple) else iftdim
@@ -239,7 +239,7 @@ class FourierDomainAmplitudeLoss(th.nn.Module):
         return self.err(P, G)
 
 
-class FourierDomainPhaseLoss(th.nn.Module):
+class FourierPhaseLoss(th.nn.Module):
     r"""Fourier Domain Phase Loss
 
     compute phase loss in fourier domain.
@@ -290,13 +290,13 @@ class FourierDomainPhaseLoss(th.nn.Module):
         xc = xr[:, [0], ...] + 1j * xr[:, [1], ...]
         yc = yr[:, [0], ...] + 1j * yr[:, [1], ...]
 
-        flossr = FourierDomainPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-        flossc = FourierDomainPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+        flossr = FourierPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+        flossc = FourierPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
         print(flossr(xr, yr))
         print(flossc(xc, yc))
 
-        flossr = FourierDomainPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-        flossc = FourierDomainPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+        flossr = FourierPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+        flossc = FourierPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
         print(flossr(xr, yr))
         print(flossc(xc, yc))
 
@@ -308,7 +308,7 @@ class FourierDomainPhaseLoss(th.nn.Module):
     """
 
     def __init__(self, cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean'):
-        super(FourierDomainPhaseLoss, self).__init__()
+        super(FourierPhaseLoss, self).__init__()
         self.cdim = cdim
         self.ftdim = [ftdim] if (type(ftdim) is not list and type(ftdim) is not tuple) else ftdim
         self.iftdim = [iftdim] if (type(iftdim) is not list and type(iftdim) is not tuple) else iftdim
@@ -350,8 +350,8 @@ class FourierDomainPhaseLoss(th.nn.Module):
         return self.err(P, G)
 
 
-class FourierDomainNormLoss(th.nn.Module):
-    r"""FourierDomainNormLoss
+class FourierNormLoss(th.nn.Module):
+    r"""FourierNormLoss
 
     .. math::
         C = \frac{{\rm E}(|I|^2)}{[E(|I|)]^2}
@@ -361,7 +361,7 @@ class FourierDomainNormLoss(th.nn.Module):
     """
 
     def __init__(self, reduction='mean', p=1.5):
-        super(FourierDomainNormLoss, self).__init__()
+        super(FourierNormLoss, self).__init__()
         self.reduction = reduction
         self.p = p
 
@@ -410,34 +410,34 @@ if __name__ == '__main__':
     xc = xr[:, [0], ...] + 1j * xr[:, [1], ...]
     yc = yr[:, [0], ...] + 1j * yr[:, [1], ...]
 
-    flossr = FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-    flossc = FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+    flossr = FourierLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+    flossc = FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
     print(flossr(xr, yr))
     print(flossc(xc, yc))
 
-    flossr = FourierDomainLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-    flossc = FourierDomainLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-    print(flossr(xr, yr))
-    print(flossc(xc, yc))
-
-
-    flossr = FourierDomainAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-    flossc = FourierDomainAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-    print(flossr(xr, yr))
-    print(flossc(xc, yc))
-
-    flossr = FourierDomainAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-    flossc = FourierDomainAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+    flossr = FourierLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+    flossc = FourierLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
     print(flossr(xr, yr))
     print(flossc(xc, yc))
 
 
-    flossr = FourierDomainPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
-    flossc = FourierDomainPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+    flossr = FourierAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+    flossc = FourierAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
     print(flossr(xr, yr))
     print(flossc(xc, yc))
 
-    flossr = FourierDomainPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
-    flossc = FourierDomainPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+    flossr = FourierAmplitudeLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+    flossc = FourierAmplitudeLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+    print(flossr(xr, yr))
+    print(flossc(xc, yc))
+
+
+    flossr = FourierPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+    flossc = FourierPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean')
+    print(flossr(xr, yr))
+    print(flossc(xc, yc))
+
+    flossr = FourierPhaseLoss(cdim=1, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
+    flossc = FourierPhaseLoss(cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm='forward', iftnorm=None, err='mse', reduction='mean')
     print(flossr(xr, yr))
     print(flossc(xc, yc))

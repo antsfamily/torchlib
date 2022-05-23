@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from .version import __version__
 
 from .utils.const import *
 from .utils.ios import loadyaml, loadjson, loadmat, savemat, loadh5, saveh5, mvkeyh5
@@ -11,7 +12,7 @@ from .utils.plot_show import cplot, plots, Plots
 
 from .base.baseops import dreplace, dmka, cat
 from .base.arrayops import sl, cut, arraycomb
-from .base.mathops import sinc, nextpow2, prevpow2, ematmul, matmul, c2r, r2c, conj, real, imag, abs, pow
+from .base.mathops import ebeo, sinc, nextpow2, prevpow2, ematmul, matmul, c2r, r2c, conj, real, imag, abs, pow
 from .base.randomfunc import setseed, randgrid, randperm, randperm2d
 
 from .dsp.ffts import padfft, freq, fftfreq, fftshift, ifftshift, fft, ifft
@@ -21,6 +22,7 @@ from .dsp.normalsignals import rect, chirp
 from .dsp.interpolation import interpolate, interpolatec
 from .dsp.polynomialfit import polyfit, polyval, rmlinear
 from .dsp.function_base import unwrap, unwrap2
+from .dsp.window_function import window, windowing
 
 from .evaluation.contrast import contrast
 from .evaluation.entropy import entropy
@@ -64,9 +66,9 @@ from .module.loss.norm import FnormLoss, PnormLoss
 from .module.loss.perceptual import RandomProjectionLoss
 from .module.loss.retrieval import DiceLoss, JaccardLoss, F1Loss
 from .module.loss.variation import TotalVariation
-from .module.loss.fourier_domain import FourierDomainLoss, FourierDomainAmplitudeLoss, FourierDomainPhaseLoss, FourierDomainNormLoss
+from .module.loss.fourier import FourierLoss, FourierAmplitudeLoss, FourierPhaseLoss, FourierNormLoss
 from .module.loss.error import MSELoss, SSELoss, MAELoss, SAELoss
-from .module.loss.sparse_metric import LogSparseLoss, FourierDomainLogSparseLoss
+from .module.loss.sparse_metric import LogSparseLoss, FourierLogSparseLoss
 
 from .module.loss.semantic import EdgeLoss
 # from .module.loss.segmentation import SoftDiceLoss, FocalLoss, BinaryCrossEntropyLoss, ContourLoss, EdgeAwareLoss
