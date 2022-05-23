@@ -528,6 +528,38 @@ otherwise (None), <code class="xref py py-attr docutils literal notranslate"><sp
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="torchlib.base.mathops.ebeo">
+<span class="sig-prename descclassname"><span class="pre">torchlib.base.mathops.</span></span><span class="sig-name descname"><span class="pre">ebeo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.mathops.ebeo" title="Permalink to this definition">¶</a></dt>
+<dd><p>element by element operation</p>
+<p>Element by element operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><em>tensor</em><em> or </em><em>array</em>) – The first list/tuple/nparray/tensor.</p></li>
+<li><p><strong>b</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><em>tensor</em><em> or </em><em>array</em>) – The second list/tuple/nparray/tensor.</p></li>
+<li><p><strong>op</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – Supported operations are:
+- <code class="docutils literal notranslate"><span class="pre">'+'</span></code> or <code class="docutils literal notranslate"><span class="pre">'add'</span></code> for addition (default)
+- <code class="docutils literal notranslate"><span class="pre">'-'</span></code> or <code class="docutils literal notranslate"><span class="pre">'sub'</span></code> for substraction
+- <code class="docutils literal notranslate"><span class="pre">'*'</span></code> or <code class="docutils literal notranslate"><span class="pre">'mul'</span></code> for multiplication
+- <code class="docutils literal notranslate"><span class="pre">'/'</span></code> or <code class="docutils literal notranslate"><span class="pre">'div'</span></code> for division
+- <code class="docutils literal notranslate"><span class="pre">'**'</span></code> or <code class="docutils literal notranslate"><span class="pre">pow</span></code> for power
+- <code class="docutils literal notranslate"><span class="pre">'&lt;'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'lt'</span></code> for less than
+- <code class="docutils literal notranslate"><span class="pre">'&lt;='</span></code>, or <code class="docutils literal notranslate"><span class="pre">'le'</span></code> for less than or equal to
+- <code class="docutils literal notranslate"><span class="pre">'&gt;'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'gt'</span></code> for greater than
+- <code class="docutils literal notranslate"><span class="pre">'&gt;='</span></code>, or <code class="docutils literal notranslate"><span class="pre">'ge'</span></code> for greater than or equal to
+- <code class="docutils literal notranslate"><span class="pre">'&amp;'</span></code> for bitwise and
+- <code class="docutils literal notranslate"><span class="pre">'|'</span></code> for bitwise or
+- <code class="docutils literal notranslate"><span class="pre">'^'</span></code> for bitwise xor
+- function for custom operation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – If the specified operator not in the above list, raise a TypeError.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="torchlib.base.mathops.ematmul">
 <span class="sig-prename descclassname"><span class="pre">torchlib.base.mathops.</span></span><span class="sig-name descname"><span class="pre">ematmul</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cdim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.base.mathops.ematmul" title="Permalink to this definition">¶</a></dt>
 <dd><p>Element-by-element complex multiplication</p>

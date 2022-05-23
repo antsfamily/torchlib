@@ -28,10 +28,10 @@ torchlib.module.loss.error module
    :undoc-members:
    :show-inheritance:
 
-torchlib.module.loss.fourier\_domain module
--------------------------------------------
+torchlib.module.loss.fourier module
+-----------------------------------
 
-.. automodule:: torchlib.module.loss.fourier_domain
+.. automodule:: torchlib.module.loss.fourier
    :members:
    :undoc-members:
    :show-inheritance:

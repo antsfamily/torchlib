@@ -1175,6 +1175,61 @@ the data with 2 to <span class="math">\(M\)</span> order polynominal.</p>
 </dd></dl>
 
 </section>
+<section id="module-torchlib.dsp.window_function">
+<span id="torchlib-dsp-window-function-module"></span><h2>torchlib.dsp.window_function module<a class="headerlink" href="#module-torchlib.dsp.window_function" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.dsp.window_function.window">
+<span class="sig-prename descclassname"><span class="pre">torchlib.dsp.window_function.</span></span><span class="sig-name descname"><span class="pre">window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isperiodic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.dsp.window_function.window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The length of the window.</p></li>
+<li><p><strong>wtype</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The window type:
+- <code class="docutils literal notranslate"><span class="pre">'rectangle'</span></code> for rectangle window
+- <code class="docutils literal notranslate"><span class="pre">'bartlett'</span></code> for bartlett window
+- <code class="docutils literal notranslate"><span class="pre">'blackman'</span></code> for blackman window
+- <code class="docutils literal notranslate"><span class="pre">'hamming</span> <span class="pre">x</span> <span class="pre">y'</span></code> for hamming window with <span class="math">\(\alpha=x, \beta=y\)</span>, default is 0.54, 0.46.
+- <code class="docutils literal notranslate"><span class="pre">'hanning'</span></code> for hanning window
+- <code class="docutils literal notranslate"><span class="pre">'kaiser</span> <span class="pre">x'</span></code> for kaiser window with <span class="math">\(\beta=x\)</span>, default is 12.</p></li>
+<li><p><strong>isperiodic</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – If True (default), returns a window to be used as periodic function.
+If False, return a symmetric window.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The desired data type of returned tensor.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The desired device of returned tensor.</p></li>
+<li><p><strong>requires_grad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – If autograd should record operations on the returned tensor. Default: False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A 1-D tensor of size (n,) containing the window</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="torchlib.dsp.window_function.windowing">
+<span class="sig-prename descclassname"><span class="pre">torchlib.dsp.window_function.</span></span><span class="sig-name descname"><span class="pre">windowing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchlib.dsp.window_function.windowing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs windowing operation in the specified axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tensor</em>) – The input tensor.</p></li>
+<li><p><strong>w</strong> (<em>tensor</em>) – A 1-d window tensor.</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><em>optional</em>) – The axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The windowed data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-torchlib.dsp">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-torchlib.dsp" title="Permalink to this headline">¶</a></h2>
 </section>

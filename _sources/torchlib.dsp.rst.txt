@@ -76,6 +76,14 @@ torchlib.dsp.polynomialfit module
    :undoc-members:
    :show-inheritance:
 
+torchlib.dsp.window\_function module
+------------------------------------
+
+.. automodule:: torchlib.dsp.window_function
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
