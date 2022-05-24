@@ -9,8 +9,8 @@ import math
 import torch as th
 
 
-class DoubleGaussianKernelLR(th.optim.lr_scheduler._LRScheduler):
-    r"""DoubleGaussianKernelLR
+class GaussianLR(th.optim.lr_scheduler._LRScheduler):
+    r"""GaussianLR
 
     Set the learning rate of each parameter group using a double gaussian kernel schedule
 
@@ -76,7 +76,7 @@ class DoubleGaussianKernelLR(th.optim.lr_scheduler._LRScheduler):
 
         optimizer = th.optim.Adam(params, lr=lr)
         # optimizer = th.optim.SGD(params, lr=lr, momentum=0.9)
-        scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
+        scheduler = tl.optim.lr_scheduler.GaussianLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
 
         print(optimizer)
 
@@ -107,7 +107,7 @@ class DoubleGaussianKernelLR(th.optim.lr_scheduler._LRScheduler):
         self.eta_start = eta_start
         self.eta_stop = eta_stop
         # self.eta_max = eta_max  # base lr
-        super(DoubleGaussianKernelLR, self).__init__(optimizer, last_epoch)
+        super(GaussianLR, self).__init__(optimizer, last_epoch)
 
     def get_lr(self):
         if not self._get_lr_called_within_step:
@@ -265,8 +265,8 @@ if __name__ == '__main__':
 
     optimizer = th.optim.Adam(params, lr=lr)
     # optimizer = th.optim.SGD(params, lr=lr, momentum=0.9)
-    # scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=80, sigma1=15, sigma2=200, eta_start=1e-4, eta_stop=1e-5, last_epoch=-1)
-    # scheduler = tl.optim.lr_scheduler.DoubleGaussianKernelLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
+    # scheduler = tl.optim.lr_scheduler.GaussianLR(optimizer, t_eta_max=80, sigma1=15, sigma2=200, eta_start=1e-4, eta_stop=1e-5, last_epoch=-1)
+    # scheduler = tl.optim.lr_scheduler.GaussianLR(optimizer, t_eta_max=50, sigma1=15, sigma2=100, eta_start=1e-4, eta_stop=1e-3, last_epoch=-1)
     scheduler = tl.optim.lr_scheduler.MountainLR(optimizer, total_epoch=num_epochs, peak_epoch=300, period_epoch=50, last_epoch=-1)
 
     print(optimizer)

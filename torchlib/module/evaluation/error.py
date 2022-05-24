@@ -27,8 +27,10 @@ class MSE(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
+    dim : int or None
         The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
@@ -42,28 +44,29 @@ class MSE(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
 
         # real
-        C1 = MSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = MSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = MSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in real format
-        C1 = MSE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = MSE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = MSE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = MSE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = MSE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = MSE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in complex format
         X = X[:, 0, ...] + 1j * X[:, 1, ...]
         Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-        C1 = MSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = MSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = MSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # ---output
@@ -77,14 +80,15 @@ class MSE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
         super(MSE, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.mse(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.mse(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
 
 
 class SSE(th.nn.Module):
@@ -105,8 +109,10 @@ class SSE(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
+    dim : int or None
         The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
@@ -120,28 +126,29 @@ class SSE(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
 
         # real
-        C1 = SSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = SSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = SSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in real format
-        C1 = SSE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = SSE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = SSE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = SSE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = SSE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = SSE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in complex format
         X = X[:, 0, ...] + 1j * X[:, 1, ...]
         Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-        C1 = SSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = SSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = SSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # ---output
@@ -155,14 +162,15 @@ class SSE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
         super(SSE, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.sse(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.sse(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
 
 class MAE(th.nn.Module):
     r"""computes the mean absoluted error
@@ -182,8 +190,10 @@ class MAE(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
+    dim : int or None
         The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
@@ -197,28 +207,29 @@ class MAE(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
 
         # real
-        C1 = MAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = MAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = MAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in real format
-        C1 = MAE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = MAE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = MAE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = MAE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = MAE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = MAE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in complex format
         X = X[:, 0, ...] + 1j * X[:, 1, ...]
         Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-        C1 = MAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = MAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = MAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # ---output
@@ -232,14 +243,15 @@ class MAE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
         super(MAE, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.mae(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.mae(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
 
 
 class SAE(th.nn.Module):
@@ -260,8 +272,10 @@ class SAE(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
+    dim : int or None
         The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
@@ -275,28 +289,29 @@ class SAE(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
 
         # real
-        C1 = SAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = SAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = SAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in real format
-        C1 = SAE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = SAE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = SAE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = SAE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = SAE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = SAE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # complex in complex format
         X = X[:, 0, ...] + 1j * X[:, 1, ...]
         Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-        C1 = SAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-        C2 = SAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-        C3 = SAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+        C1 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+        C2 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+        C3 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
         print(C1, C2, C3)
 
         # ---output
@@ -310,64 +325,42 @@ class SAE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
         super(SAE, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.sae(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.sae(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
 
 
 if __name__ == '__main__':
 
+    norm = False
     th.manual_seed(2020)
     X = th.randn(5, 2, 3, 4)
     Y = th.randn(5, 2, 3, 4)
 
     # real
-    C1 = MSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = MSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = MSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     # complex in real format
-    C1 = MSE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = MSE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = MSE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = MSE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = MSE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = MSE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     # complex in complex format
     X = X[:, 0, ...] + 1j * X[:, 1, ...]
     Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-    C1 = MSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = MSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = MSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
-    print(C1, C2, C3)
-
-    th.manual_seed(2020)
-    X = th.randn(5, 2, 3, 4)
-    Y = th.randn(5, 2, 3, 4)
-
-    # real
-    C1 = SSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = SSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = SSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
-    print(C1, C2, C3)
-
-    # complex in real format
-    C1 = SSE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = SSE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = SSE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
-    print(C1, C2, C3)
-
-    # complex in complex format
-    X = X[:, 0, ...] + 1j * X[:, 1, ...]
-    Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-    C1 = SSE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = SSE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = SSE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = MSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     th.manual_seed(2020)
@@ -375,23 +368,23 @@ if __name__ == '__main__':
     Y = th.randn(5, 2, 3, 4)
 
     # real
-    C1 = MAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = MAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = MAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     # complex in real format
-    C1 = MAE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = MAE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = MAE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = SSE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = SSE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = SSE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     # complex in complex format
     X = X[:, 0, ...] + 1j * X[:, 1, ...]
     Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-    C1 = MAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = MAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = MAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = SSE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     th.manual_seed(2020)
@@ -399,21 +392,45 @@ if __name__ == '__main__':
     Y = th.randn(5, 2, 3, 4)
 
     # real
-    C1 = SAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = SAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = SAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     # complex in real format
-    C1 = SAE(cdim=1, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = SAE(cdim=1, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = SAE(cdim=1, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = MAE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = MAE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = MAE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)
 
     # complex in complex format
     X = X[:, 0, ...] + 1j * X[:, 1, ...]
     Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
-    C1 = SAE(cdim=None, dim=(-2, -1), reduction=None)(X, Y)
-    C2 = SAE(cdim=None, dim=(-2, -1), reduction='sum')(X, Y)
-    C3 = SAE(cdim=None, dim=(-2, -1), reduction='mean')(X, Y)
+    C1 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = MAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
+    print(C1, C2, C3)
+
+    th.manual_seed(2020)
+    X = th.randn(5, 2, 3, 4)
+    Y = th.randn(5, 2, 3, 4)
+
+    # real
+    C1 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
+    print(C1, C2, C3)
+
+    # complex in real format
+    C1 = SAE(cdim=1, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = SAE(cdim=1, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = SAE(cdim=1, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
+    print(C1, C2, C3)
+
+    # complex in complex format
+    X = X[:, 0, ...] + 1j * X[:, 1, ...]
+    Y = Y[:, 0, ...] + 1j * Y[:, 1, ...]
+    C1 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction=None)(X, Y)
+    C2 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='sum')(X, Y)
+    C3 = SAE(cdim=None, dim=(-2, -1), norm=norm, reduction='mean')(X, Y)
     print(C1, C2, C3)

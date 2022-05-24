@@ -90,9 +90,9 @@ def fnorm(X, cdim=None, dim=None, reduction='mean'):
         else:  # complex in real
             d = X.ndim
             if dim is None:
-                F = ((X[tl.sl(d, axis=cdim, idx=[0])]**2 + X[tl.sl(d, axis=cdim, idx=[1])]**2).sum()).sqrt()
+                F = ((X[tl.sl(d, axis=cdim, idx=[[0]])]**2 + X[tl.sl(d, axis=cdim, idx=[[1]])]**2).sum()).sqrt()
             else:
-                F = ((X[tl.sl(d, axis=cdim, idx=[0])]**2 + X[tl.sl(d, axis=cdim, idx=[1])]**2).sum(dim=dim)).sqrt()
+                F = ((X[tl.sl(d, axis=cdim, idx=[[0]])]**2 + X[tl.sl(d, axis=cdim, idx=[[1]])]**2).sum(dim=dim)).sqrt()
 
     if reduction in ['sum', 'SUM']:
         F = th.sum(F)
@@ -184,9 +184,9 @@ def pnorm(X, cdim=None, dim=None, p=2, reduction='mean'):
             d = X.ndim
 
             if dim is None:
-                F = ((X[tl.sl(d, axis=cdim, idx=[0])]**2 + X[tl.sl(d, axis=cdim, idx=[1])]**2).sqrt().pow(p).sum()).pow(1/p)
+                F = ((X[tl.sl(d, axis=cdim, idx=[[0]])]**2 + X[tl.sl(d, axis=cdim, idx=[[1]])]**2).sqrt().pow(p).sum()).pow(1/p)
             else:
-                F = ((X[tl.sl(d, axis=cdim, idx=[0])]**2 + X[tl.sl(d, axis=cdim, idx=[1])]**2).sqrt().pow(p).sum(dim=dim)).pow(1/p)
+                F = ((X[tl.sl(d, axis=cdim, idx=[[0]])]**2 + X[tl.sl(d, axis=cdim, idx=[[1]])]**2).sqrt().pow(p).sum(dim=dim)).pow(1/p)
 
     if reduction in ['sum', 'SUM']:
         F = th.sum(F)

@@ -42,6 +42,7 @@ class MSELoss(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
@@ -120,6 +121,7 @@ class SSELoss(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
@@ -197,6 +199,7 @@ class MAELoss(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
@@ -275,6 +278,7 @@ class SAELoss(th.nn.Module):
 
     ::
 
+        norm = False
         th.manual_seed(2020)
         X = th.randn(5, 2, 3, 4)
         Y = th.randn(5, 2, 3, 4)
