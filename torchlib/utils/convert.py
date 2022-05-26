@@ -18,9 +18,9 @@ def str2list(s):
     s : str
         The string.
     """
-    left = [i.start() for i in re.finditer('\[', s)]
+    left = [i.start() for i in re.finditer(r'\[', s)]
     print(left)
-    right = [i.start() for i in re.finditer('\]', s)]
+    right = [i.start() for i in re.finditer(r'\]', s)]
     print(right)
 
     nlevel = -1
