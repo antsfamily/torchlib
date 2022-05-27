@@ -95,14 +95,13 @@ def contrast(X, cdim=None, dim=None, mode='way1', reduction='mean'):
     if X.dtype is not th.float32 or th.double:
         X = X.to(th.float32)
 
-    axis = tuple(range(X.ndim)) if dim is None else dim
     if mode in ['way1', 'WAY1']:
-        Xmean = X.mean(axis=axis, keepdims=True)
-        C = (X - Xmean).pow(2).mean(axis=axis, keepdims=True).sqrt() / (Xmean + EPS)
-        C = th.sum(C, axis=axis, keepdims=False)
+        Xmean = X.mean(dim=dim, keepdims=True)
+        C = (X - Xmean).pow(2).mean(dim=dim, keepdims=True).sqrt() / (Xmean + EPS)
+        C = th.sum(C, dim=dim, keepdims=False)
     if mode in ['way2', 'WAY2']:
-        C = X.mean(axis=axis, keepdims=True) / ((X.sqrt().mean(axis=axis, keepdims=True)).pow(2) + EPS)
-        C = th.sum(C, axis=axis, keepdims=False)
+        C = X.mean(dim=dim, keepdims=True) / ((X.sqrt().mean(dim=dim, keepdims=True)).pow(2) + EPS)
+        C = th.sum(C, dim=dim, keepdims=False)
 
     if reduction == 'mean':
         C = th.mean(C)

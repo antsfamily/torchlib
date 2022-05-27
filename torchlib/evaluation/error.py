@@ -89,18 +89,15 @@ def mse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
     else:
         if cdim is None:  # real
             if dim is None:
-               E = th.mean(X**2)
+                E = th.mean(X**2)
             else:
-               E = th.mean(X**2, dim=dim)
+                E = th.mean(X**2, dim=dim)
         else:  # complex in real
-            d = X.ndim
-            idxreal = tl.sl(d, axis=cdim, idx=[[0]])
-            idximag = tl.sl(d, axis=cdim, idx=[[1]])
 
             if dim is None:
-               E = th.mean(X[idxreal]**2 + X[idximag]**2)
+                E = th.mean((X**2).sum(dim=cdim))
             else:
-               E = th.mean(X[idxreal]**2 + X[idximag]**2, dim=dim)
+                E = th.mean((X**2).sum(dim=cdim), dim=dim)
 
     if norm is True:
         xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
@@ -108,9 +105,9 @@ def mse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:
-       E = th.mean(E)
+        E = th.mean(E)
     if reduction in ['sum', 'SUM']:
-       E = th.sum(E)
+        E = th.sum(E)
 
     return E
 
@@ -195,18 +192,15 @@ def sse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
     else:
         if cdim is None:  # real
             if dim is None:
-               E = th.sum(X**2)
+                E = th.sum(X**2)
             else:
-               E = th.sum(X**2, dim=dim)
+                E = th.sum(X**2, dim=dim)
         else:  # complex in real
-            d = X.ndim
-            idxreal = tl.sl(d, axis=cdim, idx=[[0]])
-            idximag = tl.sl(d, axis=cdim, idx=[[1]])
 
             if dim is None:
-               E = th.sum(X[idxreal]**2 + X[idximag]**2)
+                E = th.sum((X**2).sum(dim=cdim))
             else:
-               E = th.sum(X[idxreal]**2 + X[idximag]**2, dim=dim)
+                E = th.sum((X**2).sum(dim=cdim), dim=dim)
 
     if norm is True:
         xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
@@ -214,9 +208,9 @@ def sse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:
-       E = th.mean(E)
+        E = th.mean(E)
     if reduction in ['sum', 'SUM']:
-       E = th.sum(E)
+        E = th.sum(E)
 
     return E
 
@@ -295,24 +289,20 @@ def mae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
     X = X - Y
     if th.is_complex(X):  # complex in complex
         if dim is None:
-           E = th.mean(th.abs(X))
+            E = th.mean(th.abs(X))
         else:
-           E = th.mean(th.abs(X), dim=dim)
+            E = th.mean(th.abs(X), dim=dim)
     else:
         if cdim is None:  # real
             if dim is None:
-               E = th.mean(th.abs(X))
+                E = th.mean(th.abs(X))
             else:
-               E = th.mean(th.abs(X), dim=dim)
+                E = th.mean(th.abs(X), dim=dim)
         else:  # complex in real
-            d = X.ndim
-            idxreal = tl.sl(d, axis=cdim, idx=[[0]])
-            idximag = tl.sl(d, axis=cdim, idx=[[1]])
-
             if dim is None:
-               E = th.mean(th.sqrt(X[idxreal]**2 + X[idximag]**2))
+                E = th.mean((X**2).sum(dim=cdim).sqrt())
             else:
-               E = th.mean(th.sqrt(X[idxreal]**2 + X[idximag]**2), dim=dim)
+                E = th.mean((X**2).sum(dim=cdim).sqrt(), dim=dim)
     
     if norm is True:
         xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
@@ -320,9 +310,9 @@ def mae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:
-       E = th.mean(E)
+        E = th.mean(E)
     if reduction in ['sum', 'SUM']:
-       E = th.sum(E)
+        E = th.sum(E)
 
     return E
 
@@ -400,24 +390,20 @@ def sae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
     X = X - Y
     if th.is_complex(X):  # complex in complex
         if dim is None:
-           E = th.sum(th.abs(X))
+            E = th.sum(th.abs(X))
         else:
-           E = th.sum(th.abs(X), dim=dim)
+            E = th.sum(th.abs(X), dim=dim)
     else:
         if cdim is None:  # real
             if dim is None:
-               E = th.sum(th.abs(X))
+                E = th.sum(th.abs(X))
             else:
-               E = th.sum(th.abs(X), dim=dim)
+                E = th.sum(th.abs(X), dim=dim)
         else:  # complex in real
-            d = X.ndim
-            idxreal = tl.sl(d, axis=cdim, idx=[[0]])
-            idximag = tl.sl(d, axis=cdim, idx=[[1]])
-
             if dim is None:
-               E = th.sum(th.sqrt(X[idxreal]**2 + X[idximag]**2))
+                E = th.sum((X**2).sum(dim=cdim).sqrt())
             else:
-               E = th.sum(th.sqrt(X[idxreal]**2 + X[idximag]**2), dim=dim)
+                E = th.sum((X**2).sum(dim=cdim).sqrt(), dim=dim)
 
     if norm is True:
         xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
@@ -425,9 +411,9 @@ def sae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:
-       E = th.mean(E)
+        E = th.mean(E)
     if reduction in ['sum', 'SUM']:
-       E = th.sum(E)
+        E = th.sum(E)
 
     return E
 

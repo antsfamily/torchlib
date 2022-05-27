@@ -6,6 +6,7 @@
 # @Version : $1.0$
 
 import torch as th
+import torchlib as tl
 
 
 class LogSparseLoss(th.nn.Module):
@@ -13,27 +14,27 @@ class LogSparseLoss(th.nn.Module):
 
     """
 
-    def __init__(self, p=1., axis=None, caxis=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, p=1., reduction='mean'):
         super(LogSparseLoss, self).__init__()
         self.p = p
-        self.axis = axis
-        self.caxis = caxis
+        self.dim = dim
+        self.cdim = cdim
         self.reduction = reduction
 
     def forward(self, X):
-        if th.is_complex(X):
-            X = (X * X.conj()).real
-        elif (self.caxis is None) or X.shape[-1] == 2:
-            X = th.sum(X.pow(2), axis=-1, keepdims=True)
+        if th.is_complex(X):  # complex in complex
+            pass
         else:
-            X = th.sum(X.pow(2), axis=self.caxis, keepdims=True)
+            if self.cdim is None:  # real
+                pass
+            else:  # complex in real
+                d = X.ndim
+                idxreal = tl.sl(d, axis=self.cdim, idx=[[0]])
+                idximag = tl.sl(d, axis=self.cdim, idx=[[1]])
+                X = X[idxreal] + 1j * X[idximag]
 
-        if self.axis is None:
-            D = X.dim()
-            axis = list(range(1, D)) if D > 2 else list(range(0, D))
-        else:
-            axis = self.axis
-        S = th.sum(th.log2(1 + X / self.p), axis)
+        X = X.abs()
+        S = th.sum(th.log2(1 + X / self.p), self.dim)
         if self.reduction == 'mean':
             S = th.mean(S)
         if self.reduction == 'sum':
@@ -49,38 +50,31 @@ class FourierLogSparseLoss(th.nn.Module):
 
     """
 
-    def __init__(self, p=1, axis=(-2, -1), caxis=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, p=1., reduction='mean'):
         super(FourierLogSparseLoss, self).__init__()
         self.p = p
-        self.axis = [axis] if type(axis) is int else axis
+        self.dim = dim
+        self.cdim = cdim
         self.reduction = reduction
-        self.caxis = caxis
 
     def forward(self, X):
-        D = X.dim()
-        if self.axis is None:
-            axis = list(range(1, D)) if D > 2 else list(range(0, D))
+        if th.is_complex(X):  # complex in complex
+            pass
         else:
-            axis = self.axis
-        axis = [a + D if a < 0 else a for a in axis]
+            if self.cdim is None:  # real
+                pass
+            else:  # complex in real
+                d = X.ndim
+                idxreal = tl.sl(d, axis=self.cdim, idx=[[0]])
+                idximag = tl.sl(d, axis=self.cdim, idx=[[1]])
+                X = X[idxreal] + 1j * X[idximag]
 
-        if th.is_complex(X):
-            caxis = None
-        else:
-            caxis = self.caxis + D if self.caxis < 0 else self.caxis
-            if caxis != D - 1:
-                newshape = list(range(0, caxis)) + list(range(caxis + 1, D)) + [caxis]
-                X = X.permute(newshape)
-                axis = [a if a < caxis else a - 1 for a in axis]
-
-            X = X[..., 0] + 1j * X[..., 1]
-
-        for a in axis:
+        for a in self.dim:
             X = th.fft.fft(X, n=None, dim=a)
 
         X = X.abs()
 
-        S = th.sum(th.log2(1 + X / self.p), axis)
+        S = th.sum(th.log2(1 + X / self.p), self.dim)
         if self.reduction == 'mean':
             S = th.mean(S)
         if self.reduction == 'sum':
@@ -98,8 +92,8 @@ if __name__ == '__main__':
     X = X[:, :, :, 0] + 1j * X[:, :, :, 1]
 
     sparse_func = LogSparseLoss(p=p)
-    sparse_func = LogSparseLoss(p=p, axis=None, caxis=-1)
-    sparse_func1 = LogSparseLoss(p=p, axis=None, caxis=1)
+    sparse_func = LogSparseLoss(p=p, dim=None, cdim=-1)
+    sparse_func1 = LogSparseLoss(p=p, dim=None, cdim=1)
     S = sparse_func(X)
     print(S)
 
@@ -114,8 +108,8 @@ if __name__ == '__main__':
     # print(X)
 
     sparse_func = FourierLogSparseLoss(p=p)
-    sparse_func = FourierLogSparseLoss(p=p, axis=(1, 2), caxis=-1)
-    sparse_func1 = FourierLogSparseLoss(p=p, axis=(2, 3), caxis=1)
+    sparse_func = FourierLogSparseLoss(p=p, dim=(1, 2), cdim=-1)
+    sparse_func1 = FourierLogSparseLoss(p=p, dim=(2, 3), cdim=1)
     S = sparse_func(X)
     print(S)
 

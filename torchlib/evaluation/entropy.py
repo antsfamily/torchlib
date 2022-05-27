@@ -86,13 +86,11 @@ def entropy(X, cdim=None, dim=None, mode='shannon', reduction='mean'):
         if cdim is None:  # real
             X = X**2
         else:  # complex in real
-            X = th.sum(X**2, axis=cdim)
+            X = th.sum(X**2, dim=cdim)
 
-    axis = tuple(range(X.ndim)) if dim is None else dim
-
-    P = th.sum(X, axis=axis, keepdims=True)
+    P = th.sum(X, dim=dim, keepdims=True)
     p = X / (P + EPS)
-    S = -th.sum(p * logfunc(p + EPS), axis)
+    S = -th.sum(p * logfunc(p + EPS), dim=dim)
     if reduction == 'mean':
         S = th.mean(S)
     if reduction == 'sum':
