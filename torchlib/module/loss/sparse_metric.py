@@ -12,6 +12,27 @@ import torchlib as tl
 class LogSparseLoss(th.nn.Module):
     """Log sparse loss
 
+    Parameters
+    ----------
+    X : array
+        original
+    X : array
+        reconstructed
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    dim : int or None
+        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    p : float
+        weight
+    reduction : str, optional
+        The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
+    
+    Returns
+    -------
+    scalar or array
+         loss
     """
 
     def __init__(self, cdim=None, dim=None, p=1., reduction='mean'):
@@ -29,8 +50,8 @@ class LogSparseLoss(th.nn.Module):
                 pass
             else:  # complex in real
                 d = X.ndim
-                idxreal = tl.sl(d, axis=self.cdim, idx=[[0]])
-                idximag = tl.sl(d, axis=self.cdim, idx=[[1]])
+                idxreal = tl.sl(d, axis=self.cdim, idx=[0])
+                idximag = tl.sl(d, axis=self.cdim, idx=[1])
                 X = X[idxreal] + 1j * X[idximag]
 
         X = X.abs()
@@ -46,7 +67,27 @@ class LogSparseLoss(th.nn.Module):
 class FourierLogSparseLoss(th.nn.Module):
     r"""FourierLogSparseLoss
 
-
+    Parameters
+    ----------
+    X : array
+        original
+    X : array
+        reconstructed
+    cdim : int or None
+        If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
+        then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
+        otherwise (None), :attr:`X` will be treated as real-valued
+    dim : int or None
+        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    p : float
+        weight
+    reduction : str, optional
+        The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
+    
+    Returns
+    -------
+    scalar or array
+         loss
 
     """
 
@@ -65,8 +106,8 @@ class FourierLogSparseLoss(th.nn.Module):
                 pass
             else:  # complex in real
                 d = X.ndim
-                idxreal = tl.sl(d, axis=self.cdim, idx=[[0]])
-                idximag = tl.sl(d, axis=self.cdim, idx=[[1]])
+                idxreal = tl.sl(d, axis=self.cdim, idx=[0])
+                idximag = tl.sl(d, axis=self.cdim, idx=[1])
                 X = X[idxreal] + 1j * X[idximag]
 
         for a in self.dim:
