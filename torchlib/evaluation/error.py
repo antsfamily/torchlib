@@ -9,7 +9,7 @@ import torch as th
 import torchlib as tl
 
 
-def mse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
+def mse(X, Y, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
     r"""computes the mean square error
 
     Both complex and real representation are supported.
@@ -28,7 +28,11 @@ def mse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -93,15 +97,14 @@ def mse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
             else:
                 E = th.mean(X**2, dim=dim)
         else:  # complex in real
-
             if dim is None:
                 E = th.mean((X**2).sum(dim=cdim))
             else:
-                E = th.mean((X**2).sum(dim=cdim), dim=dim)
+                E = th.mean((X**2).sum(dim=cdim, keepdims=keepcdim), dim=dim)
 
     if norm is True:
-        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
-        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, reduction=None)
+        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
+        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:
@@ -112,7 +115,7 @@ def mse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
     return E
 
 
-def sse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
+def sse(X, Y, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
     r"""computes the sum square error
 
     Both complex and real representation are supported.
@@ -131,7 +134,11 @@ def sse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -196,15 +203,14 @@ def sse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
             else:
                 E = th.sum(X**2, dim=dim)
         else:  # complex in real
-
             if dim is None:
                 E = th.sum((X**2).sum(dim=cdim))
             else:
-                E = th.sum((X**2).sum(dim=cdim), dim=dim)
+                E = th.sum((X**2).sum(dim=cdim, keepdims=keepcdim), dim=dim)
 
     if norm is True:
-        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
-        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, reduction=None)
+        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
+        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:
@@ -215,7 +221,7 @@ def sse(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
     return E
 
 
-def mae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
+def mae(X, Y, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
     r"""computes the mean absoluted error
 
     Both complex and real representation are supported.
@@ -234,7 +240,11 @@ def mae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -302,11 +312,11 @@ def mae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
             if dim is None:
                 E = th.mean((X**2).sum(dim=cdim).sqrt())
             else:
-                E = th.mean((X**2).sum(dim=cdim).sqrt(), dim=dim)
+                E = th.mean((X**2).sum(dim=cdim, keepdims=keepcdim).sqrt(), dim=dim)
     
     if norm is True:
-        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
-        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, reduction=None)
+        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
+        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:
@@ -317,7 +327,7 @@ def mae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
     return E
 
 
-def sae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
+def sae(X, Y, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
     r"""computes the sum absoluted error
 
     Both complex and real representation are supported.
@@ -336,7 +346,11 @@ def sae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all.
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -403,11 +417,11 @@ def sae(X, Y, cdim=None, dim=None, norm=False, reduction='mean'):
             if dim is None:
                 E = th.sum((X**2).sum(dim=cdim).sqrt())
             else:
-                E = th.sum((X**2).sum(dim=cdim).sqrt(), dim=dim)
+                E = th.sum((X**2).sum(dim=cdim, keepdims=keepcdim).sqrt(), dim=dim)
 
     if norm is True:
-        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, reduction=None)
-        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, reduction=None)
+        xnorm = tl.fnorm(X, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
+        ynorm = tl.fnorm(Y, cdim=cdim, dim=dim, keepcdim=keepcdim, reduction=None)
         E /= (xnorm * ynorm + tl.EPS)
 
     if reduction in ['mean', 'MEAN']:

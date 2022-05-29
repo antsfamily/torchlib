@@ -126,7 +126,7 @@ def polyval(w, x, deg=None):
     deg : int or tuple or list or None, optional
         degree (:math:`M`) of the fitting polynomial, ``deg[0]`` is the minimum degree,
         ``deg[1]`` is the maximum degree; if ``deg`` is an integer, the minimum degree is 0,
-        the maximum degree is ``deg``; if ``deg`` is ``None``, the minimum degree is 0
+        the maximum degree is ``deg``; if ``deg`` is :obj:`None`, the minimum degree is 0
         the maximum degree is ``w.shape[1] - 1``(the default is None)
 
     Returns

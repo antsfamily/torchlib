@@ -27,8 +27,14 @@ class MSELoss(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    dim : int or None
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
@@ -78,14 +84,16 @@ class MSELoss(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(MSELoss, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.keepcdim = keepcdim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.mse(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.mse(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 
 class SSELoss(th.nn.Module):
@@ -106,9 +114,15 @@ class SSELoss(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
-    reduction : str, optional
+    dim : int or None
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
+    eduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
     Returns
@@ -157,14 +171,16 @@ class SSELoss(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(SSELoss, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.keepcdim = keepcdim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.sse(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.sse(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 class MAELoss(th.nn.Module):
     r"""computes the mean absoluted error
@@ -184,8 +200,14 @@ class MAELoss(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    dim : int or None
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
@@ -235,14 +257,16 @@ class MAELoss(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(MAELoss, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.keepcdim = keepcdim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.mae(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.mae(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 
 class SAELoss(th.nn.Module):
@@ -263,8 +287,14 @@ class SAELoss(th.nn.Module):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    axis : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+    dim : int or None
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
+    norm : bool
+        If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
         The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is ``'mean'``)
     
@@ -314,14 +344,16 @@ class SAELoss(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(SAELoss, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.keepcdim = keepcdim
+        self.norm = norm
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.sae(X=P, Y=G, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.sae(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 
 if __name__ == '__main__':

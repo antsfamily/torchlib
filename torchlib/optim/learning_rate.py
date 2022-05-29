@@ -190,7 +190,7 @@ class LrFinder():
         lr = lr_init
         optimizer.param_groups[0]['lr'] = lr
         avg_loss, best_loss = 0., 0.
-
+        criterion = [criterion] if (type(criterion) is not list) and (type(criterion) is not tuple) else criterion
         for b, data in enumerate(dataloader):
             data = [x.to(self.device) for x in data]
 
@@ -198,11 +198,12 @@ class LrFinder():
                 optimizer.zero_grad()
 
             outputs = model(*data[:nin])
-
-            if type(outputs) is tuple or type(outputs) is list:
-                loss = criterion(*outputs[:nout], *data[nin:])
-            else:
-                loss = criterion(outputs, *data[nin:])
+            loss = 0.
+            for lossf in criterion:
+                if type(outputs) is tuple or type(outputs) is list:
+                    loss += lossf(*outputs[:nout], *data[nin:])
+                else:
+                    loss += lossf(outputs, *data[nin:])
 
             # Compute the smoothed loss
             avg_loss = beta * avg_loss + (1. - beta) * loss.item()

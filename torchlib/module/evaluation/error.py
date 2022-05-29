@@ -28,7 +28,11 @@ class MSE(th.nn.Module):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -80,15 +84,16 @@ class MSE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(MSE, self).__init__()
         self.cdim = cdim
         self.dim = dim
         self.norm = norm
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.mse(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
+        return tl.mse(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 
 class SSE(th.nn.Module):
@@ -110,7 +115,11 @@ class SSE(th.nn.Module):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -162,15 +171,16 @@ class SSE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(SSE, self).__init__()
         self.cdim = cdim
         self.dim = dim
         self.norm = norm
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.sse(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
+        return tl.sse(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 class MAE(th.nn.Module):
     r"""computes the mean absoluted error
@@ -191,7 +201,11 @@ class MAE(th.nn.Module):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -243,15 +257,16 @@ class MAE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(MAE, self).__init__()
         self.cdim = cdim
         self.dim = dim
         self.norm = norm
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.mae(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
+        return tl.mae(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 
 class SAE(th.nn.Module):
@@ -273,7 +288,11 @@ class SAE(th.nn.Module):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is :obj:`None`, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing error. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     norm : bool
         If :obj:`True`, normalize with the f-norm of :attr:`X` and :attr:`Y`. (default is :obj:`False`)
     reduction : str, optional
@@ -325,15 +344,16 @@ class SAE(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, dim=None, norm=False, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, norm=False, reduction='mean'):
         super(SAE, self).__init__()
         self.cdim = cdim
         self.dim = dim
         self.norm = norm
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
     def forward(self, P, G):
-        return tl.sae(X=P, Y=G, cdim=self.cdim, dim=self.dim, norm=self.norm, reduction=self.reduction)
+        return tl.sae(X=P, Y=G, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, norm=self.norm, reduction=self.reduction)
 
 
 if __name__ == '__main__':

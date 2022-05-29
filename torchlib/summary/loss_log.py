@@ -43,7 +43,16 @@ class LossLog():
 
     def plot(self, x=None):
         legend = []
-        plt.figure()
+        try:
+            plt.figure()
+        except Exception as e:
+            # print(e.args)
+            # print(str(e))
+            # print(repr(e))
+            import matplotlib; matplotlib.use('Agg');
+            import matplotlib.pyplot as plt
+            plt.figure()
+
         for k, v in self.losses.items():
             if len(v) > 0:
                 if x is None:

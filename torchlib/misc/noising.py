@@ -104,7 +104,7 @@ def imnoise(img, noise='wgn', snr=30, peak=None, fmt='chnllast'):
     peak : None, str or float
         Peak value in input, if None, auto detected (default), if ``'maxv'``, use the maximum value as peak value.
     fmt : str or None, optional
-        for color image, :attr:`fmt` should be specified with ``'chnllast'`` or ``'chnlfirst'``, for gray image, :attr:`fmt` should be setted to ``None``.
+        for color image, :attr:`fmt` should be specified with ``'chnllast'`` or ``'chnlfirst'``, for gray image, :attr:`fmt` should be setted to :obj:`None`.
 
     Returns
     -------

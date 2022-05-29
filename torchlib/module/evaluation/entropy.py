@@ -21,14 +21,18 @@ class Entropy(th.nn.Module):
     ----------
     X : tensor
         The complex or real inputs, for complex inputs, both complex and real representations are surpported.
+    mode : str, optional
+        The entropy mode: ``'shannon'`` or ``'natural'`` (the default is 'shannon')
     cdim : int or None
         If :attr:`X` is complex-valued, :attr:`caxis` is ignored. If :attr:`X` is real-valued and :attr:`caxis` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`caxis` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    dim : tuple, None, optional
-        The dimension axis (:attr:`caxis` is not included) for computing entropy. The default is ``None``, which means all. 
-    mode : str, optional
-        The entropy mode: ``'shannon'`` or ``'natural'`` (the default is 'shannon')
+    dim : int or None
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing entropy. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
@@ -46,22 +50,22 @@ class Entropy(th.nn.Module):
         X = th.randn(5, 2, 3, 4)
 
         # real
-        S1 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction=None)(X)
-        S2 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')(X)
-        S3 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')(X)
+        S1 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction=None)(X)
+        S2 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')(X)
+        S3 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')(X)
         print(S1, S2, S3)
 
         # complex in real format
-        S1 = Entropy(cdim=1, dim=(-2, -1), mode='shannon', reduction=None)(X)
-        S2 = Entropy(cdim=1, dim=(-2, -1), mode='shannon', reduction='sum')(X)
-        S3 = Entropy(cdim=1, dim=(-2, -1), mode='shannon', reduction='mean')(X)
+        S1 = Entropy(mode='shannon', cdim=1, dim=(-2, -1), reduction=None)(X)
+        S2 = Entropy(mode='shannon', cdim=1, dim=(-2, -1), reduction='sum')(X)
+        S3 = Entropy(mode='shannon', cdim=1, dim=(-2, -1), reduction='mean')(X)
         print(S1, S2, S3)
 
         # complex in complex format
         X = X[:, 0, ...] + 1j * X[:, 1, ...]
-        S1 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction=None)(X)
-        S2 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')(X)
-        S3 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')(X)
+        S1 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction=None)(X)
+        S2 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')(X)
+        S3 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')(X)
         print(S1, S2, S3)
 
         # output
@@ -74,15 +78,16 @@ class Entropy(th.nn.Module):
         tensor([3.2738, 2.5613, 3.2911, 2.7989, 3.2789]) tensor(15.2040) tensor(3.0408)
     """
 
-    def __init__(self, cdim=None, dim=None, mode='shannon', reduction='mean'):
+    def __init__(self, mode='shannon', cdim=None, dim=None, keepcdim=False, reduction='mean'):
         super(Entropy, self).__init__()
         self.mode = mode
         self.dim = dim
         self.cdim = cdim
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
     def forward(self, X):
-        return tl.entropy(X, cdim=self.cdim, dim=self.dim, mode=self.mode, reduction=self.reduction)
+        return tl.entropy(X, mode=self.mode, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, reduction=self.reduction)
 
 
 if __name__ == '__main__':
@@ -91,20 +96,20 @@ if __name__ == '__main__':
     X = th.randn(5, 2, 3, 4)
 
     # real
-    S1 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction=None)(X)
-    S2 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')(X)
-    S3 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')(X)
+    S1 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction=None)(X)
+    S2 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')(X)
+    S3 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')(X)
     print(S1, S2, S3)
 
     # complex in real format
-    S1 = Entropy(cdim=1, dim=(-2, -1), mode='shannon', reduction=None)(X)
-    S2 = Entropy(cdim=1, dim=(-2, -1), mode='shannon', reduction='sum')(X)
-    S3 = Entropy(cdim=1, dim=(-2, -1), mode='shannon', reduction='mean')(X)
+    S1 = Entropy(mode='shannon', cdim=1, dim=(-2, -1), reduction=None)(X)
+    S2 = Entropy(mode='shannon', cdim=1, dim=(-2, -1), reduction='sum')(X)
+    S3 = Entropy(mode='shannon', cdim=1, dim=(-2, -1), reduction='mean')(X)
     print(S1, S2, S3)
 
     # complex in complex format
     X = X[:, 0, ...] + 1j * X[:, 1, ...]
-    S1 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction=None)(X)
-    S2 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')(X)
-    S3 = Entropy(cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')(X)
+    S1 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction=None)(X)
+    S2 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')(X)
+    S3 = Entropy(mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')(X)
     print(S1, S2, S3)

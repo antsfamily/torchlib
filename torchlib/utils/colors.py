@@ -153,7 +153,7 @@ def gray2rgb(gray, cmap, drange=[0, 255], fmtstr=False):
         colormap = cmaps['parula']
         L = 64
     else:
-        colormap = cm.get_cmap(cmap, L) if type(cmap) is str else cm
+        colormap = cm.get_cmap(cmap, L) if type(cmap) is str else cmap
 
     N, H, W = gray.shape
     gray = gray.cpu()

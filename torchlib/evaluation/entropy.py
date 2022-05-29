@@ -9,7 +9,7 @@ import torch as th
 from torchlib.utils.const import EPS
 
 
-def entropy(X, cdim=None, dim=None, mode='shannon', reduction='mean'):
+def entropy(X, mode='shannon', cdim=None, dim=None, keepcdim=False, reduction='mean'):
     r"""compute the entropy of the inputs
 
     .. math::
@@ -21,14 +21,18 @@ def entropy(X, cdim=None, dim=None, mode='shannon', reduction='mean'):
     ----------
     X : tensor
         The complex or real inputs, for complex inputs, both complex and real representations are surpported.
+    mode : str, optional
+        The entropy mode: ``'shannon'`` or ``'natural'`` (the default is 'shannon')
     cdim : int or None
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    dim : tuple, None, optional
-        The dimension axis (:attr:`cdim` is not included) for computing entropy. The default is ``None``, which means all. 
-    mode : str, optional
-        The entropy mode: ``'shannon'`` or ``'natural'`` (the default is 'shannon')
+    dim : int or None
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing norm. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
@@ -46,22 +50,22 @@ def entropy(X, cdim=None, dim=None, mode='shannon', reduction='mean'):
         X = th.randn(5, 2, 3, 4)
 
         # real
-        S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
-        S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
-        S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+        S1 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction=None)
+        S2 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')
+        S3 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')
         print(S1, S2, S3)
 
         # complex in real format
-        S1 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction=None)
-        S2 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='sum')
-        S3 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='mean')
+        S1 = entropy(X, mode='shannon', cdim=1, dim=(-2, -1), reduction=None)
+        S2 = entropy(X, mode='shannon', cdim=1, dim=(-2, -1), reduction='sum')
+        S3 = entropy(X, mode='shannon', cdim=1, dim=(-2, -1), reduction='mean')
         print(S1, S2, S3)
 
         # complex in complex format
         X = X[:, 0, ...] + 1j * X[:, 1, ...]
-        S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
-        S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
-        S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+        S1 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction=None)
+        S2 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')
+        S3 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')
         print(S1, S2, S3)
 
         # output
@@ -86,7 +90,7 @@ def entropy(X, cdim=None, dim=None, mode='shannon', reduction='mean'):
         if cdim is None:  # real
             X = X**2
         else:  # complex in real
-            X = th.sum(X**2, dim=cdim)
+            X = th.sum(X**2, dim=cdim, keepdims=keepcdim)
 
     P = th.sum(X, dim=dim, keepdims=True)
     p = X / (P + EPS)
@@ -105,21 +109,21 @@ if __name__ == '__main__':
     X = th.randn(5, 2, 3, 4)
 
     # real
-    S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
-    S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
-    S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+    S1 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction=None)
+    S2 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')
+    S3 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')
     print(S1, S2, S3)
 
     # complex in real format
-    S1 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction=None)
-    S2 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='sum')
-    S3 = entropy(X, cdim=1, dim=(-2, -1), mode='shannon', reduction='mean')
+    S1 = entropy(X, mode='shannon', cdim=1, dim=(-2, -1), reduction=None)
+    S2 = entropy(X, mode='shannon', cdim=1, dim=(-2, -1), reduction='sum')
+    S3 = entropy(X, mode='shannon', cdim=1, dim=(-2, -1), reduction='mean')
     print(S1, S2, S3)
 
     # complex in complex format
     X = X[:, 0, ...] + 1j * X[:, 1, ...]
-    S1 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction=None)
-    S2 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='sum')
-    S3 = entropy(X, cdim=None, dim=(-2, -1), mode='shannon', reduction='mean')
+    S1 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction=None)
+    S2 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='sum')
+    S3 = entropy(X, mode='shannon', cdim=None, dim=(-2, -1), reduction='mean')
     print(S1, S2, S3)
 

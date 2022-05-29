@@ -9,7 +9,7 @@ import torch as th
 from torchlib.utils.const import EPS
 
 
-def contrast(X, cdim=None, dim=None, mode='way1', reduction='mean'):
+def contrast(X, mode='way1', cdim=None, dim=None, keepcdim=False, reduction='mean'):
     r"""Compute contrast of an complex image
 
     ``'way1'`` is defined as follows, see [1]:
@@ -30,14 +30,18 @@ def contrast(X, cdim=None, dim=None, mode='way1', reduction='mean'):
     ----------
     X : torch tensor
         The image array.
+    mode : str, optional
+        ``'way1'`` or ``'way2'``
     cdim : int or None
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : tuple, None, optional
-        The dimension axis (:attr:`cdim` is not included) for computing contrast. The default is ``None``, which means all.
-    mode : str, optional
-        ``'way1'`` or ``'way2'``
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing contrast. 
+        The default is :obj:`None`, which means all.
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     reduction : str, optional
         The operation in batch dim, ``'None'``, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
@@ -90,7 +94,7 @@ def contrast(X, cdim=None, dim=None, mode='way1', reduction='mean'):
         if cdim is None:  # real
             X = X**2
         else:  # complex in real
-            X = th.sum(X**2, axis=cdim)
+            X = th.sum(X**2, axis=cdim, keepdims=keepcdim)
 
     if X.dtype is not th.float32 or th.double:
         X = X.to(th.float32)

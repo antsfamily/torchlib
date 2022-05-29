@@ -28,9 +28,13 @@ class Fnorm(th.nn.Module):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is ``None``, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing norm. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     reduction : str, None or optional
-        The operation in batch dim, ``None``, ``'mean'`` or ``'sum'`` (the default is 'mean')
+        The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
     Returns
     -------
@@ -75,15 +79,16 @@ class Fnorm(th.nn.Module):
         tensor([4.0294, 4.7058, 5.7154, 4.0743, 5.0290]) tensor(23.5539) tensor(4.7108)
     """
 
-    def __init__(self, cdim=None, dim=None, reduction='mean'):
+    def __init__(self, cdim=None, dim=None, keepcdim=False, reduction='mean'):
         super(Fnorm, self).__init__()
         self.cdim = cdim
         self.dim = dim
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
     def forward(self, X):
 
-        return tl.fnorm(X, cdim=self.cdim, dim=self.dim, reduction=self.reduction)
+        return tl.fnorm(X, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, reduction=self.reduction)
 
 
 class Pnorm(th.nn.Module):
@@ -100,14 +105,20 @@ class Pnorm(th.nn.Module):
     ----------
     X : tensor
         input
+    p : int
+        Specifies the power. The default is 2.
     cdim : int or None
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is ``None``, which means all. 
-    p : int
-        Specifies the power. The default is 2.
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing norm. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
+    reduction : str, None or optional
+        The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is 'mean')
     
     Returns
     -------
@@ -152,16 +163,17 @@ class Pnorm(th.nn.Module):
         tensor([4.0294, 4.7058, 5.7154, 4.0743, 5.0290]) tensor(23.5539) tensor(4.7108)
     """
 
-    def __init__(self, cdim=None, dim=None, p=2, reduction='mean'):
+    def __init__(self, p=2, cdim=None, dim=None, keepcdim=False, reduction='mean'):
         super(Pnorm, self).__init__()
+        self.p = p
         self.cdim = cdim
         self.dim = dim
-        self.p = p
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
     def forward(self, X):
 
-        return tl.pnorm(X, cdim=self.cdim, dim=self.dim, p=self.p, reduction=self.reduction)
+        return tl.pnorm(X, p=self.p, cdim=self.cdim, dim=self.dim, keepcdim=self.keepcdim, reduction=self.reduction)
 
 
 if __name__ == '__main__':

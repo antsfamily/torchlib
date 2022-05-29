@@ -70,8 +70,6 @@ from .module.loss.fourier import FourierLoss, FourierAmplitudeLoss, FourierPhase
 from .module.loss.error import MSELoss, SSELoss, MAELoss, SAELoss
 from .module.loss.sparse_metric import LogSparseLoss, FourierLogSparseLoss
 
-from .module.loss.semantic import EdgeLoss
-# from .module.loss.segmentation import SoftDiceLoss, FocalLoss, BinaryCrossEntropyLoss, ContourLoss, EdgeAwareLoss
 
 from .module.layers.balanceconv2d import BalaConv2d
 from .module.layers.cnnsize import ConvSize1d, ConvTransposeSize1d, PoolSize1d, UnPoolSize1d, ConvSize2d, ConvTransposeSize2d, PoolSize2d, UnPoolSize2d

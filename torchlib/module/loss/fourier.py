@@ -32,6 +32,9 @@ class FourierLoss(th.nn.Module):
         the dimensions for Fourier transformation. by default (-2, -1).
     iftdim : tuple, None, optional
         the dimension for inverse Fourier transformation, by default None.
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     ftn : int, None, optional
         the number of points for Fourier transformation, by default None
     iftn : int, None, optional
@@ -83,7 +86,7 @@ class FourierLoss(th.nn.Module):
         tensor(45425624.)
     """
 
-    def __init__(self, cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean'):
+    def __init__(self, err='mse', cdim=None, ftdim=(-2, -1), iftdim=None, keepcdim=False, ftn=None, iftn=None, ftnorm=None, iftnorm=None, reduction='mean'):
         super(FourierLoss, self).__init__()
         self.cdim = cdim
         self.ftdim = [ftdim] if (type(ftdim) is not list and type(ftdim) is not tuple) else ftdim
@@ -92,6 +95,7 @@ class FourierLoss(th.nn.Module):
         self.iftn = [iftn] if (type(iftn) is not list and type(iftn) is not tuple) else iftn
         self.ftnorm = [ftnorm] if (type(ftnorm) is not list and type(ftnorm) is not tuple) else ftnorm
         self.iftnorm = [iftnorm] if (type(iftnorm) is not list and type(iftnorm) is not tuple) else iftnorm
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
         if err in ['mse', 'MSE', 'Mse']:
@@ -102,10 +106,9 @@ class FourierLoss(th.nn.Module):
             self.err = err
 
     def forward(self, P, G):
-        d = P.dim()
         if self.cdim is not None:
-            P = P[tl.sl(d, self.cdim, [[0]])] + 1j * P[tl.sl(d, self.cdim, [[1]])]
-            G = G[tl.sl(d, self.cdim, [[0]])] + 1j * G[tl.sl(d, self.cdim, [[1]])]
+            P = tl.r2c(P, cdim=self.cdim, keepcdim=self.keepcdim)
+            G = tl.r2c(G, cdim=self.cdim, keepcdim=self.keepcdim)
 
         for dim, n, norm in zip(self.ftdim, self.ftn, self.ftnorm):
             if dim is None:
@@ -121,8 +124,8 @@ class FourierLoss(th.nn.Module):
                 P = th.fft.ifft(P, n=n, dim=dim, norm=norm)
                 G = th.fft.ifft(G, n=n, dim=dim, norm=norm)
 
-        P = th.view_as_real(P)
-        G = th.view_as_real(G)
+        P = tl.c2r(P, cdim=-1)
+        G = tl.c2r(G, cdim=-1)
 
         return self.err(P, G)
 
@@ -134,6 +137,8 @@ class FourierAmplitudeLoss(th.nn.Module):
 
     Parameters
     ----------
+    err : str, loss function, optional
+        ``'MSE'``, ``'MAE'`` or torch's loss function, by default ``'mse'``.
     cdim : int, optional
         If data is complex-valued but represented as real tensors, 
         you should specify the dimension. Otherwise, set it to None, defaults is None.
@@ -144,6 +149,9 @@ class FourierAmplitudeLoss(th.nn.Module):
         the dimensions for Fourier transformation. by default (-2, -1).
     iftdim : tuple, None, optional
         the dimension for inverse Fourier transformation, by default None.
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     ftn : int, None, optional
         the number of points for Fourier transformation, by default None
     iftn : int, None, optional
@@ -158,8 +166,6 @@ class FourierAmplitudeLoss(th.nn.Module):
         - "forward" - no normalization
         - "backward" - normalize by 1/n
         - "ortho" - normalize by 1/sqrt(n) (making the IFFT orthonormal)
-    err : str, loss function, optional
-        ``'MSE'``, ``'MAE'`` or torch's loss function, by default ``'mse'``
     reduction : str, optional
         reduction behavior, ``'sum'`` or ``'mean'``, by default ``'mean'``
 
@@ -196,7 +202,7 @@ class FourierAmplitudeLoss(th.nn.Module):
 
     """
 
-    def __init__(self, cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean'):
+    def __init__(self, err='mse', cdim=None, ftdim=(-2, -1), iftdim=None, keepcdim=False, ftn=None, iftn=None, ftnorm=None, iftnorm=None, reduction='mean'):
         super(FourierAmplitudeLoss, self).__init__()
         self.cdim = cdim
         self.ftdim = [ftdim] if (type(ftdim) is not list and type(ftdim) is not tuple) else ftdim
@@ -205,6 +211,7 @@ class FourierAmplitudeLoss(th.nn.Module):
         self.iftn = [iftn] if (type(iftn) is not list and type(iftn) is not tuple) else iftn
         self.ftnorm = [ftnorm] if (type(ftnorm) is not list and type(ftnorm) is not tuple) else ftnorm
         self.iftnorm = [iftnorm] if (type(iftnorm) is not list and type(iftnorm) is not tuple) else iftnorm
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
         if err in ['mse', 'MSE', 'Mse']:
@@ -215,10 +222,9 @@ class FourierAmplitudeLoss(th.nn.Module):
             self.err = err
 
     def forward(self, P, G):
-        d = P.dim()
         if self.cdim is not None:
-            P = P[tl.sl(d, self.cdim, [[0]])] + 1j * P[tl.sl(d, self.cdim, [[1]])]
-            G = G[tl.sl(d, self.cdim, [[0]])] + 1j * G[tl.sl(d, self.cdim, [[1]])]
+            P = tl.r2c(P, cdim=self.cdim, keepcdim=self.keepcdim)
+            G = tl.r2c(G, cdim=self.cdim, keepcdim=self.keepcdim)
 
         for dim, n, norm in zip(self.ftdim, self.ftn, self.ftnorm):
             if dim is None:
@@ -246,6 +252,8 @@ class FourierPhaseLoss(th.nn.Module):
 
     Parameters
     ----------
+    err : str, loss function, optional
+        ``'MSE'``, ``'MAE'`` or torch's loss function, by default ``'mse'``
     cdim : int, optional
         If data is complex-valued but represented as real tensors, 
         you should specify the dimension. Otherwise, set it to None, defaults is None.
@@ -256,6 +264,9 @@ class FourierPhaseLoss(th.nn.Module):
         the dimensions for Fourier transformation. by default (-2, -1).
     iftdim : tuple, None, optional
         the dimension for inverse Fourier transformation, by default None.
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     ftn : int, None, optional
         the number of points for Fourier transformation, by default None
     iftn : int, None, optional
@@ -270,8 +281,6 @@ class FourierPhaseLoss(th.nn.Module):
         - "forward" - no normalization
         - "backward" - normalize by 1/n
         - "ortho" - normalize by 1/sqrt(n) (making the IFFT orthonormal)
-    err : str, loss function, optional
-        ``'MSE'``, ``'MAE'`` or torch's loss function, by default ``'mse'``
     reduction : str, optional
         reduction behavior, ``'sum'`` or ``'mean'``, by default ``'mean'``
 
@@ -307,7 +316,7 @@ class FourierPhaseLoss(th.nn.Module):
         tensor(6.6797)
     """
 
-    def __init__(self, cdim=None, ftdim=(-2, -1), iftdim=None, ftn=None, iftn=None, ftnorm=None, iftnorm=None, err='mse', reduction='mean'):
+    def __init__(self, err='mse', cdim=None, ftdim=(-2, -1), iftdim=None, keepcdim=False, ftn=None, iftn=None, ftnorm=None, iftnorm=None, reduction='mean'):
         super(FourierPhaseLoss, self).__init__()
         self.cdim = cdim
         self.ftdim = [ftdim] if (type(ftdim) is not list and type(ftdim) is not tuple) else ftdim
@@ -316,6 +325,7 @@ class FourierPhaseLoss(th.nn.Module):
         self.iftn = [iftn] if (type(iftn) is not list and type(iftn) is not tuple) else iftn
         self.ftnorm = [ftnorm] if (type(ftnorm) is not list and type(ftnorm) is not tuple) else ftnorm
         self.iftnorm = [iftnorm] if (type(iftnorm) is not list and type(iftnorm) is not tuple) else iftnorm
+        self.keepcdim = keepcdim
         self.reduction = reduction
 
         if err in ['mse', 'MSE', 'Mse']:
@@ -326,10 +336,9 @@ class FourierPhaseLoss(th.nn.Module):
             self.err = err
 
     def forward(self, P, G):
-        d = P.dim()
         if self.cdim is not None:
-            P = P[tl.sl(d, self.cdim, [[0]])] + 1j * P[tl.sl(d, self.cdim, [[1]])]
-            G = G[tl.sl(d, self.cdim, [[0]])] + 1j * G[tl.sl(d, self.cdim, [[1]])]
+            P = tl.r2c(P, cdim=self.cdim, keepcdim=self.keepcdim)
+            G = tl.r2c(G, cdim=self.cdim, keepcdim=self.keepcdim)
 
         for dim, n, norm in zip(self.ftdim, self.ftn, self.ftnorm):
             if dim is None:

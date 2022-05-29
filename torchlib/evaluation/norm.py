@@ -9,7 +9,7 @@ import torch as th
 import torchlib as tl
 
 
-def fnorm(X, cdim=None, dim=None, reduction='mean'):
+def fnorm(X, cdim=None, dim=None, keepcdim=False, reduction='mean'):
     r"""obtain the f-norm of a tensor
 
     Both complex and real representation are supported.
@@ -28,9 +28,13 @@ def fnorm(X, cdim=None, dim=None, reduction='mean'):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is ``None``, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing norm. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     reduction : str, None or optional
-        The operation in batch dim, ``None``, ``'mean'`` or ``'sum'`` (the default is 'mean')
+        The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is 'mean')
 
     Returns
     -------
@@ -91,7 +95,7 @@ def fnorm(X, cdim=None, dim=None, reduction='mean'):
             if dim is None:
                 F = (X**2).sum(dim=cdim).sum().sqrt()
             else:
-                F = (X**2).sum(dim=cdim).sum(dim=dim).sqrt()
+                F = (X**2).sum(dim=cdim, keepdims=keepcdim).sum(dim=dim).sqrt()
 
     if reduction in ['sum', 'SUM']:
         F = th.sum(F)
@@ -101,7 +105,7 @@ def fnorm(X, cdim=None, dim=None, reduction='mean'):
     return F
 
 
-def pnorm(X, cdim=None, dim=None, p=2, reduction='mean'):
+def pnorm(X, cdim=None, dim=None, keepcdim=False, p=2, reduction='mean'):
     r"""obtain the p-norm of a tensor
 
     Both complex and real representation are supported.
@@ -120,10 +124,16 @@ def pnorm(X, cdim=None, dim=None, p=2, reduction='mean'):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     dim : int or None
-        The dimension axis (:attr:`cdim` is not included) for computing norm. The default is ``None``, which means all. 
+        The dimension axis (if :attr:`keepcdim` is :obj:`False` then :attr:`cdim` is not included) for computing norm. 
+        The default is :obj:`None`, which means all. 
+    keepcdim : bool
+        If :obj:`True`, the complex dimension will be keeped. Only works when :attr:`X` is complex-valued tensor 
+        and :attr:`dim` is not :obj:`None` but represents in real format. Default is :obj:`False`.
     p : int
         Specifies the power. The default is 2.
-    
+    reduction : str, None or optional
+        The operation in batch dim, :obj:`None`, ``'mean'`` or ``'sum'`` (the default is 'mean')
+
     Returns
     -------
     tensor
@@ -183,7 +193,7 @@ def pnorm(X, cdim=None, dim=None, p=2, reduction='mean'):
             if dim is None:
                 F = (X**2).sum(dim=cdim).sqrt().pow(p).sum().pow(1/p)
             else:
-                F = (X**2).sum(dim=cdim).sqrt().pow(p).sum(dim=dim).pow(1/p)
+                F = (X**2).sum(dim=cdim, keepdims=keepcdim).sqrt().pow(p).sum(dim=dim).pow(1/p)
             
     if reduction in ['sum', 'SUM']:
         F = th.sum(F)

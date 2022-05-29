@@ -188,7 +188,7 @@ def readcsv(filepath, sep=None, vfn=None, nlines=None):
     sep : str, optional
         The separation character. Such as ``','`` or ``' '``. If None (default) or ``''`` (empty) return a list of all the lines.
     vfn : function or None, optional
-        The function for formating the numbers. ``float`` --> convert to float number; ``int`` --> convert to integer number..., The default is ``None``, which means won't converted, string format.
+        The function for formating the numbers. ``float`` --> convert to float number; ``int`` --> convert to integer number..., The default is :obj:`None`, which means won't converted, string format.
     nlines : None, optional
         The number of lines for reading, the default is None, which means all the lines.
 

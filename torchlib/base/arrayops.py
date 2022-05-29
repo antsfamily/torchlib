@@ -122,7 +122,7 @@ def arraycomb(arrays, out=None):
 
     Args:
         arrays (list or tensor): The lists or tensors.
-        out (tensor, optional): The combination results (defaults is ``None``).
+        out (tensor, optional): The combination results (defaults is :obj:`None`).
 
     Returns:
         tensor: The combination results.

@@ -321,7 +321,7 @@ def c2r(X, cdim=-1):
     return th.stack((X.real, X.imag), dim=cdim)
 
 
-def r2c(X, cdim=-1, keepdims=False):
+def r2c(X, cdim=-1, keepcdim=False):
     r"""real representaion to complex representaion
 
     Parameters
@@ -330,8 +330,8 @@ def r2c(X, cdim=-1, keepdims=False):
         input in real representaion
     cdim : int, optional
         real and imag dimention in real format, by default -1
-    keepdims : bool, optional
-        keep dimensions?
+    keepcdim : bool, optional
+        keep complex dimention?
 
     Returns
     -------
@@ -383,7 +383,7 @@ def r2c(X, cdim=-1, keepdims=False):
 
     """
     d = X.dim()
-    if keepdims:
+    if keepcdim:
         return X[tl.sl(d, cdim, [[0]])] + 1j * X[tl.sl(d, cdim, [[1]])]
     else:
         return X[tl.sl(d, cdim, [0])] + 1j * X[tl.sl(d, cdim, [1])]
@@ -445,7 +445,7 @@ def conj(X, cdim=None):
             return th.cat((X[tl.sl(d, axis=cdim, idx=[[0]])], -X[tl.sl(d, axis=cdim, idx=[[1]])]), dim=cdim)
 
 
-def real(X, cdim=None, keepdim=False):
+def real(X, cdim=None, keepcdim=False):
     r"""obtain real part of a tensor
 
     Both complex and real representation are supported.
@@ -458,8 +458,8 @@ def real(X, cdim=None, keepdim=False):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    keepdims : bool, optional
-        keep dimensions?
+    keepcdim : bool, optional
+        keep the complex dimension?
 
     Returns
     -------
@@ -495,11 +495,11 @@ def real(X, cdim=None, keepdim=False):
             return X
         else:  # complex in real
             d = X.ndim
-            idx = [[0]] if keepdim else [0]
+            idx = [[0]] if keepcdim else [0]
             return X[tl.sl(d, axis=cdim, idx=idx)]
 
 
-def imag(X, cdim=None, keepdim=False):
+def imag(X, cdim=None, keepcdim=False):
     r"""obtain imaginary part of a tensor
 
     Both complex and real representation are supported.
@@ -512,8 +512,8 @@ def imag(X, cdim=None, keepdim=False):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    keepdims : bool, optional
-        keep dimensions?
+    keepcdim : bool, optional
+        keep the complex dimension?
 
     Returns
     -------
@@ -550,11 +550,11 @@ def imag(X, cdim=None, keepdim=False):
             return th.zeros_like(X)
         else:  # complex in real
             d = X.ndim
-            idx = [[1]] if keepdim else [1]
+            idx = [[1]] if keepcdim else [1]
             return X[tl.sl(d, axis=cdim, idx=idx)]
 
 
-def abs(X, cdim=None, keepdim=False):
+def abs(X, cdim=None, keepcdim=False):
     r"""obtain amplitude of a tensor
 
     Both complex and real representation are supported.
@@ -573,7 +573,7 @@ def abs(X, cdim=None, keepdim=False):
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
     keepdims : bool, optional
-        keep dimensions?
+        keep the complex dimension?
 
     Returns
     -------
@@ -609,13 +609,13 @@ def abs(X, cdim=None, keepdim=False):
             return X.abs()
         else:  # complex in real
             d = X.ndim
-            idxreal = [[0]] if keepdim else [0]
-            idximag = [[1]] if keepdim else [1]
+            idxreal = [[0]] if keepcdim else [0]
+            idximag = [[1]] if keepcdim else [1]
 
             return (X[tl.sl(d, axis=cdim, idx=idxreal)]**2 + X[tl.sl(d, axis=cdim, idx=idximag)]**2).sqrt()
 
 
-def pow(X, cdim=None, keepdim=False):
+def pow(X, cdim=None, keepcdim=False):
     r"""obtain power of a tensor
 
     Both complex and real representation are supported.
@@ -633,8 +633,8 @@ def pow(X, cdim=None, keepdim=False):
         If :attr:`X` is complex-valued, :attr:`cdim` is ignored. If :attr:`X` is real-valued and :attr:`cdim` is integer
         then :attr:`X` will be treated as complex-valued, in this case, :attr:`cdim` specifies the complex axis;
         otherwise (None), :attr:`X` will be treated as real-valued
-    keepdims : bool, optional
-        keep dimensions?
+    keepcdim : bool, optional
+        keep the complex dimension?
 
     Returns
     -------
@@ -670,8 +670,8 @@ def pow(X, cdim=None, keepdim=False):
             return X**2
         else:  # complex in real
             d = X.ndim
-            idxreal = [[0]] if keepdim else [0]
-            idximag = [[1]] if keepdim else [1]
+            idxreal = [[0]] if keepcdim else [0]
+            idximag = [[1]] if keepcdim else [1]
 
             return X[tl.sl(d, axis=cdim, idx=idxreal)]**2 + X[tl.sl(d, axis=cdim, idx=idximag)]**2
 
